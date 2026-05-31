@@ -1,0 +1,1400 @@
+{
+  "_meta": {
+    "description": "Mock upskill catalog keyed by competency_id (Feature 8.4). Prices/providers are illustrative; affiliate links are mock.",
+    "total_courses": 126
+  },
+  "by_competency": {
+    "S01_Active_Learning": [
+      {
+        "course_id": "CR001",
+        "title": "Beginner Active Learning",
+        "provider": "Datacamp",
+        "price_thb": 1990,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR001",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR002",
+        "title": "Intermediate Active Learning",
+        "provider": "Chula MOOC",
+        "price_thb": 1490,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR002",
+        "affiliate": true
+      }
+    ],
+    "S02_Active_Listening": [
+      {
+        "course_id": "CR003",
+        "title": "Beginner Active Listening",
+        "provider": "Chula MOOC",
+        "price_thb": 0,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR003",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR004",
+        "title": "Intermediate Active Listening",
+        "provider": "BorntoDev",
+        "price_thb": 1490,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR004",
+        "affiliate": true
+      }
+    ],
+    "S03_Complex_Problem_Solving": [
+      {
+        "course_id": "CR005",
+        "title": "Beginner Complex Problem Solving",
+        "provider": "BorntoDev",
+        "price_thb": 990,
+        "duration_hours": 30,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR005",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR006",
+        "title": "Intermediate Complex Problem Solving",
+        "provider": "Skooldio",
+        "price_thb": 0,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR006",
+        "affiliate": true
+      }
+    ],
+    "S04_Coordination": [
+      {
+        "course_id": "CR007",
+        "title": "Beginner Coordination",
+        "provider": "Skooldio",
+        "price_thb": 3500,
+        "duration_hours": 30,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR007",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR008",
+        "title": "Intermediate Coordination",
+        "provider": "Coursera",
+        "price_thb": 3500,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR008",
+        "affiliate": true
+      }
+    ],
+    "S05_Critical_Thinking": [
+      {
+        "course_id": "CR009",
+        "title": "Beginner Critical Thinking",
+        "provider": "Coursera",
+        "price_thb": 1990,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR009",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR010",
+        "title": "Intermediate Critical Thinking",
+        "provider": "Udemy",
+        "price_thb": 1490,
+        "duration_hours": 10,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR010",
+        "affiliate": true
+      }
+    ],
+    "S06_Equipment_Maintenance": [
+      {
+        "course_id": "CR011",
+        "title": "Beginner Equipment Maintenance",
+        "provider": "Udemy",
+        "price_thb": 990,
+        "duration_hours": 30,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR011",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR012",
+        "title": "Intermediate Equipment Maintenance",
+        "provider": "Future Skill",
+        "price_thb": 0,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR012",
+        "affiliate": true
+      }
+    ],
+    "S07_Equipment_Selection": [
+      {
+        "course_id": "CR013",
+        "title": "Beginner Equipment Selection",
+        "provider": "Future Skill",
+        "price_thb": 1490,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR013",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR014",
+        "title": "Intermediate Equipment Selection",
+        "provider": "Datacamp",
+        "price_thb": 3500,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR014",
+        "affiliate": true
+      }
+    ],
+    "S08_Installation": [
+      {
+        "course_id": "CR015",
+        "title": "Beginner Installation",
+        "provider": "Datacamp",
+        "price_thb": 0,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR015",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR016",
+        "title": "Intermediate Installation",
+        "provider": "Chula MOOC",
+        "price_thb": 1990,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR016",
+        "affiliate": true
+      }
+    ],
+    "S09_Instructing": [
+      {
+        "course_id": "CR017",
+        "title": "Beginner Instructing",
+        "provider": "Chula MOOC",
+        "price_thb": 1990,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR017",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR018",
+        "title": "Intermediate Instructing",
+        "provider": "BorntoDev",
+        "price_thb": 1990,
+        "duration_hours": 16,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR018",
+        "affiliate": true
+      }
+    ],
+    "S10_Judgment_and_Decision_Making": [
+      {
+        "course_id": "CR019",
+        "title": "Beginner Judgment and Decision Making",
+        "provider": "BorntoDev",
+        "price_thb": 1990,
+        "duration_hours": 12,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR019",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR020",
+        "title": "Intermediate Judgment and Decision Making",
+        "provider": "Skooldio",
+        "price_thb": 2900,
+        "duration_hours": 16,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR020",
+        "affiliate": true
+      }
+    ],
+    "S11_Learning_Strategies": [
+      {
+        "course_id": "CR021",
+        "title": "Beginner Learning Strategies",
+        "provider": "Skooldio",
+        "price_thb": 0,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR021",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR022",
+        "title": "Intermediate Learning Strategies",
+        "provider": "Coursera",
+        "price_thb": 2900,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR022",
+        "affiliate": true
+      }
+    ],
+    "S12_Management_of_Financial_Resources": [
+      {
+        "course_id": "CR023",
+        "title": "Beginner Management of Financial Resources",
+        "provider": "Coursera",
+        "price_thb": 3500,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR023",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR024",
+        "title": "Intermediate Management of Financial Resources",
+        "provider": "Udemy",
+        "price_thb": 990,
+        "duration_hours": 16,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR024",
+        "affiliate": true
+      }
+    ],
+    "S13_Management_of_Personnel_Resources": [
+      {
+        "course_id": "CR025",
+        "title": "Beginner Management of Personnel Resources",
+        "provider": "Udemy",
+        "price_thb": 0,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR025",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR026",
+        "title": "Intermediate Management of Personnel Resources",
+        "provider": "Future Skill",
+        "price_thb": 1490,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR026",
+        "affiliate": true
+      }
+    ],
+    "S14_Mathematics": [
+      {
+        "course_id": "CR027",
+        "title": "Beginner Mathematics",
+        "provider": "Future Skill",
+        "price_thb": 1490,
+        "duration_hours": 12,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR027",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR028",
+        "title": "Intermediate Mathematics",
+        "provider": "Datacamp",
+        "price_thb": 0,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR028",
+        "affiliate": true
+      }
+    ],
+    "S15_Monitoring": [
+      {
+        "course_id": "CR029",
+        "title": "Beginner Monitoring",
+        "provider": "Datacamp",
+        "price_thb": 1490,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR029",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR030",
+        "title": "Intermediate Monitoring",
+        "provider": "Chula MOOC",
+        "price_thb": 1990,
+        "duration_hours": 10,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR030",
+        "affiliate": true
+      }
+    ],
+    "S16_Negotiation": [
+      {
+        "course_id": "CR031",
+        "title": "Beginner Negotiation",
+        "provider": "Chula MOOC",
+        "price_thb": 3500,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR031",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR032",
+        "title": "Intermediate Negotiation",
+        "provider": "BorntoDev",
+        "price_thb": 2900,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR032",
+        "affiliate": true
+      }
+    ],
+    "S17_Operation_and_Control": [
+      {
+        "course_id": "CR033",
+        "title": "Beginner Operation and Control",
+        "provider": "BorntoDev",
+        "price_thb": 1490,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR033",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR034",
+        "title": "Intermediate Operation and Control",
+        "provider": "Skooldio",
+        "price_thb": 2900,
+        "duration_hours": 16,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR034",
+        "affiliate": true
+      }
+    ],
+    "S18_Operations_Analysis": [
+      {
+        "course_id": "CR035",
+        "title": "Beginner Operations Analysis",
+        "provider": "Skooldio",
+        "price_thb": 3500,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR035",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR036",
+        "title": "Intermediate Operations Analysis",
+        "provider": "Coursera",
+        "price_thb": 1990,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR036",
+        "affiliate": true
+      }
+    ],
+    "S19_Persuasion": [
+      {
+        "course_id": "CR037",
+        "title": "Beginner Persuasion",
+        "provider": "Coursera",
+        "price_thb": 990,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR037",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR038",
+        "title": "Intermediate Persuasion",
+        "provider": "Udemy",
+        "price_thb": 1990,
+        "duration_hours": 10,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR038",
+        "affiliate": true
+      }
+    ],
+    "S20_Programming": [
+      {
+        "course_id": "CR039",
+        "title": "Beginner Programming",
+        "provider": "Udemy",
+        "price_thb": 0,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR039",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR040",
+        "title": "Intermediate Programming",
+        "provider": "Future Skill",
+        "price_thb": 1490,
+        "duration_hours": 10,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR040",
+        "affiliate": true
+      }
+    ],
+    "S21_Reading_Comprehension": [
+      {
+        "course_id": "CR041",
+        "title": "Beginner Reading Comprehension",
+        "provider": "Future Skill",
+        "price_thb": 990,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR041",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR042",
+        "title": "Intermediate Reading Comprehension",
+        "provider": "Datacamp",
+        "price_thb": 3500,
+        "duration_hours": 20,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR042",
+        "affiliate": true
+      }
+    ],
+    "S22_Planning": [
+      {
+        "course_id": "CR043",
+        "title": "Beginner Planning",
+        "provider": "Datacamp",
+        "price_thb": 3500,
+        "duration_hours": 30,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR043",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR044",
+        "title": "Intermediate Planning",
+        "provider": "Chula MOOC",
+        "price_thb": 2900,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR044",
+        "affiliate": true
+      }
+    ],
+    "S23_Social_Perceptiveness": [
+      {
+        "course_id": "CR045",
+        "title": "Beginner Social Perceptiveness",
+        "provider": "Chula MOOC",
+        "price_thb": 3500,
+        "duration_hours": 12,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR045",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR046",
+        "title": "Intermediate Social Perceptiveness",
+        "provider": "BorntoDev",
+        "price_thb": 1490,
+        "duration_hours": 10,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR046",
+        "affiliate": true
+      }
+    ],
+    "S24_Speaking": [
+      {
+        "course_id": "CR047",
+        "title": "Beginner Speaking",
+        "provider": "BorntoDev",
+        "price_thb": 0,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR047",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR048",
+        "title": "Intermediate Speaking",
+        "provider": "Skooldio",
+        "price_thb": 1990,
+        "duration_hours": 20,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR048",
+        "affiliate": true
+      }
+    ],
+    "S25_Systems_Analysis": [
+      {
+        "course_id": "CR049",
+        "title": "Beginner Systems Analysis",
+        "provider": "Skooldio",
+        "price_thb": 2900,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR049",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR050",
+        "title": "Intermediate Systems Analysis",
+        "provider": "Coursera",
+        "price_thb": 990,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR050",
+        "affiliate": true
+      }
+    ],
+    "S26_Systems_Design": [
+      {
+        "course_id": "CR051",
+        "title": "Beginner Systems Design",
+        "provider": "Coursera",
+        "price_thb": 1490,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR051",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR052",
+        "title": "Intermediate Systems Design",
+        "provider": "Udemy",
+        "price_thb": 1990,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR052",
+        "affiliate": true
+      }
+    ],
+    "S27_Technology_Design": [
+      {
+        "course_id": "CR053",
+        "title": "Beginner Technology Design",
+        "provider": "Udemy",
+        "price_thb": 1490,
+        "duration_hours": 30,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR053",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR054",
+        "title": "Intermediate Technology Design",
+        "provider": "Future Skill",
+        "price_thb": 3500,
+        "duration_hours": 20,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR054",
+        "affiliate": true
+      }
+    ],
+    "S28_Troubleshooting": [
+      {
+        "course_id": "CR055",
+        "title": "Beginner Troubleshooting",
+        "provider": "Future Skill",
+        "price_thb": 1990,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR055",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR056",
+        "title": "Intermediate Troubleshooting",
+        "provider": "Datacamp",
+        "price_thb": 0,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR056",
+        "affiliate": true
+      }
+    ],
+    "S29_Writing": [
+      {
+        "course_id": "CR057",
+        "title": "Beginner Writing",
+        "provider": "Datacamp",
+        "price_thb": 990,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR057",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR058",
+        "title": "Intermediate Writing",
+        "provider": "Chula MOOC",
+        "price_thb": 3500,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR058",
+        "affiliate": true
+      }
+    ],
+    "S30_Time_Management": [
+      {
+        "course_id": "CR059",
+        "title": "Beginner Time Management",
+        "provider": "Chula MOOC",
+        "price_thb": 0,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR059",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR060",
+        "title": "Intermediate Time Management",
+        "provider": "BorntoDev",
+        "price_thb": 0,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR060",
+        "affiliate": true
+      }
+    ],
+    "S31_Quality_Control_Analysis": [
+      {
+        "course_id": "CR061",
+        "title": "Beginner Quality Control Analysis",
+        "provider": "BorntoDev",
+        "price_thb": 1990,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR061",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR062",
+        "title": "Intermediate Quality Control Analysis",
+        "provider": "Skooldio",
+        "price_thb": 1990,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR062",
+        "affiliate": true
+      }
+    ],
+    "A01_Artistic": [
+      {
+        "course_id": "CR063",
+        "title": "Beginner Artistic",
+        "provider": "Skooldio",
+        "price_thb": 1490,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR063",
+        "affiliate": true
+      }
+    ],
+    "A02_Conventional": [
+      {
+        "course_id": "CR064",
+        "title": "Beginner Conventional",
+        "provider": "Datacamp",
+        "price_thb": 3500,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR064",
+        "affiliate": true
+      }
+    ],
+    "A03_Enterprising": [
+      {
+        "course_id": "CR065",
+        "title": "Beginner Enterprising",
+        "provider": "Coursera",
+        "price_thb": 1990,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR065",
+        "affiliate": true
+      }
+    ],
+    "A04_Investigative": [
+      {
+        "course_id": "CR066",
+        "title": "Beginner Investigative",
+        "provider": "Chula MOOC",
+        "price_thb": 1490,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR066",
+        "affiliate": true
+      }
+    ],
+    "A05_Realistic": [
+      {
+        "course_id": "CR067",
+        "title": "Beginner Realistic",
+        "provider": "Udemy",
+        "price_thb": 1490,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR067",
+        "affiliate": true
+      }
+    ],
+    "A06_Social": [
+      {
+        "course_id": "CR068",
+        "title": "Beginner Social",
+        "provider": "BorntoDev",
+        "price_thb": 1990,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR068",
+        "affiliate": true
+      }
+    ],
+    "K01_Administration_and_Management": [
+      {
+        "course_id": "CR069",
+        "title": "Beginner Administration and Management",
+        "provider": "Future Skill",
+        "price_thb": 1490,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR069",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR070",
+        "title": "Intermediate Administration and Management",
+        "provider": "Datacamp",
+        "price_thb": 1990,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR070",
+        "affiliate": true
+      }
+    ],
+    "K02_Building_and_Construction": [
+      {
+        "course_id": "CR071",
+        "title": "Beginner Building and Construction",
+        "provider": "Datacamp",
+        "price_thb": 990,
+        "duration_hours": 12,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR071",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR072",
+        "title": "Intermediate Building and Construction",
+        "provider": "Chula MOOC",
+        "price_thb": 2900,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR072",
+        "affiliate": true
+      }
+    ],
+    "K03_Clerical": [
+      {
+        "course_id": "CR073",
+        "title": "Beginner Clerical",
+        "provider": "Chula MOOC",
+        "price_thb": 990,
+        "duration_hours": 30,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR073",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR074",
+        "title": "Intermediate Clerical",
+        "provider": "BorntoDev",
+        "price_thb": 3500,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR074",
+        "affiliate": true
+      }
+    ],
+    "K04_Communications_and_Media": [
+      {
+        "course_id": "CR075",
+        "title": "Beginner Communications and Media",
+        "provider": "BorntoDev",
+        "price_thb": 0,
+        "duration_hours": 30,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR075",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR076",
+        "title": "Intermediate Communications and Media",
+        "provider": "Skooldio",
+        "price_thb": 1490,
+        "duration_hours": 20,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR076",
+        "affiliate": true
+      }
+    ],
+    "K05_Computers_and_Electronics": [
+      {
+        "course_id": "CR077",
+        "title": "Beginner Computers and Electronics",
+        "provider": "Skooldio",
+        "price_thb": 1990,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR077",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR078",
+        "title": "Intermediate Computers and Electronics",
+        "provider": "Coursera",
+        "price_thb": 990,
+        "duration_hours": 20,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR078",
+        "affiliate": true
+      }
+    ],
+    "K06_Customer_and_Personal_Service": [
+      {
+        "course_id": "CR079",
+        "title": "Beginner Customer and Personal Service",
+        "provider": "Coursera",
+        "price_thb": 0,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR079",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR080",
+        "title": "Intermediate Customer and Personal Service",
+        "provider": "Udemy",
+        "price_thb": 2900,
+        "duration_hours": 16,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR080",
+        "affiliate": true
+      }
+    ],
+    "K07_Design": [
+      {
+        "course_id": "CR081",
+        "title": "Beginner Design",
+        "provider": "Udemy",
+        "price_thb": 2900,
+        "duration_hours": 30,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR081",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR082",
+        "title": "Intermediate Design",
+        "provider": "Future Skill",
+        "price_thb": 1990,
+        "duration_hours": 20,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR082",
+        "affiliate": true
+      }
+    ],
+    "K08_Economics_and_Accounting": [
+      {
+        "course_id": "CR083",
+        "title": "Beginner Economics and Accounting",
+        "provider": "Future Skill",
+        "price_thb": 990,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR083",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR084",
+        "title": "Intermediate Economics and Accounting",
+        "provider": "Datacamp",
+        "price_thb": 1490,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR084",
+        "affiliate": true
+      }
+    ],
+    "K09_Education_and_Training": [
+      {
+        "course_id": "CR085",
+        "title": "Beginner Education and Training",
+        "provider": "Datacamp",
+        "price_thb": 1990,
+        "duration_hours": 30,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR085",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR086",
+        "title": "Intermediate Education and Training",
+        "provider": "Chula MOOC",
+        "price_thb": 0,
+        "duration_hours": 20,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR086",
+        "affiliate": true
+      }
+    ],
+    "K10_Engineering_and_Technology": [
+      {
+        "course_id": "CR087",
+        "title": "Beginner Engineering and Technology",
+        "provider": "Chula MOOC",
+        "price_thb": 2900,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR087",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR088",
+        "title": "Intermediate Engineering and Technology",
+        "provider": "BorntoDev",
+        "price_thb": 2900,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR088",
+        "affiliate": true
+      }
+    ],
+    "K11_English_Language": [
+      {
+        "course_id": "CR089",
+        "title": "Beginner English Language",
+        "provider": "BorntoDev",
+        "price_thb": 2900,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR089",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR090",
+        "title": "Intermediate English Language",
+        "provider": "Skooldio",
+        "price_thb": 0,
+        "duration_hours": 16,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR090",
+        "affiliate": true
+      }
+    ],
+    "K12_Fine_Arts": [
+      {
+        "course_id": "CR091",
+        "title": "Beginner Fine Arts",
+        "provider": "Skooldio",
+        "price_thb": 990,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR091",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR092",
+        "title": "Intermediate Fine Arts",
+        "provider": "Coursera",
+        "price_thb": 990,
+        "duration_hours": 10,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR092",
+        "affiliate": true
+      }
+    ],
+    "K13_Food_Production": [
+      {
+        "course_id": "CR093",
+        "title": "Beginner Food Production",
+        "provider": "Coursera",
+        "price_thb": 990,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR093",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR094",
+        "title": "Intermediate Food Production",
+        "provider": "Udemy",
+        "price_thb": 1990,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR094",
+        "affiliate": true
+      }
+    ],
+    "K14_Geography": [
+      {
+        "course_id": "CR095",
+        "title": "Beginner Geography",
+        "provider": "Udemy",
+        "price_thb": 3500,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR095",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR096",
+        "title": "Intermediate Geography",
+        "provider": "Future Skill",
+        "price_thb": 990,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR096",
+        "affiliate": true
+      }
+    ],
+    "K15_History_and_Archeology": [
+      {
+        "course_id": "CR097",
+        "title": "Beginner History and Archeology",
+        "provider": "Future Skill",
+        "price_thb": 990,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR097",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR098",
+        "title": "Intermediate History and Archeology",
+        "provider": "Datacamp",
+        "price_thb": 1490,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR098",
+        "affiliate": true
+      }
+    ],
+    "K16_Law_and_Government": [
+      {
+        "course_id": "CR099",
+        "title": "Beginner Law and Government",
+        "provider": "Datacamp",
+        "price_thb": 3500,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR099",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR100",
+        "title": "Intermediate Law and Government",
+        "provider": "Chula MOOC",
+        "price_thb": 0,
+        "duration_hours": 16,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR100",
+        "affiliate": true
+      }
+    ],
+    "K17_Mathematics": [
+      {
+        "course_id": "CR101",
+        "title": "Beginner Mathematics",
+        "provider": "Chula MOOC",
+        "price_thb": 2900,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR101",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR102",
+        "title": "Intermediate Mathematics",
+        "provider": "BorntoDev",
+        "price_thb": 2900,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR102",
+        "affiliate": true
+      }
+    ],
+    "K18_Mechanical": [
+      {
+        "course_id": "CR103",
+        "title": "Beginner Mechanical",
+        "provider": "BorntoDev",
+        "price_thb": 1490,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR103",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR104",
+        "title": "Intermediate Mechanical",
+        "provider": "Skooldio",
+        "price_thb": 1990,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR104",
+        "affiliate": true
+      }
+    ],
+    "K19_Medicine_and_Dentistry": [
+      {
+        "course_id": "CR105",
+        "title": "Beginner Medicine and Dentistry",
+        "provider": "Skooldio",
+        "price_thb": 3500,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR105",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR106",
+        "title": "Intermediate Medicine and Dentistry",
+        "provider": "Coursera",
+        "price_thb": 2900,
+        "duration_hours": 20,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR106",
+        "affiliate": true
+      }
+    ],
+    "K20_Personnel_and_Human_Resources": [
+      {
+        "course_id": "CR107",
+        "title": "Beginner Personnel and Human Resources",
+        "provider": "Coursera",
+        "price_thb": 1990,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR107",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR108",
+        "title": "Intermediate Personnel and Human Resources",
+        "provider": "Udemy",
+        "price_thb": 1990,
+        "duration_hours": 10,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR108",
+        "affiliate": true
+      }
+    ],
+    "K21_Philosophy_and_Theology": [
+      {
+        "course_id": "CR109",
+        "title": "Beginner Philosophy and Theology",
+        "provider": "Udemy",
+        "price_thb": 990,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR109",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR110",
+        "title": "Intermediate Philosophy and Theology",
+        "provider": "Future Skill",
+        "price_thb": 2900,
+        "duration_hours": 20,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR110",
+        "affiliate": true
+      }
+    ],
+    "K22_Physics": [
+      {
+        "course_id": "CR111",
+        "title": "Beginner Physics",
+        "provider": "Future Skill",
+        "price_thb": 0,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR111",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR112",
+        "title": "Intermediate Physics",
+        "provider": "Datacamp",
+        "price_thb": 2900,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR112",
+        "affiliate": true
+      }
+    ],
+    "K23_Production_and_Processing": [
+      {
+        "course_id": "CR113",
+        "title": "Beginner Production and Processing",
+        "provider": "Datacamp",
+        "price_thb": 1490,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR113",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR114",
+        "title": "Intermediate Production and Processing",
+        "provider": "Chula MOOC",
+        "price_thb": 1490,
+        "duration_hours": 16,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR114",
+        "affiliate": true
+      }
+    ],
+    "K24_Psychology": [
+      {
+        "course_id": "CR115",
+        "title": "Beginner Psychology",
+        "provider": "Chula MOOC",
+        "price_thb": 1490,
+        "duration_hours": 16,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR115",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR116",
+        "title": "Intermediate Psychology",
+        "provider": "BorntoDev",
+        "price_thb": 3500,
+        "duration_hours": 16,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR116",
+        "affiliate": true
+      }
+    ],
+    "K25_Public_Safety_and_Security": [
+      {
+        "course_id": "CR117",
+        "title": "Beginner Public Safety and Security",
+        "provider": "BorntoDev",
+        "price_thb": 2900,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR117",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR118",
+        "title": "Intermediate Public Safety and Security",
+        "provider": "Skooldio",
+        "price_thb": 1990,
+        "duration_hours": 6,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR118",
+        "affiliate": true
+      }
+    ],
+    "K26_Sales_and_Marketing": [
+      {
+        "course_id": "CR119",
+        "title": "Beginner Sales and Marketing",
+        "provider": "Skooldio",
+        "price_thb": 990,
+        "duration_hours": 12,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR119",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR120",
+        "title": "Intermediate Sales and Marketing",
+        "provider": "Coursera",
+        "price_thb": 1990,
+        "duration_hours": 10,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR120",
+        "affiliate": true
+      }
+    ],
+    "K27_Sociology_and_Anthropology": [
+      {
+        "course_id": "CR121",
+        "title": "Beginner Sociology and Anthropology",
+        "provider": "Coursera",
+        "price_thb": 2900,
+        "duration_hours": 20,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR121",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR122",
+        "title": "Intermediate Sociology and Anthropology",
+        "provider": "Udemy",
+        "price_thb": 3500,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR122",
+        "affiliate": true
+      }
+    ],
+    "K28_Telecommunications": [
+      {
+        "course_id": "CR123",
+        "title": "Beginner Telecommunications",
+        "provider": "Udemy",
+        "price_thb": 1990,
+        "duration_hours": 6,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR123",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR124",
+        "title": "Intermediate Telecommunications",
+        "provider": "Future Skill",
+        "price_thb": 1990,
+        "duration_hours": 12,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR124",
+        "affiliate": true
+      }
+    ],
+    "K29_Transportation": [
+      {
+        "course_id": "CR125",
+        "title": "Beginner Transportation",
+        "provider": "Future Skill",
+        "price_thb": 3500,
+        "duration_hours": 10,
+        "level": "Beginner",
+        "url": "https://example.com/courses/CR125",
+        "affiliate": true
+      },
+      {
+        "course_id": "CR126",
+        "title": "Intermediate Transportation",
+        "provider": "Datacamp",
+        "price_thb": 0,
+        "duration_hours": 30,
+        "level": "Intermediate",
+        "url": "https://example.com/courses/CR126",
+        "affiliate": true
+      }
+    ]
+  }
+}

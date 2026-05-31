@@ -1,0 +1,60 @@
+"""
+CARIA-GAP FastAPI application entrypoint.
+
+Run (dev):
+    uvicorn main:app --reload
+Docs:
+    http://127.0.0.1:8000/docs
+
+Based on: Seesukong et al. (2024), CARIA, IJICTE 20(1), DOI 10.4018/IJICTE.356499.
+"""
+
+from __future__ import annotations
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from models import database as db
+from routers import assessment, gap_analysis, recommendations, simulate
+
+app = FastAPI(
+    title="CARIA-GAP API",
+    version="2.0",
+    description="Career recommendation + competency gap analysis built on the CARIA "
+    "Modified Euclidean Similarity model (Eq.1 capping + Eq.2 MES, 66 dimensions, scale 0-100).",
+)
+
+# CORS — Next.js dev server + Vercel deploys.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://*.vercel.app",
+    ],
+    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(assessment.router)
+app.include_router(recommendations.router)
+app.include_router(gap_analysis.router)
+app.include_router(simulate.router)
+
+
+@app.on_event("startup")
+def _startup() -> None:
+    # Pre-cache demo personas so the API is pitch-ready immediately.
+    db.seed_personas()
+
+
+@app.get("/health", tags=["meta"])
+def health() -> dict:
+    return {"status": "ok", "service": "caria-gap", "competencies": 66, "careers": len(db.get_careers())}
+
+
+@app.get("/", tags=["meta"])
+def root() -> dict:
+    return {"name": "CARIA-GAP API", "docs": "/docs", "health": "/health"}

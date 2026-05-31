@@ -1,0 +1,35 @@
+# Node
+node_modules/
+.next/
+out/
+build/
+.pnpm-debug.log*
+pnpm-lock.yaml.bak
+tsconfig.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+ENV/
+env/
+
+# Environments and Secrets
+.env
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
+
+# Nested Git backups
+**/.git_backup/
