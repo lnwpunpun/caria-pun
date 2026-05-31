@@ -5,7 +5,7 @@ import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import GapAnalysisSection from "@/components/GapAnalysisSection";
+import GapAnalysisSection from "@/components/dashboard/GapAnalysisSection";
 import WhatIfSlider from "@/components/WhatIfSlider";
 import { GapBarChart } from "@/components/gap/GapBarChart";
 import { Badge } from "@/components/ui/badge";

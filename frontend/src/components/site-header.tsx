@@ -5,6 +5,7 @@ import { motion } from "motion/react"
 import { ArrowRight, Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Logo } from "@/components/logo"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const NAV = [
   { label: "How it works", href: "#how-it-works" },
@@ -35,8 +36,8 @@ export function SiteHeader() {
         className={cn(
           "mx-auto flex max-w-6xl items-center justify-between rounded-full px-3 py-2.5 transition-all duration-500",
           scrolled
-            ? "glass border border-white/40 shadow-[0_8px_40px_-12px_rgba(0,16,40,0.25)]"
-            : "border border-transparent",
+            ? "bg-white/75 dark:bg-[#0a0f1c]/70 backdrop-blur-xl border border-slate-200/70 dark:border-white/10 shadow-[0_8px_40px_-12px_rgba(0,16,40,0.25)] dark:shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)] text-foreground"
+            : "border border-transparent text-white",
         )}
       >
         <a href="#top" className="pl-2">
@@ -49,7 +50,12 @@ export function SiteHeader() {
             <a
               key={item.href}
               href={item.href}
-              className="rounded-full px-4 py-2 text-sm font-medium text-foreground/70 transition-colors hover:bg-foreground/5 hover:text-foreground"
+              className={cn(
+                "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                scrolled
+                  ? "text-foreground/70 hover:bg-foreground/5 hover:text-foreground"
+                  : "text-white/75 hover:bg-white/10 hover:text-white",
+              )}
             >
               {item.label}
             </a>
@@ -57,6 +63,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle onTop={!scrolled} />
           <a
             href="#assessment"
             className="group hidden items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_10px_30px_-8px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
@@ -67,7 +74,10 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex size-10 items-center justify-center rounded-full border border-foreground/10 text-foreground md:hidden"
+            className={cn(
+              "inline-flex size-10 items-center justify-center rounded-full border md:hidden",
+              scrolled ? "border-foreground/10 text-foreground" : "border-white/15 text-white",
+            )}
             aria-label="Toggle menu"
             aria-expanded={open}
           >
@@ -80,7 +90,7 @@ export function SiteHeader() {
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass mx-auto mt-2 max-w-6xl rounded-3xl border border-white/40 p-3 md:hidden"
+          className="mx-auto mt-2 max-w-6xl rounded-3xl border border-slate-200 bg-white/90 p-3 backdrop-blur-xl dark:border-white/10 dark:bg-[#0a0f1c]/95 md:hidden"
         >
           <nav className="flex flex-col" aria-label="Mobile">
             {NAV.map((item) => (

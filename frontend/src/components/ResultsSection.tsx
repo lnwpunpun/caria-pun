@@ -54,7 +54,7 @@ const careers = [
 
 function CareerCard({ career, index }: { career: typeof careers[0]; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, margin: "-100px" });
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const cardRotateX = useTransform(scrollYProgress, [0, 0.5, 1], [8, 0, -8]);
   const cardScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.98]);
@@ -64,14 +64,11 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 60, rotateX: 12 }}
-      animate={inView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-      transition={{
-        duration: 0.8,
-        delay: index * 0.15,
-        ease: [0.23, 1, 0.32, 1],
-      }}
-      style={{ perspective: 1000 }}
+      initial={{ opacity: 0, y: 120, rotateX: 30, scale: 0.85 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ type: "spring", stiffness: 40, damping: 15, duration: 1.2, delay: index * 0.15 }}
+      style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
       className={`relative ${isTop ? "lg:-mt-4 lg:mb-4" : ""}`}
     >
       <motion.div

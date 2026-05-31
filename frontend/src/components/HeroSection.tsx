@@ -7,6 +7,19 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import dynamic from "next/dynamic";
+
+const InteractiveCareerSphere = dynamic(
+  () => import("@/components/InteractiveCareerSphere"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-[380px] h-[380px] lg:w-[440px] lg:h-[440px] rounded-full bg-white/[0.01] border border-white/5 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-[#F39200]/30 border-t-[#F39200] animate-spin" />
+      </div>
+    ),
+  }
+);
 
 const HERO_ORB_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663715925716/C5srhVpvKrV4qWgj4NxM6w/hero-orb-CqVHLGvLZ2Mq825NTHYLoH.webp";
 
@@ -28,19 +41,20 @@ export default function HeroSection() {
     <section
       ref={ref}
       className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "linear-gradient(135deg, #050A14 0%, #0A1628 50%, #050A14 100%)" }}
+      style={{ background: "radial-gradient(ellipse 95% 85% at 72% 45%, #0A1422 0%, #050A14 45%, #030712 100%)" }}
     >
-      {/* Ambient background glow */}
+      {/* Cool glow behind the 3D nexus (right) */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 80% 60% at 60% 40%, rgba(30,144,255,0.08) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse 55% 60% at 74% 48%, rgba(45,156,255,0.10) 0%, transparent 65%)",
         }}
       />
+      {/* Warm glow behind the headline (left) to lift text off the canvas */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 50% 40% at 70% 50%, rgba(243,146,0,0.05) 0%, transparent 60%)",
+          background: "radial-gradient(ellipse 45% 55% at 18% 42%, rgba(243,146,0,0.07) 0%, transparent 68%)",
         }}
       />
 
@@ -58,7 +72,7 @@ export default function HeroSection() {
           {/* Left: Text Content */}
           <motion.div
             style={{ y: textY, opacity }}
-            className="flex flex-col gap-6 z-10"
+            className="relative flex flex-col gap-6 z-10 max-w-xl"
           >
             {/* Badge */}
             <motion.div
@@ -162,65 +176,39 @@ export default function HeroSection() {
           {/* Right: Neural Orb */}
           <motion.div
             style={{ y: orbY, scale: orbScale }}
-            className="relative flex items-center justify-center"
+            className="relative flex items-center justify-center h-[500px] lg:h-[800px] w-full"
           >
-            {/* Outer glow ring */}
-            <motion.div
-              className="absolute w-[520px] h-[520px] rounded-full"
-              style={{
-                background: "radial-gradient(circle, rgba(243,146,0,0.06) 0%, transparent 70%)",
-                border: "1px solid rgba(243,146,0,0.1)",
-              }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-            />
-            <motion.div
-              className="absolute w-[420px] h-[420px] rounded-full"
-              style={{
-                border: "1px solid rgba(30,144,255,0.15)",
-              }}
-              animate={{ rotate: -360 }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-            />
-
-            {/* Orb Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.2, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
-              className="relative w-[380px] h-[380px] lg:w-[440px] lg:h-[440px]"
-            >
-              <img
-                src={HERO_ORB_URL}
-                alt="CARIA-GAP Neural Competency Sphere"
-                className="w-full h-full object-cover rounded-full"
-                style={{ filter: "drop-shadow(0 0 40px rgba(243,146,0,0.3)) drop-shadow(0 0 80px rgba(30,144,255,0.2))" }}
+            {/* Neural Orb wrapper pushed to the right, low-opacity on mobile */}
+            <div className="absolute top-1/2 right-[-60%] lg:right-[-45%] xl:right-[-55%] -translate-y-1/2 w-[1000px] h-[1000px] z-0 pointer-events-auto flex items-center justify-center opacity-40 lg:opacity-100">
+              {/* Outer glow ring */}
+              <motion.div
+                className="absolute w-[720px] h-[720px] rounded-full hidden lg:block"
+                style={{
+                  background: "radial-gradient(circle, rgba(243,146,0,0.06) 0%, transparent 70%)",
+                  border: "1px solid rgba(243,146,0,0.1)",
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
               />
-              {/* Floating skill badges */}
-              {[
-                { label: "Data Science", top: "8%", left: "-10%", delay: 0.8 },
-                { label: "Cloud Arch.", top: "75%", left: "-5%", delay: 1.0 },
-                { label: "AI/ML", top: "5%", right: "-5%", delay: 0.9 },
-                { label: "Cybersecurity", top: "70%", right: "-8%", delay: 1.1 },
-              ].map((badge) => (
-                <motion.div
-                  key={badge.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: badge.delay, duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-                  style={{
-                    position: "absolute",
-                    top: badge.top,
-                    left: (badge as any).left,
-                    right: (badge as any).right,
-                  }}
-                  className="glass-panel px-3 py-1.5 rounded-full border border-[#F39200]/20 flex items-center gap-1.5"
-                >
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#F39200]" />
-                  <span className="text-xs font-dm text-white/80 whitespace-nowrap">{badge.label}</span>
-                </motion.div>
-              ))}
-            </motion.div>
+              <motion.div
+                className="absolute w-[580px] h-[580px] rounded-full hidden lg:block"
+                style={{
+                  border: "1px solid rgba(30,144,255,0.15)",
+                }}
+                animate={{ rotate: -360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+              />
+
+              {/* Interactive 3D Career Sphere */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1.2, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
+                className="relative w-full h-full flex items-center justify-center"
+              >
+                <InteractiveCareerSphere />
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </div>

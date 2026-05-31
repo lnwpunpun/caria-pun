@@ -5,7 +5,7 @@
  */
 "use client";
 
-import { motion, useInView, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { MOCK_TOP10, MOCK_GAP_ANALYSIS } from "@/lib/mockData";
 import { calculateMES, adjustScores } from "@/lib/mes-client";
@@ -144,9 +144,6 @@ export default function SimulatorSection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [skills, setSkills] = useState(initialSkills);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start center", "end center"] });
-  const sliderPanelRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [10, 0, -10]);
-  const rankingPanelRotateY = useTransform(scrollYProgress, [0, 0.5, 1], [-10, 0, 10]);
 
   const updateSkill = (id: string, value: number) => {
     setSkills((prev) => prev.map((s) => (s.id === id ? { ...s, value } : s)));
@@ -156,6 +153,31 @@ export default function SimulatorSection() {
   const matches = careerTargets
     .map((c) => ({ career: c, match: computeMatch(skills, c) }))
     .sort((a, b) => b.match - a.match);
+
+  const slidersContainerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+      },
+    },
+  };
+
+  const sliderItemVariants = {
+    hidden: { opacity: 0, y: 50, rotateX: 25, scale: 0.9 },
+    show: {
+      opacity: 1,
+      y: 0,
+      rotateX: 0,
+      scale: 1,
+      transition: {
+        type: "spring" as const,
+        stiffness: 80,
+        damping: 12,
+      },
+    },
+  };
 
   return (
     <section id="simulator" className="py-24 relative" style={{ background: "#050A14" }}>
@@ -191,20 +213,23 @@ export default function SimulatorSection() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          {/* Left: Skill Sliders */}
+          {/* Left: Skill Sliders with 3D scroll reveal wrapper */}
           <motion.div
-            initial={{ opacity: 0, x: -40, rotateY: 6 }}
-            animate={inView ? { opacity: 1, x: 0, rotateY: 0 } : {}}
-            transition={{ duration: 0.9, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
-            style={{ perspective: 1000, rotateY: sliderPanelRotateY }}
+            initial={{ opacity: 0, y: 100, rotateX: 25 }}
+            whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ type: "spring", bounce: 0.3, duration: 1 }}
+            style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+            className="w-full"
           >
+            {/* Perfectly flat resting container */}
             <div
-              className="rounded-3xl p-8"
               style={{
                 background: "linear-gradient(135deg, rgba(13,26,48,0.95) 0%, rgba(5,10,20,0.98) 100%)",
                 border: "1px solid rgba(243,146,0,0.12)",
                 boxShadow: "0 0 40px rgba(243,146,0,0.06), 0 30px 60px rgba(0,0,0,0.4)",
               }}
+              className="rounded-3xl p-8"
             >
               <div className="flex items-center gap-3 mb-8">
                 <div
@@ -222,13 +247,19 @@ export default function SimulatorSection() {
                 </div>
               </div>
 
-              <div className="flex flex-col gap-8">
-                {skills.map((skill, i) => (
+              {/* Sliders Staggered Container */}
+              <motion.div
+                className="flex flex-col gap-8"
+                variants={slidersContainerVariants}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-100px" }}
+                style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+              >
+                {skills.map((skill) => (
                   <motion.div
                     key={skill.id}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.3 + i * 0.08, duration: 0.5 }}
+                    variants={sliderItemVariants}
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-2">
@@ -277,7 +308,7 @@ export default function SimulatorSection() {
                     </div>
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
               {/* Reset button */}
               <motion.button
@@ -291,20 +322,23 @@ export default function SimulatorSection() {
             </div>
           </motion.div>
 
-          {/* Right: Live Rankings */}
+          {/* Right: Live Rankings sticky layout with 3D Reveal wrapper */}
           <motion.div
-            initial={{ opacity: 0, x: 40, rotateY: -6 }}
-            animate={inView ? { opacity: 1, x: 0, rotateY: 0 } : {}}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            style={{ perspective: 1000, rotateY: rankingPanelRotateY }}
+            initial={{ opacity: 0, y: 100, rotateX: 25 }}
+            whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ type: "spring", bounce: 0.3, duration: 1, delay: 0.15 }}
+            style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+            className="lg:sticky lg:top-24 z-20 self-start w-full"
           >
+            {/* Perfectly flat resting container */}
             <div
-              className="rounded-3xl p-8"
               style={{
                 background: "linear-gradient(135deg, rgba(13,26,48,0.95) 0%, rgba(5,10,20,0.98) 100%)",
                 border: "1px solid rgba(30,144,255,0.12)",
                 boxShadow: "0 0 40px rgba(30,144,255,0.06), 0 30px 60px rgba(0,0,0,0.4)",
               }}
+              className="rounded-3xl p-8"
             >
               <div className="flex items-center gap-3 mb-8">
                 <div

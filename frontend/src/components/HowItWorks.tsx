@@ -74,11 +74,7 @@ function StepCard({ step, index }: { step: typeof steps[0]; index: number }) {
       className="relative group"
     >
       <motion.div
-        className="relative h-full glass-panel rounded-2xl p-7 overflow-hidden"
-        style={{
-          border: "1px solid rgba(255,255,255,0.06)",
-          background: "linear-gradient(135deg, rgba(13,26,48,0.9) 0%, rgba(5,10,20,0.95) 100%)",
-        }}
+        className="relative h-full rounded-2xl p-7 overflow-hidden border bg-white border-slate-200 shadow-[0_8px_30px_rgb(0,0,0,0.05)] dark:bg-[#0d1726] dark:border-white/10 dark:shadow-none"
         whileHover={{
           scale: 1.02,
           borderColor: `${step.color}40`,
@@ -96,7 +92,7 @@ function StepCard({ step, index }: { step: typeof steps[0]; index: number }) {
 
         {/* Connector line (not last) */}
         {index < steps.length - 1 && (
-          <div className="hidden lg:block absolute top-1/2 -right-px w-px h-12 -translate-y-1/2 bg-gradient-to-b from-transparent via-white/10 to-transparent" />
+          <div className="hidden lg:block absolute top-1/2 -right-px w-px h-12 -translate-y-1/2 bg-gradient-to-b from-transparent via-foreground/10 to-transparent" />
         )}
 
         {/* Icon */}
@@ -147,7 +143,7 @@ export default function HowItWorks() {
   const titleInView = useInView(titleRef, { once: true, margin: "-60px" });
 
   return (
-    <section id="how-it-works" className="py-24 relative" style={{ background: "#050A14" }}>
+    <section id="how-it-works" className="py-24 relative bg-slate-50 dark:bg-[#0a0f1c]">
       {/* Section glow */}
       <div
         className="absolute inset-0 pointer-events-none"
