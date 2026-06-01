@@ -51,8 +51,8 @@ export default function Footer() {
               Digital Future?
             </span>
           </h2>
-          <p className="text-white/45 font-dm text-lg max-w-lg mx-auto mb-8">
-            Join thousands of students who have discovered their optimal career path with CARIA-GAP's precision AI engine.
+          <p className="text-slate-500 mt-3 text-sm font-dm leading-relaxed max-w-sm">
+            Join thousands of students who have discovered their optimal career path with SUT-CARIA's advisory platform.
           </p>
           <motion.a
             href="#assessment"
@@ -93,8 +93,8 @@ export default function Footer() {
                 </div>
               </div>
               <div>
-                <span className="font-syne font-extrabold text-white text-lg">CARIA</span>
-                <span className="font-syne font-extrabold text-[#F39200] text-lg">-GAP</span>
+                <span className="font-syne font-extrabold text-white text-lg">SUT</span>
+                <span className="font-syne font-extrabold text-[#F39200] text-lg">-CARIA</span>
               </div>
             </div>
             <p className="text-sm font-dm text-white/40 leading-relaxed max-w-xs">
@@ -156,9 +156,9 @@ export default function Footer() {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="flex flex-col md:flex-row items-center justify-between gap-4 pt-8"
         >
-          <p className="text-xs font-dm text-white/25">
-            © 2024 CARIA-GAP · Suranaree University of Technology · All rights reserved.
-          </p>
+          <div className="text-slate-500 text-xs font-dm tracking-wide">
+            © 2024 SUT-CARIA · Suranaree University of Technology · All rights reserved.
+          </div>
           <div className="flex items-center gap-6">
             {["Privacy", "Terms", "Contact"].map((item) => (
               <a key={item} href="#" className="text-xs font-dm text-white/25 hover:text-white/50 transition-colors">

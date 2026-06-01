@@ -2,6 +2,7 @@
 
 import type { GapItem } from '@/types';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/components/language-provider';
 import {
   ResponsiveContainer,
   BarChart,
@@ -23,13 +24,13 @@ function GapTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null;
 
   return (
-    <div className="bg-gray-900/95 backdrop-blur-md border border-white/10 rounded-xl p-3 shadow-xl">
-      <p className="text-white font-medium text-sm mb-2">{label}</p>
+    <div className="bg-card/95 backdrop-blur-md border border-border/80 rounded-xl p-3 shadow-xl text-foreground text-sm">
+      <p className="font-semibold mb-2">{label}</p>
       <div className="space-y-1">
         {payload.map((entry: any, index: number) => (
-          <div key={index} className="flex justify-between gap-4 text-sm">
-            <span style={{ color: entry.color }}>{entry.name}</span>
-            <span className="text-white font-mono">{entry.value}</span>
+          <div key={index} className="flex justify-between gap-4">
+            <span style={{ color: entry.color }} className="font-medium">{entry.name}</span>
+            <span className="font-mono font-bold">{entry.value}</span>
           </div>
         ))}
       </div>
@@ -38,6 +39,9 @@ function GapTooltip({ active, payload, label }: any) {
 }
 
 export function GapBarChart({ gaps, maxItems = 5, className }: GapBarChartProps) {
+  const { lang } = useLanguage();
+  const thai = lang === "th";
+
   // Take top N gaps and format data for Recharts
   const chartData = gaps.slice(0, maxItems).map((gap) => ({
     name: gap.competency_id.replace(/^[ASK]\d{2}_/, '').replace(/_/g, ' '),
@@ -48,51 +52,51 @@ export function GapBarChart({ gaps, maxItems = 5, className }: GapBarChartProps)
 
   if (!chartData.length) {
     return (
-      <div className={cn('flex items-center justify-center p-8 text-white/50 border border-white/10 rounded-2xl bg-white/5', className)}>
-        ไม่มีข้อมูล Gap (คุณมีคุณสมบัติครบถ้วน!)
+      <div className={cn('flex items-center justify-center p-8 text-muted-foreground border border-border/60 rounded-2xl bg-card/50 backdrop-blur-md', className)}>
+        {thai ? "ไม่มีข้อมูล Gap (คุณมีสมรรถนะครบถ้วน!)" : "No Gap data (You are fully qualified!)"}
       </div>
     );
   }
 
   return (
-    <div className={cn('bg-gray-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6', className)}>
+    <div className={cn('bg-card/50 dark:bg-card/30 backdrop-blur-md border border-border/60 dark:border-white/5 rounded-2xl p-6 shadow-sm', className)}>
       <div className="mb-6">
-        <h3 className="text-xl font-bold text-white">Top Gaps ที่ต้องพัฒนา</h3>
-        <p className="text-sm text-gray-400 mt-1">เปรียบเทียบคะแนนของคุณกับที่อาชีพต้องการ</p>
+        <h3 className="text-xl font-bold text-foreground">{thai ? "แผนภูมิช่องว่างสมรรถนะ (Top Gaps)" : "Top Gaps Chart"}</h3>
+        <p className="text-xs text-muted-foreground mt-1">{thai ? "เปรียบเทียบคะแนนของคุณกับที่อาชีพต้องการ" : "Compare your scores with career requirements"}</p>
       </div>
 
-      <div className="h-[300px] w-full">
+      <div className="h-[280px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             layout="vertical"
             data={chartData}
-            margin={{ top: 0, right: 30, left: 0, bottom: 0 }}
+            margin={{ top: 0, right: 10, left: -20, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="rgba(255,255,255,0.1)" />
-            <XAxis type="number" domain={[0, 100]} stroke="#64748B" />
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="var(--border)" strokeOpacity={0.6} />
+            <XAxis type="number" domain={[0, 100]} stroke="var(--muted-foreground)" tick={{ fontSize: 9 }} />
             <YAxis 
               dataKey="name" 
               type="category" 
-              width={150} 
-              tick={{ fill: '#E2E8F0', fontSize: 12 }} 
+              width={140} 
+              tick={{ fill: 'var(--foreground)', fontSize: 10, fontWeight: 500 }} 
               axisLine={false} 
               tickLine={false}
             />
-            <Tooltip content={<GapTooltip />} cursor={{ fill: 'rgba(255,255,255,0.05)' }} />
-            <Legend wrapperStyle={{ paddingTop: '10px' }} />
+            <Tooltip content={<GapTooltip />} cursor={{ fill: 'var(--muted)', opacity: 0.15 }} />
+            <Legend wrapperStyle={{ paddingTop: '15px', fontSize: '11px', fontWeight: 600 }} />
             <Bar 
               dataKey="student" 
-              name="Your Score" 
-              fill="#3B82F6" 
+              name={thai ? "คะแนนของคุณ" : "Your Score"} 
+              fill="#F39200" 
               radius={[0, 4, 4, 0]} 
-              barSize={12} 
+              barSize={10} 
             />
             <Bar 
               dataKey="required" 
-              name="Required Score" 
-              fill="#F39200" 
+              name={thai ? "คะแนนที่ต้องการ" : "Required Score"} 
+              fill="#3B82F6" 
               radius={[0, 4, 4, 0]} 
-              barSize={12} 
+              barSize={10} 
             />
           </BarChart>
         </ResponsiveContainer>

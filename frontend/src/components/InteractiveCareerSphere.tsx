@@ -26,52 +26,146 @@ const DT_DIRECTIONS: [number, number, number][] = [
   [0.45, 0.75, 0.0]    // Entrepreneurship/Other - top-most center
 ];
 
+const DC_DIRECTIONS: [number, number, number][] = [
+  [-0.6, 0.5, 0.45],   // Group 1: Visual Design - upper right
+  [-0.6, 0.5, -0.45],  // Group 2: Content Creator - upper left
+  [-0.75, 0.25, 0.2],  // Group 3: Animation - mid-upper right
+  [-0.75, 0.25, -0.2], // Group 4: Film & Video - mid-upper left
+  [-0.6, -0.1, 0.5],   // Group 5: Game - mid-lower right
+  [-0.6, -0.1, -0.5],  // Group 6: Media Planning - mid-lower left
+  [-0.75, -0.4, 0.25], // Group 7: Marketing - lower right
+  [-0.75, -0.4, -0.25],// Group 8: Reporting - lower left
+  [-0.5, 0.75, 0.0],   // Group 9: Application - top-most center
+  [-0.5, -0.75, 0.0]   // Group 10: Personalized/Research - bottom-most center
+];
+
+interface InteractiveCareerSphereProps {
+  isExploring: boolean;
+  setIsExploring: (val: boolean) => void;
+  activeBranch: "DT" | "DC";
+  setActiveBranch: (branch: "DT" | "DC") => void;
+  selectedGroup: string;
+  setSelectedGroup: (group: string) => void;
+  selectedCareer: string;
+  setSelectedCareer: (career: string) => void;
+}
+
+function getHemisphereDirections(count: number, branch: "DT" | "DC"): [number, number, number][] {
+  if (count === 7) {
+    if (branch === "DT") {
+      return DT_DIRECTIONS;
+    } else {
+      return DT_DIRECTIONS.map(d => [-d[0], d[1], -d[2]] as [number, number, number]);
+    }
+  }
+  
+  if (count === 10 && branch === "DC") {
+    return DC_DIRECTIONS;
+  }
+  
+  // Dynamic distribution for other counts (e.g. 10 groups of DC)
+  const dirs: [number, number, number][] = [];
+  for (let i = 0; i < count; i++) {
+    const t = count > 1 ? i / (count - 1) : 0.5;
+    const y = -0.6 + 1.2 * t;
+    
+    const angle = i * 2.39996;
+    const r = Math.sqrt(Math.max(0.1, 1 - y * y)) * 0.75;
+    const z = Math.sin(angle) * r;
+    const x = Math.cos(angle) * r;
+    
+    const posX = Math.abs(x) < 0.25 ? 0.25 + Math.abs(x) : Math.abs(x);
+    const signX = branch === "DT" ? 1 : -1;
+    
+    dirs.push([posX * signX, y, z]);
+  }
+  return dirs;
+}
+
 interface NexusProps {
   light: boolean;
   activeBranch: "DT" | "DC";
   viewMode: "groups" | "careers";
   allGroups: (CareerGroup & { branch: "DT" | "DC" })[];
   lang: string;
+  onNodeClick: (node: any) => void;
 }
 
-function Nexus({ light, activeBranch, viewMode, allGroups, lang }: NexusProps) {
+function Nexus({ light, activeBranch, viewMode, allGroups, lang, onNodeClick }: NexusProps) {
   const groupRef = useRef<THREE.Group>(null);
   const occluderRef = useRef<THREE.Mesh>(null);
   const prevBranchRef = useRef(activeBranch);
   const interactionTimeRef = useRef(0);
 
-  // Prepare nodes list from both branches using DT_DIRECTIONS and mirrored DC_DIRECTIONS
+  // Dynamic nodes data depending on viewMode
   const nodesData = useMemo(() => {
-    const dtList: any[] = [];
-    const dcList: any[] = [];
+    const isThai = lang === "th";
     
-    allGroups.forEach((g) => {
-      if (g.careers.length > 0) {
-        const c = g.careers[0];
-        const isThai = lang === "th";
-        const item = {
-          label: isThai ? (c.nameTh || c.name) : c.name,
-          fullName: isThai ? `${c.nameTh || c.name} (${c.name})` : c.name,
-          desc: c.description,
-          isGroup: false,
-          branch: g.branch,
-          dir: [0, 0, 0] as [number, number, number]
-        };
-        
-        if (g.branch === "DT" && dtList.length < 7) {
-          item.dir = DT_DIRECTIONS[dtList.length];
-          dtList.push(item);
-        } else if (g.branch === "DC" && dcList.length < 7) {
-          const dtDir = DT_DIRECTIONS[dcList.length];
-          // Perfect opposite symmetry: [-x, y, -z]
-          item.dir = [-dtDir[0], dtDir[1], -dtDir[2]];
-          dcList.push(item);
+    if (viewMode === "careers") {
+      // Landing state: 14 representative sub-careers (7 DT, 7 DC)
+      const dtList: any[] = [];
+      const dcList: any[] = [];
+      
+      const dtGroups = allGroups.filter(g => g.branch === "DT");
+      const dcGroups = allGroups.filter(g => g.branch === "DC");
+      
+      const dtDirs = getHemisphereDirections(7, "DT");
+      const dcDirs = getHemisphereDirections(7, "DC");
+      
+      dtGroups.forEach((g) => {
+        if (g.careers.length > 0 && dtList.length < 7) {
+          const c = g.careers[0];
+          dtList.push({
+            label: isThai ? (c.nameTh || c.name) : c.name,
+            fullName: isThai ? `${c.nameTh || c.name} (${c.name})` : c.name,
+            desc: isThai ? c.description : (c.descriptionEn || c.description),
+            isGroup: false,
+            branch: "DT",
+            groupName: g.name,
+            careerName: c.name,
+            dir: dtDirs[dtList.length]
+          });
         }
-      }
-    });
-    
-    return [...dtList, ...dcList];
-  }, [allGroups, lang]);
+      });
+      
+      dcGroups.forEach((g) => {
+        if (g.careers.length > 0 && dcList.length < 7) {
+          const c = g.careers[0];
+          dcList.push({
+            label: isThai ? (c.nameTh || c.name) : c.name,
+            fullName: isThai ? `${c.nameTh || c.name} (${c.name})` : c.name,
+            desc: isThai ? c.description : (c.descriptionEn || c.description),
+            isGroup: false,
+            branch: "DC",
+            groupName: g.name,
+            careerName: c.name,
+            dir: dcDirs[dcList.length]
+          });
+        }
+      });
+      
+      return [...dtList, ...dcList];
+    } else {
+      // Exploring state: groups of the active branch
+      const branchGroups = allGroups.filter(g => g.branch === activeBranch);
+      const dirs = getHemisphereDirections(branchGroups.length, activeBranch);
+      
+      return branchGroups.map((g, idx) => {
+        const groupLabel = g.name; // Always English name for Category Title
+        
+        return {
+          label: groupLabel,
+          fullName: groupLabel,
+          desc: "",
+          isGroup: true,
+          branch: activeBranch,
+          groupName: g.name,
+          careerName: "",
+          dir: dirs[idx]
+        };
+      });
+    }
+  }, [allGroups, lang, viewMode, activeBranch]);
 
   const { pointsGeo, linesGeo, dotTexture, labeledNodes } = useMemo(() => {
     const ico = new THREE.IcosahedronGeometry(RADIUS, 4);
@@ -185,6 +279,8 @@ function Nexus({ light, activeBranch, viewMode, allGroups, lang }: NexusProps) {
         desc: node.desc,
         isGroup: node.isGroup,
         branch: node.branch,
+        groupName: node.groupName,
+        careerName: node.careerName,
         position: [verts[best * 3], verts[best * 3 + 1], verts[best * 3 + 2]] as [number, number, number],
       };
     });
@@ -208,9 +304,9 @@ function Nexus({ light, activeBranch, viewMode, allGroups, lang }: NexusProps) {
         interactionTimeRef.current = state.clock.getElapsedTime();
       }
 
-      // 4. Smooth Rotation logic (DT faces front at Math.PI / 2, DC at -Math.PI / 2)
+      // 4. Smooth Rotation logic (DT faces front at -Math.PI / 2, DC at Math.PI / 2)
       const timeSinceInteraction = state.clock.getElapsedTime() - interactionTimeRef.current;
-      const targetRotationY = activeBranch === "DT" ? Math.PI / 2 : -Math.PI / 2;
+      const targetRotationY = activeBranch === "DT" ? -Math.PI / 2 : Math.PI / 2;
       
       let finalTargetY = targetRotationY;
       if (timeSinceInteraction > 4) {
@@ -281,11 +377,12 @@ function Nexus({ light, activeBranch, viewMode, allGroups, lang }: NexusProps) {
             zIndexRange={[30, 0]}
           >
             <div
+              onClick={() => onNodeClick(node)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white/90 shadow-[0_4px_18px_rgba(0,0,0,0.12)] backdrop-blur-md transition-all hover:scale-105 ${
                 node.branch === "DT"
                   ? "hover:border-blue-500/60 dark:hover:border-blue-400/60"
                   : "hover:border-brand-orange/60"
-              } dark:border-white/10 dark:bg-[#070b14]/85 dark:shadow-[0_4px_24px_rgba(0,0,0,0.55)] text-slate-800 dark:text-white pointer-events-auto select-none`}
+              } dark:border-white/10 dark:bg-[#070b14]/85 dark:shadow-[0_4px_24px_rgba(0,0,0,0.55)] text-slate-800 dark:text-white pointer-events-auto select-none cursor-pointer`}
             >
               <span 
                 className={`w-1.5 h-1.5 rounded-full ${
@@ -294,7 +391,9 @@ function Nexus({ light, activeBranch, viewMode, allGroups, lang }: NexusProps) {
                     : "bg-brand-orange shadow-[0_0_8px_#F39200]"
                 }`} 
               />
-              <span className="text-[10px] md:text-[11px] font-semibold whitespace-nowrap">{node.label}</span>
+              <span className={`text-[10px] md:text-[11px] font-semibold whitespace-nowrap ${lang === "th" ? "font-thai leading-relaxed" : ""}`}>
+                {node.label}
+              </span>
             </div>
           </Html>
         </group>
@@ -303,11 +402,19 @@ function Nexus({ light, activeBranch, viewMode, allGroups, lang }: NexusProps) {
   );
 }
 
-export default function InteractiveCareerSphere() {
+export default function InteractiveCareerSphere({
+  isExploring,
+  setIsExploring,
+  activeBranch,
+  setActiveBranch,
+  selectedGroup,
+  setSelectedGroup,
+  selectedCareer,
+  setSelectedCareer,
+}: InteractiveCareerSphereProps) {
   const [mounted, setMounted] = useState(false);
-  const [activeBranch, setActiveBranch] = useState<"DT" | "DC">("DT");
-  const viewMode = "careers";
   const { lang } = useLanguage();
+  const thai = lang === "th";
 
   const allGroups = useMemo(() => [
     ...DT_BRANCH.map(g => ({ ...g, branch: "DT" as const })),
@@ -321,6 +428,23 @@ export default function InteractiveCareerSphere() {
 
   const light = mounted && resolvedTheme === "light";
 
+  const viewMode = isExploring ? "groups" : "careers";
+
+  const handleNodeClick = (node: any) => {
+    if (viewMode === "careers") {
+      setActiveBranch(node.branch);
+      setSelectedGroup(node.groupName);
+      setSelectedCareer(node.careerName);
+      setIsExploring(true);
+    } else {
+      setSelectedGroup(node.groupName);
+      const grp = allGroups.find(g => g.name === node.groupName);
+      if (grp && grp.careers.length > 0) {
+        setSelectedCareer(grp.careers[0].name);
+      }
+    }
+  };
+
   if (!mounted) {
     return (
       <div className="w-full h-full flex items-center justify-center">
@@ -330,43 +454,57 @@ export default function InteractiveCareerSphere() {
   }
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-between p-2">
+    <div className="relative w-full h-full flex flex-col justify-between p-2 overflow-visible">
       
       {/* Branch Toggle: DT vs DC (Positioned at top-right, shifted down and left) */}
-      <div className="absolute top-20 right-20 md:top-24 md:right-24 z-20 pointer-events-auto flex rounded-full border border-slate-200 dark:border-white/10 p-1 bg-white/60 dark:bg-black/40 backdrop-blur-md max-w-fit shadow-lg">
-        <button
-          onClick={() => {
-            setActiveBranch("DT");
-          }}
-          className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${
-            activeBranch === "DT"
-              ? "bg-brand-orange text-white shadow-md"
-              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-          }`}
-        >
-          DT
-        </button>
-        <button
-          onClick={() => {
-            setActiveBranch("DC");
-          }}
-          className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${
-            activeBranch === "DC"
-              ? "bg-[#2563EB] text-white shadow-md"
-              : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
-          }`}
-        >
-          DC
-        </button>
-      </div>
+      {/* Hidden when exploring to prevent duplicate controls */}
+      {!isExploring && (
+        <div className="absolute top-20 right-20 md:top-24 md:right-24 z-20 pointer-events-auto flex rounded-full border border-slate-200 dark:border-white/10 p-1 bg-white/60 dark:bg-black/40 backdrop-blur-md max-w-fit shadow-lg">
+          <button
+            onClick={() => {
+              setActiveBranch("DT");
+            }}
+            className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${
+              activeBranch === "DT"
+                ? "bg-[#2563EB] text-white shadow-md"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            DT
+          </button>
+          <button
+            onClick={() => {
+              setActiveBranch("DC");
+            }}
+            className={`px-3.5 py-1.5 text-xs font-bold rounded-full transition-all duration-300 ${
+              activeBranch === "DC"
+                ? "bg-brand-orange text-[#050A14] shadow-md"
+                : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white"
+            }`}
+          >
+            DC
+          </button>
+        </div>
+      )}
+
+      {/* Interactive tip overlay for landing */}
+      {!isExploring && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 pointer-events-none text-center hidden md:block">
+          <div className="px-4 py-2 rounded-full border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-[#070b14]/90 backdrop-blur-md shadow-md animate-bounce">
+            <span className={`text-[10px] md:text-xs font-medium text-slate-500 dark:text-slate-400 ${thai ? "font-thai" : ""}`}>
+              {thai ? "💡 คลิกที่กลุ่มอาชีพบนลูกบอลเพื่อเจาะลึกวิชาเรียน" : "💡 Click on any career label to explore details"}
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* 3D Canvas */}
-      <div className="flex-1 w-full min-h-[360px] md:min-h-[420px] relative z-10">
+      <div className="flex-1 w-full min-h-[360px] md:min-h-[420px] relative z-10 overflow-visible">
         <Canvas
           camera={{ position: [0, 0, 6.2], fov: 55 }}
           gl={{ alpha: true, antialias: true }}
           dpr={[1, 2]}
-          style={{ background: "transparent" }}
+          style={{ background: "transparent", overflow: "visible" }}
         >
           <Nexus
             light={light}
@@ -374,6 +512,7 @@ export default function InteractiveCareerSphere() {
             viewMode={viewMode}
             allGroups={allGroups}
             lang={lang}
+            onNodeClick={handleNodeClick}
           />
 
           <OrbitControls
@@ -392,9 +531,7 @@ export default function InteractiveCareerSphere() {
           )}
         </Canvas>
       </div>
-
-
-
     </div>
   );
 }
+

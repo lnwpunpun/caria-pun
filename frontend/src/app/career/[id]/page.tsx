@@ -5,7 +5,7 @@ import { useRouter, useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import GapAnalysisSection from "@/components/dashboard/GapAnalysisSection";
+import GapRadarChart, { PriorityGapsList } from "@/components/dashboard/GapAnalysisSection";
 import WhatIfSlider from "@/components/WhatIfSlider";
 import { GapBarChart } from "@/components/gap/GapBarChart";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,7 @@ import { CourseMatcher } from "@/components/results/CourseMatcher";
 export default function CareerGapPage() {
   const router = useRouter();
   const { lang } = useLanguage();
+  const thai = lang === "th";
   const params = useParams();
   const searchParams = useSearchParams();
 
@@ -77,58 +78,58 @@ export default function CareerGapPage() {
   const readiness = data.readiness_percentage;
 
   return (
-    <div className="min-h-screen bg-[#0a0e1a] text-white font-thai relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground font-thai relative overflow-hidden">
       <Navbar />
 
-      {/* Background */}
+      {/* Ambient background glows tailored to SUT brand palette */}
       <div className="pointer-events-none fixed inset-0 z-0">
-        <div className="absolute -top-40 left-0 h-[500px] w-[500px] rounded-full bg-primary/30 blur-[120px]" />
-        <div className="absolute top-1/2 right-0 h-[400px] w-[400px] rounded-full bg-accent/15 blur-[100px]" />
-        <div className="absolute bottom-0 left-1/3 h-[300px] w-[300px] rounded-full bg-success/10 blur-[80px]" />
+        <div className="absolute -top-40 left-0 h-[500px] w-[500px] rounded-full bg-brand-orange/10 dark:bg-brand-orange/15 blur-[120px]" />
+        <div className="absolute top-1/3 right-0 h-[400px] w-[400px] rounded-full bg-blue-500/5 dark:bg-blue-500/10 blur-[100px]" />
+        <div className="absolute bottom-0 left-1/4 h-[300px] w-[300px] rounded-full bg-emerald-500/5 dark:bg-emerald-500/10 blur-[80px]" />
       </div>
 
       <main className="relative z-10 mx-auto max-w-7xl px-6 pt-28 pb-20">
         {/* Back button */}
         <button
           onClick={() => router.back()}
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/50 transition-colors hover:text-white"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
-          ← กลับไปหน้าผลลัพธ์
+          ← {thai ? "กลับไปหน้าผลลัพธ์" : "Back to Results"}
         </button>
 
         {/* Header Card */}
-        <div className="mb-10 rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-md">
+        <div className="mb-10 rounded-2xl border border-border/60 dark:border-white/5 bg-card/50 dark:bg-card/30 p-8 backdrop-blur-md shadow-sm">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
-              <h1 className="text-3xl font-bold md:text-4xl">
-                <span className="bg-gradient-to-r from-accent to-orange-300 bg-clip-text text-transparent">
+              <h1 className="text-3xl font-extrabold md:text-4xl">
+                <span className="bg-gradient-to-r from-brand-orange to-orange-400 bg-clip-text text-transparent">
                   {data.career.career_name}
                 </span>
               </h1>
-              <p className="mt-2 text-white/50">
-                Gap Analysis — การวิเคราะห์ช่องว่างสมรรถนะ
+              <p className="mt-2 text-muted-foreground text-sm font-medium">
+                Gap Analysis — {thai ? "การวิเคราะห์ช่องว่างสมรรถนะ" : "Competency Gap Analysis"}
               </p>
             </div>
 
-            <div className="flex items-center gap-8">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-8">
               {/* Animated match % */}
-              <div className="text-center">
-                <div className="text-5xl font-bold text-accent">
+              <div className="text-center sm:text-left">
+                <div className="text-5xl font-extrabold text-brand-orange">
                   {animatedMatch.toFixed(1)}
-                  <span className="text-2xl">%</span>
+                  <span className="text-2xl font-bold">%</span>
                 </div>
-                <div className="text-sm text-white/50">ความเหมาะสม</div>
+                <div className="text-xs text-muted-foreground mt-1 font-semibold">{thai ? "ความเหมาะสม (Match Fit)" : "Match Fit"}</div>
               </div>
 
               {/* Readiness bar */}
-              <div className="w-48">
-                <div className="mb-1 flex justify-between text-sm">
-                  <span className="text-white/60">ความพร้อม</span>
-                  <span className="font-bold text-success">{readiness}%</span>
+              <div className="w-full sm:w-48">
+                <div className="mb-1.5 flex justify-between text-xs font-semibold">
+                  <span className="text-muted-foreground">{thai ? "ความพร้อมหลักสูตร" : "Curriculum Readiness"}</span>
+                  <span className="text-emerald-500 font-bold">{readiness}%</span>
                 </div>
-                <div className="h-3 overflow-hidden rounded-full bg-white/10">
+                <div className="h-2.5 overflow-hidden rounded-full bg-muted-foreground/15">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-success to-emerald-400 transition-all duration-1000 ease-out"
+                    className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-1000 ease-out"
                     style={{ width: `${readiness}%` }}
                   />
                 </div>
@@ -137,52 +138,67 @@ export default function CareerGapPage() {
           </div>
         </div>
 
-        {/* Main 2-col: Radar + What-if */}
+        {/* Row 2: Radar Chart + What-If Simulator */}
         <div className="grid gap-8 lg:grid-cols-5">
-          {/* Left — Radar (wider) */}
-          <div className="lg:col-span-3">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
-              <h2 className="mb-4 text-xl font-bold text-white">
-                📡 Drilldown Radar
+          {/* Left - Radar Chart (col-span-3) */}
+          <div className="lg:col-span-3 flex flex-col justify-stretch">
+            <div className="flex-1">
+              <h2 className="mb-4 text-xl font-bold text-foreground flex items-center gap-2">
+                <span>📡</span> {thai ? "แผนภูมิใยแมงมุมสมรรถนะ" : "Drilldown Radar"}
               </h2>
-              <GapAnalysisSection />
+              <GapRadarChart radarData={data.radar_data} />
             </div>
           </div>
 
-          {/* Right — What-if Slider */}
-          <div className="lg:col-span-2">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
-              <h2 className="mb-4 text-xl font-bold text-white">
-                🎚️ What-if Simulator
+          {/* Right - What-If Simulator (col-span-2) */}
+          <div className="lg:col-span-2 flex flex-col justify-stretch">
+            <div className="flex-1">
+              <h2 className="mb-4 text-xl font-bold text-foreground flex items-center gap-2">
+                <span>🎚️</span> {thai ? "จำลองการปรับระดับทักษะ" : "What-if Simulator"}
               </h2>
-              <p className="mb-4 text-sm text-white/50">
-                ลองปรับคะแนนเพื่อดูว่าหากพัฒนาสมรรถนะนี้ อันดับจะเปลี่ยนอย่างไร
-              </p>
               <WhatIfSlider
                 gaps={data.gaps}
                 currentScores={currentScores}
                 allCareers={[]}
                 onRankingChange={() => {}}
-                className=""
+                className="h-full"
               />
             </div>
           </div>
         </div>
 
-        {/* Gap Bar Chart */}
-        <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
-          <h2 className="mb-4 text-xl font-bold text-white">
-            📊 Gap สมรรถนะ (เรียงจากมากไปน้อย)
-          </h2>
-          <GapBarChart
-            gaps={data.gaps}
-            maxItems={10}
-            className="min-h-[300px]"
-          />
+        {/* Row 3: Priority Gaps List + Gap Bar Chart */}
+        <div className="grid gap-8 lg:grid-cols-5 mt-10">
+          {/* Left - Priority Gaps (col-span-3) */}
+          <div className="lg:col-span-3 flex flex-col justify-stretch">
+            <div className="flex-1">
+              <h2 className="mb-4 text-xl font-bold text-foreground flex items-center gap-2">
+                <span>⚠️</span> {thai ? "ช่องว่างสมรรถนะสำคัญ" : "Priority Gaps"}
+              </h2>
+              <PriorityGapsList gaps={data.gaps} />
+            </div>
+          </div>
+
+          {/* Right - Gap Bar Chart (col-span-2) */}
+          <div className="lg:col-span-2 flex flex-col justify-stretch">
+            <div className="flex-1">
+              <h2 className="mb-4 text-xl font-bold text-foreground flex items-center gap-2">
+                <span>📊</span> {thai ? "แผนภูมิเปรียบเทียบช่องว่าง" : "Top Gaps Comparison"}
+              </h2>
+              <GapBarChart
+                gaps={data.gaps}
+                maxItems={10}
+                className="h-full"
+              />
+            </div>
+          </div>
         </div>
 
         {/* SUT Course Curriculum Mapping & Career Group Matcher */}
-        <div className="mt-8">
+        <div className="mt-10">
+          <h2 className="mb-4 text-xl font-bold text-foreground flex items-center gap-2">
+            <span>🎓</span> {thai ? "การวิเคราะห์และแนะนำแผนการเรียน มทส." : "SUT Curriculum Advisory"}
+          </h2>
           <CourseMatcher
             careerName={data.career.career_name}
             gaps={data.gaps}
@@ -192,16 +208,16 @@ export default function CareerGapPage() {
 
         {/* Strengths */}
         {data.strengths.length > 0 && (
-          <div className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md">
-            <h2 className="mb-4 text-xl font-bold text-white">
-              💪 จุดแข็งของคุณ
+          <div className="mt-10 rounded-2xl border border-border/60 bg-card/50 dark:bg-card/30 p-6 backdrop-blur-md shadow-sm">
+            <h2 className="mb-4 text-xl font-bold text-foreground flex items-center gap-2">
+              <span>💪</span> {thai ? "จุดแข็งของคุณ (Your Strengths)" : "Your Strengths"}
             </h2>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2.5">
               {data.strengths.map((s) => (
                 <Badge
                   key={s.competency_id}
                   variant="default"
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 text-sm"
+                  className="bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 px-4 py-2 text-sm font-semibold rounded-xl"
                 >
                   {s.competency_id.replace(/_/g, " ")} — {s.student_score}
                 </Badge>
@@ -211,12 +227,12 @@ export default function CareerGapPage() {
         )}
 
         {/* CTA */}
-        <div className="mt-10 text-center">
+        <div className="mt-12 text-center">
           <Link
             href={`/marketplace?user=${userId}&career=${careerId}`}
-            className="group inline-flex items-center gap-3 rounded-xl bg-accent px-10 py-4 text-lg font-bold text-white shadow-lg shadow-accent/30 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-accent/40"
+            className="group inline-flex items-center gap-2.5 rounded-xl bg-brand-orange px-10 py-4 text-lg font-bold text-brand-orange-foreground shadow-lg shadow-brand-orange/20 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-brand-orange/30"
           >
-            ค้นหาคอร์สเรียนเพื่อปิด Gap
+            {thai ? "ค้นหาคอร์สเรียนเพื่อเรียนล่วงหน้าและปิด Gap" : "Find Courses to Close Gaps"}
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
               →
             </span>

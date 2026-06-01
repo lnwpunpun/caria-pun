@@ -13,7 +13,7 @@ export function OnboardingCard({ onStart, lang }: OnboardingCardProps) {
   const thai = lang === "th";
 
   return (
-    <div className="max-w-3xl mx-auto rounded-3xl border border-slate-200 bg-white/70 p-6 md:p-8 backdrop-blur-xl dark:border-white/10 dark:bg-[#0a0f1d]/75 shadow-2xl animate-slide-up">
+    <div className="max-w-3xl mx-auto rounded-3xl border border-slate-200 bg-white/70 p-6 md:p-8 backdrop-blur-xl dark:border-white/10 dark:bg-[#0a0f1d]/75 shadow-2xl">
       
       {/* Badge Header */}
       <div className="flex justify-center mb-6">
@@ -32,8 +32,8 @@ export function OnboardingCard({ onStart, lang }: OnboardingCardProps) {
         </h2>
         <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
           {thai
-            ? "วิเคราะห์และจับคู่สมรรถนะ 66 มิติกับ 78 อาชีพดิจิทัล เพื่อเป้าหมายการวางแผนการเรียนรู้ที่แม่นยำที่สุด"
-            : "Analyze and map 66 competency dimensions against 78 digital careers for accurate learning planning."}
+            ? "ประเมินเชิงลึกทุกมิติ (ทักษะ, ความรู้, ทัศนคติ) ใช้เวลาประมาณ 10 นาที เพื่อผลการวิเคราะห์ที่มีความแม่นยำสูงที่สุด (ความแม่นยำ 83% ตามงานวิจัย)"
+            : "In-depth assessment of all dimensions (skills, knowledge, attitude) takes about 10 minutes to provide the most accurate analysis (83% precision based on research)."}
         </p>
       </div>
 

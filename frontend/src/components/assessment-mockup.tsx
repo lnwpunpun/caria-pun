@@ -1,106 +1,86 @@
 "use client"
 
-import { useState } from "react"
 import { motion } from "motion/react"
-import { Check } from "lucide-react"
+import Link from "next/link"
+import { Brain } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
 
-
-function labelFor(v: number, t: any) {
-  if (v < 20) return t.assessment.stronglyDisagreeLabel
-  if (v < 40) return t.assessment.disagreeLabel
-  if (v < 60) return t.assessment.neutralLabel
-  if (v < 80) return t.assessment.agreeLabel
-  return t.assessment.stronglyAgreeLabel
-}
+const HIGHLIGHTS = [
+  { emoji: "⏱️", th: "ใช้เวลาเพียง 10-15 นาที", en: "Only 10–15 minutes" },
+  { emoji: "🎯", th: "ความแม่นยำสูง (Precision@10)", en: "High precision (Precision@10)" },
+  { emoji: "🧠", th: "วิเคราะห์ด้วย AI", en: "AI-powered analysis" },
+]
 
 export function AssessmentMockup() {
-  const { t, lang } = useLanguage()
-  const [values, setValues] = useState<number[]>([72, 48, 88])
+  const { lang } = useLanguage()
   const thai = lang === "th"
 
   return (
     <section id="assessment" className="relative overflow-hidden bg-background py-28 sm:py-36">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-24 top-1/3 size-72 rounded-full bg-accent blur-3xl"
-      />
-      <div className="relative mx-auto max-w-6xl px-6">
-        <div className="mx-auto mb-14 max-w-2xl text-center">
-          <p className={`text-xs font-medium text-muted-foreground ${thai ? "font-thai" : "uppercase tracking-[0.3em]"}`}>
-            {t.assessment.eyebrow}
-          </p>
-          <h2 className={`mt-3 text-balance text-4xl font-semibold tracking-tight sm:text-5xl ${thai ? "font-thai leading-snug" : ""}`}>
-            {t.assessment.title}
-          </h2>
-          <p className={`mt-5 text-pretty text-lg text-muted-foreground sm:text-xl ${thai ? "font-thai leading-loose" : "leading-relaxed"}`}>
-            {t.assessment.subtitle}
-          </p>
-        </div>
+      {/* Ambient accents */}
+      <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-1/3 size-72 rounded-full bg-brand-orange/10 blur-3xl" />
+      <div aria-hidden="true" className="pointer-events-none absolute -right-24 bottom-1/4 size-72 rounded-full bg-[#2563EB]/10 blur-3xl" />
 
+      <div className="relative mx-auto max-w-6xl px-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="mx-auto max-w-2xl rounded-[2rem] border border-border bg-card p-6 shadow-[0_30px_80px_-30px_rgba(0,16,40,0.25)] sm:p-10"
+          className="relative mx-auto max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white/70 p-8 shadow-2xl backdrop-blur-xl dark:border-white/10 dark:bg-[#0A1422]/60 md:p-12"
         >
-          <div className="mb-8 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="flex size-9 items-center justify-center rounded-full bg-brand-blue text-xs font-semibold text-white">
-                A
-              </span>
-              <div className={thai ? "font-thai" : ""}>
-                <p className="text-sm font-semibold">{t.assessment.module}</p>
-                <p className="text-xs text-muted-foreground">{t.assessment.section}</p>
-              </div>
-            </div>
-            <span className={`rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground ${thai ? "font-thai" : ""}`}>
-              {t.assessment.questionsCount}
-            </span>
-          </div>
+          {/* Decorative glow behind the icon */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 -top-20 mx-auto h-48 w-48 rounded-full bg-brand-orange/20 blur-3xl" />
 
-          <div className="flex flex-col gap-9">
-            {t.assessment.questions.map((q, i) => (
-              <div key={q}>
-                <div className="mb-4 flex items-start justify-between gap-4">
-                  <p className={`text-sm font-medium leading-relaxed sm:text-base ${thai ? "font-thai leading-loose" : ""}`}>{q}</p>
-                  <span className="shrink-0 rounded-full bg-brand-orange/10 px-3 py-1 text-xs font-semibold text-brand-orange font-mono">
-                    {values[i]}
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  value={values[i]}
-                  aria-label={q}
-                  onChange={(e) =>
-                    setValues((prev) => {
-                      const next = [...prev]
-                      next[i] = Number(e.target.value)
-                      return next
-                    })
-                  }
-                  className="caria-slider w-full"
-                  style={{ "--val": `${values[i]}%` } as React.CSSProperties}
-                />
-                <div className={`mt-2 flex justify-between text-[11px] text-muted-foreground ${thai ? "font-thai" : ""}`}>
-                  <span>{t.assessment.disagree}</span>
-                  <span className="font-medium text-foreground">{labelFor(values[i], t)}</span>
-                  <span>{t.assessment.agree}</span>
-                </div>
+          {/* Floating animated icon */}
+          <motion.div
+            animate={{ y: [-5, 5, -5] }}
+            transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+            className="relative flex justify-center"
+          >
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-[#F39200] to-[#E0700A] shadow-[0_0_30px_rgba(243,146,0,0.4)]">
+              <Brain size={40} className="text-white" />
+            </div>
+          </motion.div>
+
+          {/* Pre-title badge */}
+          <p className="mt-5 text-center text-xs font-bold uppercase tracking-widest text-brand-orange">
+            In-Depth Evaluation
+          </p>
+
+          {/* Headline */}
+          <h2 className={`mb-2 mt-2 text-center text-3xl font-bold text-slate-900 dark:text-white md:text-4xl ${thai ? "font-thai leading-snug" : "font-syne"}`}>
+            {thai ? "แบบทดสอบประเมินตนเอง 81 ข้อ" : "81-Question Self Assessment"}
+          </h2>
+
+          {/* Subtitle */}
+          <p className={`mx-auto mb-8 max-w-2xl text-center leading-relaxed text-slate-600 dark:text-slate-300 ${thai ? "font-thai leading-loose" : ""}`}>
+            {thai
+              ? "วิเคราะห์และจับคู่สมรรถนะ 66 มิติกับ 78 อาชีพดิจิทัล เพื่อเป้าหมายการวางแผนการเรียนรู้ที่แม่นยำที่สุด"
+              : "Maps your 66 competency dimensions against 78 digital careers for the most precise learning roadmap."}
+          </p>
+
+          {/* Value highlights */}
+          <div className="mx-auto grid max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3">
+            {HIGHLIGHTS.map((h) => (
+              <div
+                key={h.en}
+                className={`rounded-xl border border-slate-200 bg-slate-100 p-3 text-center text-sm font-semibold text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-200 ${thai ? "font-thai" : ""}`}
+              >
+                {h.emoji} {thai ? h.th : h.en}
               </div>
             ))}
           </div>
 
-          <button
-            type="button"
-            className={`mt-10 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange py-3.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_14px_40px_-12px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.01] active:scale-[0.99] ${thai ? "font-thai" : ""}`}
-          >
-            <Check className="size-4" />
-            {t.assessment.saveAndContinue}
-          </button>
+          {/* Grand CTA */}
+          <div className="mt-8 flex justify-center">
+            <Link
+              href="/assessment"
+              className={`block w-full rounded-full bg-[#F39200] px-10 py-4 text-center text-lg font-bold text-[#050A14] shadow-[0_0_20px_rgba(243,146,0,0.4)] transition-transform hover:scale-105 sm:w-auto ${thai ? "font-thai" : ""}`}
+            >
+              {thai ? "เริ่มทำแบบทดสอบ (Start Assessment) →" : "Start Assessment →"}
+            </Link>
+          </div>
         </motion.div>
       </div>
     </section>

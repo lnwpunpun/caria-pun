@@ -4,6 +4,7 @@ import type { CareerResult } from '@/types';
 import { cn } from '@/lib/utils';
 import { ChevronRight, Star } from 'lucide-react';
 import { useMemo } from 'react';
+import { useLanguage } from '@/components/language-provider';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -21,14 +22,7 @@ interface CareerCardProps {
 /* ------------------------------------------------------------------ */
 
 function programBadge(program: string): string {
-  switch (program.toUpperCase()) {
-    case 'DT':
-      return 'bg-blue-500/20 text-blue-400';
-    case 'DM':
-      return 'bg-purple-500/20 text-purple-400';
-    default:
-      return 'bg-gray-500/20 text-gray-400';
-  }
+  return 'bg-slate-50 text-slate-500 dark:bg-white/5 dark:text-slate-400 border border-slate-200 dark:border-white/10';
 }
 
 function rankGradient(rank: number): string {
@@ -55,6 +49,8 @@ function matchColor(pct: number): string {
 /* ------------------------------------------------------------------ */
 
 export default function CareerCard({ career, isTopRank, onClick, className }: CareerCardProps) {
+  const { lang } = useLanguage();
+  const thai = lang === 'th';
   const { rank, career_name, career_group, program, match_percentage, top_strengths, top_gaps } =
     career;
 
@@ -74,11 +70,11 @@ export default function CareerCard({ career, isTopRank, onClick, className }: Ca
     <div
       onClick={onClick}
       className={cn(
-        'bg-gray-900/60 backdrop-blur-xl border rounded-2xl overflow-hidden cursor-pointer',
-        'hover:scale-[1.02] transition-all duration-300 group',
+        'bg-white dark:bg-[#0a0f1c]/60 backdrop-blur-xl border rounded-2xl overflow-hidden cursor-pointer',
+        'hover:-translate-y-1 transition-all duration-300 group relative',
         isTopRank
-          ? 'border-amber-500/30 shadow-lg shadow-amber-500/10 p-6'
-          : 'border-white/10 p-4',
+          ? 'p-6 border-slate-200/60 dark:border-white/10 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.5)]'
+          : 'p-4 border-slate-200/50 dark:border-white/5 shadow-[0_4px_20px_-12px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_20px_-12px_rgba(0,0,0,0.4)]',
         className,
       )}
     >
@@ -107,7 +103,7 @@ export default function CareerCard({ career, isTopRank, onClick, className }: Ca
         <div className="flex-1 min-w-0">
           <h4
             className={cn(
-              'font-semibold text-white truncate',
+              'font-semibold text-foreground truncate',
               isTopRank ? 'text-lg' : 'text-base',
             )}
           >
@@ -115,32 +111,34 @@ export default function CareerCard({ career, isTopRank, onClick, className }: Ca
           </h4>
 
           {/* Badges */}
-          <div className="flex flex-wrap gap-2 mt-1.5">
-            <span className="bg-white/10 text-gray-300 text-xs px-2 py-0.5 rounded-full">
+          <div className="flex flex-wrap gap-2 mt-2">
+            <span className="bg-slate-50 text-slate-500 dark:bg-white/5 dark:text-slate-400 border border-slate-200 dark:border-white/10 text-[10px] px-2 py-0.5 rounded-full font-medium">
               {career_group}
             </span>
             <span
-              className={cn('text-xs px-2 py-0.5 rounded-full font-medium', programBadge(program))}
+              className={cn('text-[10px] px-2 py-0.5 rounded-full font-medium', programBadge(program))}
             >
               {program}
             </span>
           </div>
 
           {/* Strength + Gap tags */}
-          <div className="flex flex-wrap gap-1.5 mt-2">
+          <div className="flex flex-wrap gap-1.5 mt-2.5">
             {top_strengths.slice(0, 2).map((s) => (
               <span
                 key={s}
-                className="bg-emerald-500/15 text-emerald-400 text-[10px] px-2 py-0.5 rounded-full"
+                className="flex items-center gap-1.5 bg-slate-50 text-slate-500 dark:bg-white/5 dark:text-slate-400 border border-slate-200/60 dark:border-white/10 text-[10px] px-2 py-0.5 rounded-full"
               >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80"></span>
                 {s}
               </span>
             ))}
             {top_gaps.slice(0, 2).map((g) => (
               <span
                 key={g}
-                className="bg-red-500/15 text-red-400 text-[10px] px-2 py-0.5 rounded-full"
+                className="flex items-center gap-1.5 bg-slate-50 text-slate-500 dark:bg-white/5 dark:text-slate-400 border border-slate-200/60 dark:border-white/10 text-[10px] px-2 py-0.5 rounded-full"
               >
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400/80"></span>
                 {g}
               </span>
             ))}
@@ -155,7 +153,7 @@ export default function CareerCard({ career, isTopRank, onClick, className }: Ca
               cy={size / 2}
               r={radius}
               fill="none"
-              stroke="rgba(255,255,255,0.1)"
+              stroke="rgba(148,163,184,0.3)"
               strokeWidth={strokeWidth}
             />
             <circle
@@ -184,9 +182,12 @@ export default function CareerCard({ career, isTopRank, onClick, className }: Ca
       </div>
 
       {/* Hover action */}
-      <div className="flex items-center gap-1 text-[#F39200] text-sm mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <span>ดู Gap Analysis</span>
-        <ChevronRight size={16} />
+      <div className={cn(
+        "flex items-center gap-1 text-brand-orange text-xs font-semibold mt-4 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300",
+        isTopRank ? "mt-4" : "mt-3"
+      )}>
+        <span>{thai ? 'ดูวิเคราะห์ช่องว่าง (Gap Analysis)' : 'View Gap Analysis'}</span>
+        <ChevronRight size={14} />
       </div>
     </div>
   );

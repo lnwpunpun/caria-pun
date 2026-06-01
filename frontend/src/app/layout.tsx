@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'CARIA-GAP — AI Career Gap Analysis',
-  description: 'ระบบวิเคราะห์ช่องว่างสมรรถนะและจับคู่อาชีพดิจิทัลด้วย AI ต่อยอดจากงานวิจัย CARIA (Scopus 2024)',
-  keywords: ['career', 'gap analysis', 'AI', 'competency', 'digital career', 'CARIA'],
+  title: 'SUT-CARIA — Advisory & Curriculum Platform',
+  description: 'แพลตฟอร์มให้คำแนะนำการศึกษาและแสดงข้อมูลหลักสูตรของมหาวิทยาลัยเทคโนโลยีสุรนารี (SUT)',
+  keywords: ['career', 'advisory', 'SUT', 'curriculum', 'digital career', 'SUT-CARIA'],
 };
 
 import { ThemeProvider } from "@/components/theme-provider";

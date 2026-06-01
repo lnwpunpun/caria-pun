@@ -1,0 +1,82 @@
+[
+  {
+    "gap_competency_id": "S20_Programming",
+    "course_name": "Python Programming Foundation",
+    "provider": "xLane SUT",
+    "course_url": "https://xlane.sut.ac.th/home/course/overview/19/",
+    "thumbnail_url": "/images/xlane/cover_01.png", 
+    "price_thb": 0,
+    "duration_hours": 15,
+    "gap_points_addressed": 30.0
+  },
+  {
+    "gap_competency_id": "K04_Communications_and_Media",
+    "course_name": "Digital Communication Skills",
+    "provider": "xLane SUT",
+    "course_url": "https://xlane.sut.ac.th/home/course/overview/312/",
+    "thumbnail_url": "/images/xlane/cover_02.png", 
+    "price_thb": 500,
+    "duration_hours": 8,
+    "gap_points_addressed": 25.0
+  },
+  {
+    "gap_competency_id": "S03_Complex_Problem_Solving",
+    "course_name": "Problem Solving with Algorithms",
+    "provider": "xLane SUT",
+    "course_url": "https://xlane.sut.ac.th/home/course/overview/20/",
+    "thumbnail_url": "/images/xlane/cover_03.png", 
+    "price_thb": 0,
+    "duration_hours": 12,
+    "gap_points_addressed": 28.0
+  },
+  {
+    "gap_competency_id": "S26_Systems_Design",
+    "course_name": "Software Architecture Design",
+    "provider": "xLane SUT",
+    "course_url": "https://xlane.sut.ac.th/home/course/overview/23/",
+    "thumbnail_url": "/images/xlane/cover_04.png", 
+    "price_thb": 0,
+    "duration_hours": 16,
+    "gap_points_addressed": 35.0
+  },
+  {
+    "gap_competency_id": "K26_Sales_and_Marketing",
+    "course_name": "Digital Marketing Strategy",
+    "provider": "xLane SUT",
+    "course_url": "https://xlane.sut.ac.th/home/course/overview/311/",
+    "thumbnail_url": "/images/xlane/cover_05.png", 
+    "price_thb": 1200,
+    "duration_hours": 10,
+    "gap_points_addressed": 20.0
+  },
+  {
+    "gap_competency_id": "S16_Negotiation",
+    "course_name": "Effective Business Negotiation",
+    "provider": "xLane SUT",
+    "course_url": "https://xlane.sut.ac.th/home/course/overview/313/",
+    "thumbnail_url": "/images/xlane/cover_06.png", 
+    "price_thb": 1500,
+    "duration_hours": 9,
+    "gap_points_addressed": 22.0
+  },
+  {
+    "gap_competency_id": "K07_Design",
+    "course_name": "UI/UX Design Principles",
+    "provider": "xLane SUT",
+    "course_url": "https://xlane.sut.ac.th/home/course/overview/294/",
+    "thumbnail_url": "/images/xlane/cover_07.png", 
+    "price_thb": 800,
+    "duration_hours": 14,
+    "gap_points_addressed": 26.0
+  },
+  {
+    "gap_competency_id": "A03_Enterprising",
+    "course_name": "Startup & Entrepreneurship 101",
+    "provider": "xLane SUT",
+    "course_url": "https://xlane.sut.ac.th/home/course/overview/316/",
+    "thumbnail_url": "/images/xlane/cover_08.png", 
+    "price_thb": 2000,
+    "duration_hours": 20,
+    "gap_points_addressed": 40.0
+  }
+]

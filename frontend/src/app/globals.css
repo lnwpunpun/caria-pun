@@ -29,6 +29,8 @@
   --border: #e6eaf1;
   --input: #e6eaf1;
   --ring: #f39200;
+  --success: #16a34a;
+  --danger: #dc2626;
   --chart-1: #f39200;
   --chart-2: #002f6c;
   --chart-3: #3b6bb5;
@@ -66,6 +68,8 @@
   --border: #1c2a40;
   --input: #1c2a40;
   --ring: #f39200;
+  --success: #34d399;
+  --danger: #f87171;
   --chart-1: #f39200;
   --chart-2: #1e90ff;
   --chart-3: #6aa6e8;
@@ -106,6 +110,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);

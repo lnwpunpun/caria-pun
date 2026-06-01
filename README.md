@@ -1,153 +1,113 @@
-# CARIA-GAP
+# CARIA-GAP (AI-Driven Career Navigator)
 
-ระบบแนะนำอาชีพและการวิเคราะห์ช่องว่างสมรรถนะ (Career Recommendation and Competency Gap Analysis System) ที่พัฒนาขึ้นตามแบบจำลอง **CARIA Modified Euclidean Similarity model** (66 มิติ, คะแนน 0-100)
-
-โปรเจกต์นี้แบ่งออกเป็น 2 ส่วนหลัก:
-1. **Backend**: FastAPI (Python) สำหรับประมวลผลอัลกอริทึม CARIA
-2. **Frontend**: Next.js (React + TypeScript + Tailwind CSS v4) สำหรับการแสดงผลแบบ Interactive 3D, แอนิเมชัน และการจำลองสถานการณ์
+**CARIA-GAP** คือแพลตฟอร์มระบบแนะนำอาชีพและการวิเคราะห์ช่องว่างสมรรถนะ (Career Recommendation and Competency Gap Analysis System) ขับเคลื่อนด้วย AI อ้างอิงจากแบบจำลอง **CARIA Modified Euclidean Similarity model** (รองรับ 66 มิติทักษะ) ระบบถูกออกแบบให้ใช้งานง่ายและนำเสนอข้อมูลในรูปแบบ 3D Interactive เพื่อให้ผู้ใช้สามารถสำรวจเส้นทางอาชีพ ค้นพบความสนใจ และรับทราบช่องว่างของทักษะที่ต้องพัฒนาเพื่อไปสู่เป้าหมายทางอาชีพได้อย่างแม่นยำ
 
 ---
 
-## ✨ ฟีเจอร์และเทคโนโลยีที่ใช้ (Features & Technologies)
+## 🛠️ Tech Stack & Dependencies
 
-**Frontend:**
-- **Framework:** Next.js 14, React 18
-- **Styling:** Tailwind CSS v4
-- **3D Interactive Graphics:** Three.js, `@react-three/fiber`, `@react-three/drei` (สร้างทรงกลมอาชีพ 3 มิติ โต้ตอบได้)
-- **Animations:** Framer Motion (จัดการแอนิเมชัน UI, Page Transitions, และ Micro-interactions)
-- **Data Visualization:** Recharts (สำหรับแสดงกราฟผลลัพธ์ Assessment และ Simulator)
-- **Icons & UI Utilities:** Lucide React, Next Themes (รองรับ Dark Mode), `clsx`, `tailwind-merge`
+โปรเจกต์นี้ได้รับการพัฒนาบนโครงสร้าง Enterprise-grade แบบ Modern Web Development โดยใช้เทคโนโลยีและไลบรารีดังต่อไปนี้:
 
-**Backend:**
-- **Framework:** FastAPI (Python)
-- **Features:** CARIA Algorithm, Mock Data Fallback Mode
+### Core Frameworks & Tooling
+- **Framework:** Next.js (14.2.5) - App Router Architecture
+- **Language:** TypeScript
+- **Package Manager:** pnpm
 
----
-
-## 🛠️ สิ่งที่ต้องติดตั้งก่อนเริ่มต้น (Prerequisites)
-
-ก่อนที่จะรันโปรเจกต์นี้ ตรวจสอบให้แน่ใจว่าเครื่องคอมพิวเตอร์ของคุณติดตั้งซอฟต์แวร์ต่อไปนี้เรียบร้อยแล้ว:
-
-1. **Python (เวอร์ชัน 3.10 ขึ้นไป)**
-   - ดาวน์โหลดได้ที่: [python.org](https://www.python.org/downloads/)
-   - *หมายเหตุ: ตอนติดตั้งบน Windows อย่าลืมติ๊กเลือก "Add Python to PATH"*
-
-2. **Node.js (เวอร์ชัน 18.0.0 หรือสูงกว่า)**
-   - แนะนำเวอร์ชัน LTS ล่าสุด (เช่น v20.x หรือ v22.x)
-   - ดาวน์โหลดได้ที่: [nodejs.org](https://nodejs.org/)
-
-3. **pnpm (Package Manager)**
-   - โปรเจกต์นี้ใช้ `pnpm` ในการจัดการ library ฝั่ง Frontend
-   - ติดตั้งได้ง่ายๆ ผ่าน cmd/PowerShell:
-     ```bash
-     npm install -g pnpm
-     ```
+### UI/UX, Styling & Animation Libraries
+- **Styling:** Tailwind CSS (v4)
+- **3D Graphics & Rendering:** 
+  - `three` (Three.js)
+  - `@react-three/fiber`
+  - `@react-three/drei`
+- **Animations & Micro-interactions:** `framer-motion`
+- **Data Visualization:** `recharts`
+- **Iconography:** `lucide-react`
+- **Theme Management:** `next-themes` (สำหรับการจัดการ Dark/Light mode)
+- **UI Utility:** `clsx`, `tailwind-merge`
 
 ---
 
-## 🚀 ขั้นตอนการติดตั้งและรันโปรเจกต์ (Installation & Running)
+## 📋 Prerequisites (ข้อกำหนดเบื้องต้น)
 
-เพื่อให้โปรเจกต์ทำงานได้อย่างสมบูรณ์ ต้องเริ่มรันทั้งฝั่ง **Backend** และ **Frontend** ควบคู่กันตามขั้นตอนต่อไปนี้:
-
-### 1. วิธีติดตั้งและรัน Backend (FastAPI)
-
-1. เปิด Terminal / Command Prompt แล้วเข้าไปที่โฟลเดอร์ `backend`:
-   ```bash
-   cd backend
-   ```
-
-2. สร้าง Virtual Environment เพื่อแยกโมดูลของ Python (แนะนำเพื่อป้องกันการชนกันของเวอร์ชัน):
-   ```bash
-   python -m venv venv
-   ```
-
-3. เปิดใช้งาน (Activate) Virtual Environment:
-   * **สำหรับ Windows (PowerShell):**
-     ```powershell
-     .\venv\Scripts\Activate.ps1
-     ```
-     *(หากติดปัญหา Execution Policy ให้ใช้คำสั่ง `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process` ก่อนรันสคริปต์)*
-   * **สำหรับ Windows (CMD):**
-     ```cmd
-     .\venv\Scripts\activate.bat
-     ```
-   * **สำหรับ macOS / Linux:**
-     ```bash
-     source venv/bin/activate
-     ```
-
-4. ติดตั้ง Libraries ทั้งหมดที่จำเป็น:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. เริ่มต้นรันเซิร์ฟเวอร์ Backend:
-   ```bash
-   uvicorn main:app --reload
-   ```
-   *เซิร์ฟเวอร์จะเริ่มต้นทำงานที่: `http://127.0.0.1:8000`*
-   *คุณสามารถเข้าชม Interactive API Documentation (Swagger UI) ได้ที่: `http://127.0.0.1:8000/docs`*
+ก่อนที่คุณจะเริ่มต้นรันโปรเจกต์ ตรวจสอบให้แน่ใจว่าได้ติดตั้งซอฟต์แวร์ต่อไปนี้:
+- **Node.js:** เวอร์ชัน 18.x ขึ้นไป (แนะนำ 20.x LTS)
+- **Package Manager:** โปรเจกต์นี้ใช้ `pnpm` (ตรวจพบ `pnpm-lock.yaml`)
+  *หากยังไม่มี pnpm สามารถติดตั้งได้ผ่าน npm: `npm install -g pnpm`*
+- **Git** (สำหรับการโคลนโค้ด)
 
 ---
 
-### 2. วิธีติดตั้งและรัน Frontend (Next.js)
+## 🚀 Step-by-Step Installation & Setup
 
-1. เปิด Terminal ใหม่ (ไม่ต้องปิดอันเดิมที่รัน Backend) แล้วเข้าไปที่โฟลเดอร์ `frontend`:
-   ```bash
-   cd frontend
-   ```
+ทำตามขั้นตอนด้านล่างนี้เพื่อตั้งค่าโปรเจกต์ในเครื่องของคุณ:
 
-2. ติดตั้ง Node.js Dependencies ด้วย `pnpm`:
-   ```bash
-   pnpm install
-   ```
+**Step 1: Clone the repository**
+```bash
+git clone https://github.com/kraveerachat/caria-gap-main.git
+cd caria-gap-main/frontend
+```
 
-3. เริ่มต้นรันเว็บแอปพลิเคชันในโหมดพัฒนา (Development):
-   ```bash
-   pnpm dev
-   ```
-   *หน้าเว็บจะทำงานที่: `http://localhost:3000`*
-   *(หมายเหตุ: กรณีที่รัน pnpm dev แล้วพบปัญหาแคชบน Windows แนะนำให้ลบโฟลเดอร์ `.next` ออกแล้วรัน pnpm dev ใหม่)*
+**Step 2: Install dependencies**
+ติดตั้งไลบรารีและแพ็คเกจต่างๆ ตามที่กำหนดใน `pnpm-lock.yaml` โดยใช้ `pnpm`:
+```bash
+pnpm install
+```
 
----
-
-## ⚙️ การตั้งค่าสภาพแวดล้อม (Environment Variables) - ทางเลือกเพิ่มเติม
-
-โดยปกติระบบจะตั้งค่าเชื่อมต่อระหว่าง Frontend และ Backend แบบอัตโนมัติที่ `http://127.0.0.1:8000` 
-
-หากคุณต้องการเปลี่ยนที่อยู่ของ API (เช่น ย้าย Backend ไปรันเครื่องอื่น หรือขึ้น Cloud) ให้ทำตามขั้นตอนดังนี้:
-1. สร้างไฟล์ชื่อ `.env.local` ในโฟลเดอร์ `frontend/`
-2. ใส่การเชื่อมโยง API ปลายทาง:
-   ```env
-   NEXT_PUBLIC_API_BASE=https://api.yourdomain.com
-   ```
+**Step 3: Environment Variables setup**
+หากในโปรเจกต์มีไฟล์ `.env.example` ให้คัดลอกสร้างเป็นไฟล์ `.env.local`:
+```bash
+cp .env.example .env.local
+```
+*(กรณีที่ระบบใช้การเชื่อมต่อกับ Backend FastAPI ปกติจะเชื่อมไปที่ `http://127.0.0.1:8000` โดยอัตโนมัติ คุณสามารถเปลี่ยน API URL ได้ภายใน `.env.local`)*
 
 ---
 
-## 💡 ระบบจำลองออฟไลน์ (Offline Fallback Mode)
-* โปรเจกต์นี้ได้รับการออกแบบมาให้ทำงานได้แม้ไม่เปิดใช้งาน Backend (เช่น สำหรับการสาธิตอย่างรวดเร็ว)
-* หากเชื่อมต่อกับ Backend ไม่ได้ ระบบจะเปลี่ยนไปใช้ **Mock Data** สำหรับผลการแนะนำอาชีพและการวิเคราะห์ช่องว่างความสามารถโดยอัตโนมัติ ทำให้ผู้ใช้ยังสามารถเล่นหน้าเว็บและเห็นการทำงานของ 3D Interactive และ Animation ได้อย่างไม่มีสะดุด
+## 💻 Running the Application
+
+### โหมดนักพัฒนา (Development)
+รันคำสั่งด้านล่างเพื่อเปิดเซิร์ฟเวอร์สำหรับการพัฒนาแบบ Hot-reload:
+```bash
+pnpm dev
+```
+🌐 เข้าชมแอปพลิเคชันได้ที่: **http://localhost:3000**
+*(หมายเหตุ: กรณีพบปัญหาแคช `ENOENT` บนระบบ Windows ให้ลบโฟลเดอร์ `.next` ออกแล้วรัน pnpm dev ใหม่)*
+
+### โหมดใช้งานจริง (Production Build)
+เมื่อต้องการทดสอบโปรเจกต์ในสภาพแวดล้อมเสมือนใช้งานจริง:
+```bash
+pnpm build
+pnpm start
+```
+🌐 เข้าชมแอปพลิเคชันเวอร์ชัน Production ได้ที่: **http://localhost:3000**
 
 ---
 
-## 📦 โครงสร้างโปรเจกต์ที่สำคัญ (Key Folder Structure)
+## 📂 Project Structure (Tree)
+
+โครงสร้างโฟลเดอร์หลักในส่วนของ `src/` ที่ออกแบบมาให้รองรับการ Scale ในอนาคต:
 
 ```text
-caria-gap/
-├── backend/                  # ส่วนประมวลผล API และระบบคำนวณ CARIA
-│   ├── main.py               # จุดเริ่มต้นของ FastAPI
-│   ├── requirements.txt      # รายการ Library ของ Python
-│   ├── routers/              # เส้นทาง API (Assessment, Gap Analysis, Recommendations)
-│   ├── data/                 # แหล่งรวม Mock Data (JSON)
-│   └── models/               # การจัดการข้อมูลและคำนวณทางคณิตศาสตร์
+src/
+├── app/                  # Next.js App Router (ระบบเส้นทางของแอป)
+│   ├── analytics/        # หน้า Dashboard และ Analytics
+│   ├── assessment/       # หน้าต่างทำแบบทดสอบ (Quiz/Assessment)
+│   ├── career/           # หน้ารายละเอียดของแต่ละสายอาชีพ
+│   └── dashboard/        # หน้าหลักของผู้ใช้งานหลังจากเข้าสู่ระบบ
 │
-├── frontend/                 # หน้าตาเว็บไซต์แบบ Interactive
-│   ├── src/
-│   │   ├── app/              # หน้าเว็บ (Routing: Dashboard, Career, Assessment)
-│   │   ├── components/       # UI Components (3D Sphere, Simulator, Charts, Animations)
-│   │   └── lib/              # ฟังก์ชันติดต่อ API และ Data Lists
-│   ├── package.json          # ไฟล์กำหนดสคริปต์และ Module ฝั่ง Frontend (Framer Motion, Three.js ฯลฯ)
-│   └── pnpm-lock.yaml        # บันทึกเวอร์ชันที่ถูกต้องของ Frontend
+├── components/           # UI Components แบบ Reusable 
+│   ├── assessment/       # ส่วนประกอบสำหรับระบบแบบทดสอบ (Gamified UI)
+│   ├── results/          # กราฟ ผลลัพธ์ และ Course Matcher
+│   └── InteractiveCareerSphere.tsx # Core 3D Component สำหรับแสดงผลลูกแก้วอาชีพ
 │
-└── README.md                 # คู่มือการใช้งานนี้
+├── hooks/                # Custom React Hooks สำหรับจัดการ State และ Logic
+│
+├── lib/                  # Utility Functions, Core Algorithm Logic, และ Mock Data
+│   ├── questions.ts      # ชุดข้อมูลคำถามแบบทดสอบ
+│   ├── careers-list.ts   # รายการสายอาชีพ
+│   └── sut-courses.ts    # ข้อมูลหลักสูตรมหาวิทยาลัย (เพื่อ Match กับ Gap)
+│
+└── types/                # TypeScript Interfaces/Types definitions เพื่อความปลอดภัยของ Type
 ```
+
+---
+*Generated by Elite DevOps Automation*

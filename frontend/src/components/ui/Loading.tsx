@@ -41,17 +41,17 @@ function FullPageLoading() {
           style={{ animationDelay: '0.6s' }}
         />
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-2xl font-bold gradient-text">C</span>
+          <img src="/sut-caria-logo.png" alt="SUT-CARIA" className="w-14 h-14 object-contain animate-pulse" />
         </div>
       </div>
 
       {/* Branding */}
-      <h2 className="text-xl font-bold gradient-text mb-4">CARIA-GAP</h2>
+      <h2 className="text-xl font-bold gradient-text mb-4">SUT-CARIA</h2>
       
       {/* Shimmer text container */}
       <div className="relative overflow-hidden rounded-md px-4 py-2">
         <p className="text-sm font-medium text-white/80 animate-pulse">
-          CARIA-AI is analyzing your competencies...
+          SUT-CARIA is preparing your advisory data...
         </p>
         {/* Shimmer overlay */}
         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[shimmer_2s_infinite]" />

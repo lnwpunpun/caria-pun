@@ -33,10 +33,10 @@ export function AttitudeSliders({ values, onChange, className }: AttitudeSliders
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Icon size={18} style={{ color: att.color }} className="opacity-80 group-hover:opacity-100 transition-opacity" />
-                <span className="font-semibold text-white/90">{att.label_th}</span>
-                <span className="text-xs text-white/40 hidden sm:inline">({att.label_en})</span>
+                <span className="font-semibold text-slate-800 dark:text-white/90">{att.label_th}</span>
+                <span className="text-xs text-slate-500 dark:text-white/40 hidden sm:inline">({att.label_en})</span>
               </div>
-              <div className="font-mono text-sm font-bold text-white/80 w-8 text-right">{val}</div>
+              <div className="font-mono text-sm font-bold text-slate-800 dark:text-white/80 w-8 text-right">{val}</div>
             </div>
             <div className="relative flex items-center h-4">
               <input
@@ -45,9 +45,9 @@ export function AttitudeSliders({ values, onChange, className }: AttitudeSliders
                 max="100"
                 value={val}
                 onChange={(e) => handleSliderChange(att.id, parseInt(e.target.value))}
-                className="w-full h-1.5 rounded-full appearance-none bg-white/10 outline-none z-10"
+                className="w-full h-1.5 rounded-full appearance-none bg-slate-200 dark:bg-white/10 outline-none z-10"
                 style={{
-                  background: `linear-gradient(to right, ${att.color} ${val}%, rgba(255,255,255,0.1) ${val}%)`,
+                  background: `linear-gradient(to right, ${att.color} ${val}%, rgba(148,163,184,0.25) ${val}%)`,
                 }}
               />
             </div>

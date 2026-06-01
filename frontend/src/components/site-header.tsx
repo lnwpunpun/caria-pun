@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "motion/react"
-import { ArrowRight, Menu, X, Trash2 } from "lucide-react"
+import { ArrowRight, Menu, X, User } from "lucide-react"
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Logo } from "@/components/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -10,10 +11,10 @@ import { LanguageToggle } from "@/components/language-toggle"
 import { useLanguage } from "@/components/language-provider"
 
 const NAV = [
-  { key: "howItWorks", href: "#how-it-works" },
-  { key: "assessment", href: "#assessment" },
-  { key: "results", href: "#results" },
-  { key: "simulator", href: "#simulator" },
+  { key: "howItWorks", href: "/#how-it-works" },
+  { key: "assessment", href: "/#assessment" },
+  { key: "results", href: "/#results" },
+  { key: "simulator", href: "/#simulator" },
 ] as const
 
 export function SiteHeader() {
@@ -43,10 +44,10 @@ export function SiteHeader() {
             : "border border-transparent text-slate-900 dark:text-slate-100",
         )}
       >
-        <a href="#top" className="pl-2">
+        <Link href="/" className="pl-2">
           <Logo />
-          <span className="sr-only">CARIA-GAP home</span>
-        </a>
+          <span className="sr-only">SUT-CARIA home</span>
+        </Link>
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
           {NAV.map((item) => (
@@ -68,27 +69,21 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <LanguageToggle />
           <ThemeToggle onTop={false} />
-          <button
-            type="button"
-            onClick={() => {
-              if (window.confirm("คุณต้องการลบข้อมูลส่วนบุคคล (Assessment Results) ทั้งหมดหรือไม่?")) {
-                localStorage.clear();
-                window.location.href = "/";
-              }
-            }}
-            className="group hidden items-center gap-2 rounded-full border border-danger/50 bg-danger/10 px-4 py-2.5 text-sm font-semibold text-danger transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
-            title="ลบข้อมูลส่วนบุคคล"
-          >
-            <Trash2 className="size-4" />
-            <span className="hidden lg:inline">ลบข้อมูล</span>
-          </button>
           <a
-            href="#assessment"
+            href="/#assessment"
             className="group hidden items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_10px_30px_-8px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
           >
             {t.nav.start}
             <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </a>
+          <Link
+            href="/settings"
+            aria-label="บัญชีและการตั้งค่า"
+            title="บัญชีและการตั้งค่า"
+            className="inline-flex size-10 items-center justify-center rounded-full border border-slate-200 text-slate-700 transition-colors hover:bg-slate-900/5 hover:text-slate-900 dark:border-white/10 dark:text-slate-200 dark:hover:bg-white/5 dark:hover:text-white"
+          >
+            <User className="size-[18px]" />
+          </Link>
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}

@@ -26,9 +26,9 @@ export function CareerRoadmapTimeline() {
       title: thai ? "สร้างโปรเจกต์จริง (Portfolio Building)" : "Build Portfolio Projects",
       description: thai ? "ทำโปรเจกต์วิเคราะห์ข้อมูลจริง 2-3 งานเพื่อใส่ลงในเรซูเม่" : "Complete 2-3 real data analysis projects to add to your resume",
       icon: Target,
-      color: "text-accent",
-      bg: "bg-accent/10",
-      borderColor: "border-accent/20",
+      color: "text-brand-orange",
+      bg: "bg-brand-orange/10",
+      borderColor: "border-brand-orange/20",
     },
     {
       month: "Month 5",
@@ -59,7 +59,7 @@ export function CareerRoadmapTimeline() {
         className="text-center mb-12"
       >
         <h3 className={`text-3xl font-bold mb-4 text-slate-900 dark:text-white ${thai ? "font-thai leading-snug" : "font-syne"}`}>
-          {t.results.roadmapTitle} <span className="text-accent">{t.results.roadmapTitleAccent}</span>
+          {t.results.roadmapTitle} <span className="text-brand-orange">{t.results.roadmapTitleAccent}</span>
         </h3>
         <p className={`text-muted-foreground ${thai ? "font-thai leading-relaxed" : "font-dm"}`}>
           {t.results.roadmapSubtitle}

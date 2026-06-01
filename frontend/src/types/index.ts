@@ -50,6 +50,7 @@ export interface CourseRec {
   level?: string;
   url: string;
   affiliate: boolean;
+  thumbnail_url?: string;
 }
 
 export interface GapItem {

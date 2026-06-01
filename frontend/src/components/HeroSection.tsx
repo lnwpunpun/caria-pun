@@ -5,10 +5,13 @@
  */
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useLanguage } from "@/components/language-provider";
+import { useTheme } from "next-themes";
+import Link from "next/link";
+import { DT_BRANCH, DC_BRANCH, getGroupSlug } from "@/lib/careers-list";
 
 const InteractiveCareerSphere = dynamic(
   () => import("@/components/InteractiveCareerSphere"),
@@ -32,6 +35,33 @@ const stats = [
 
 export default function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
+  const [isExploring, setIsExploring] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [activeBranch, setActiveBranch] = useState<"DT" | "DC">("DT");
+  const [selectedGroup, setSelectedGroup] = useState<string>("");
+  const [selectedCareer, setSelectedCareer] = useState<string>("");
+
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+
+  useEffect(() => {
+    const checkSize = () => setIsDesktop(window.innerWidth >= 1024);
+    checkSize();
+    window.addEventListener("resize", checkSize);
+    return () => window.removeEventListener("resize", checkSize);
+  }, []);
+
+  useEffect(() => {
+    if (isExploring && !selectedGroup) {
+      const defaultGroup = activeBranch === "DT" ? DT_BRANCH[0].name : DC_BRANCH[0].name;
+      setSelectedGroup(defaultGroup);
+      const grp = activeBranch === "DT" ? DT_BRANCH[0] : DC_BRANCH[0];
+      if (grp && grp.careers.length > 0) {
+        setSelectedCareer(grp.careers[0].name);
+      }
+    }
+  }, [isExploring, activeBranch, selectedGroup]);
+
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const orbY = useTransform(scrollYProgress, [0, 1], [0, -80]);
   const orbScale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
@@ -39,6 +69,22 @@ export default function HeroSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const { t, lang } = useLanguage();
   const thai = lang === "th";
+
+  const panelTexts = {
+    title: thai ? "เลือกสายงานที่สนใจ" : "Select Your Career Path",
+    dtLabel: thai ? "สาย DT (Technology)" : "DT (Technology)",
+    dcLabel: thai ? "สาย DC (Media)" : "DC (Media)",
+    branchHeaderDT: "DT - DIGITAL TECHNOLOGY",
+    branchHeaderDC: "DC - DIGITAL COMMUNICATIONS & MEDIA",
+    groupSelectLabel: thai ? "เปลี่ยนกลุ่มสายงานหลักที่นี่" : "Change Main Career Group",
+    listHeader: thai ? "อาชีพย่อยภายใต้กลุ่มสายงานนี้:" : "Sub-careers under this group:",
+    viewCoursesCTA: thai ? "ดูแผนการเรียนและวิชาบังคับเรียน →" : "View Study Plan & Courses →",
+    noSubCareers: thai ? "ไม่มีอาชีพย่อยในกลุ่มนี้" : "No sub-careers in this group",
+  };
+
+  const activeGroupObj = (activeBranch === "DT" ? DT_BRANCH : DC_BRANCH).find(
+    (g) => g.name === selectedGroup
+  );
 
   return (
     <section
@@ -87,29 +133,53 @@ export default function HeroSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left: Text Content */}
           <motion.div
-            style={{ y: textY, opacity }}
-            className="relative flex flex-col gap-8 z-10 max-w-2xl"
+            style={{ y: textY, opacity: isExploring ? undefined : opacity }}
+            animate={isExploring ? { y: isDesktop ? -30 : 0, scale: 1, originX: 0 } : { y: 0, scale: 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 25 }}
+            className={`relative flex flex-col gap-6 z-30 max-w-2xl ${
+              isExploring ? "pointer-events-none" : "pointer-events-auto"
+            }`}
           >
+            {/* Back button */}
+            {isExploring && (
+              <motion.button
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                onClick={() => setIsExploring(false)}
+                className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white pointer-events-auto self-start px-3.5 py-2 rounded-full border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-black/30 backdrop-blur shadow-sm hover:shadow transition-all"
+              >
+                <span>← {thai ? "ย้อนกลับหน้าหลัก" : "Back to Main"}</span>
+              </motion.button>
+            )}
+
             {/* Badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="inline-flex items-center gap-2 self-start px-4 py-1.5 rounded-full border border-[#F39200]/30 bg-[#F39200]/5"
-            >
-              <div className="w-2 h-2 rounded-full bg-[#F39200] animate-pulse" />
-              <span className={`text-xs text-[#F39200] ${thai ? "font-thai" : "font-dm tracking-widest uppercase"}`}>
-                {t.hero.badge}
-              </span>
-            </motion.div>
+            <AnimatePresence>
+              {!isExploring && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.4 }}
+                  className="inline-flex items-center gap-2 self-start px-4 py-1.5 rounded-full border border-[#F39200]/30 bg-[#F39200]/5"
+                >
+                  <div className="w-2 h-2 rounded-full bg-[#F39200] animate-pulse" />
+                  <span className={`text-xs text-[#F39200] ${thai ? "font-thai" : "font-dm tracking-widest uppercase"}`}>
+                    {t.hero.badge}
+                  </span>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Headline */}
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-              className={`font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-slate-900 dark:text-white ${
-                thai ? "font-thai leading-snug" : "font-syne leading-[1.1]"
+              layout
+              transition={{ type: "spring", stiffness: 200, damping: 25 }}
+              className={`font-extrabold tracking-tight text-slate-900 dark:text-white transition-all duration-300 ${
+                thai ? "font-thai" : "font-syne"
+              } ${
+                isExploring
+                  ? "text-4xl sm:text-5xl md:text-6xl lg:text-6xl leading-snug"
+                  : `text-5xl sm:text-6xl md:text-7xl lg:text-8xl ${thai ? "leading-snug" : "leading-[1.1]"}`
               }`}
             >
               {t.hero.line1}
@@ -119,82 +189,92 @@ export default function HeroSection() {
               {t.hero.line3}
             </motion.h1>
 
-            {/* Subheading */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.35 }}
-              className={`text-slate-600 dark:text-slate-300 text-lg sm:text-xl md:text-2xl max-w-2xl ${
-                thai ? "font-thai leading-loose" : "font-dm leading-relaxed"
-              }`}
-            >
-              {t.hero.sub}
-            </motion.p>
-
-            {/* CTAs */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-wrap gap-4 items-center"
-            >
-              <motion.a
-                href="#assessment"
-                className="flex items-center gap-2 px-8 py-4 rounded-full bg-[#F39200] text-[#050A14] font-syne font-bold text-base tracking-wide"
-                style={{ boxShadow: "0 0 30px rgba(243,146,0,0.4), 0 4px 20px rgba(0,0,0,0.3)" }}
-                whileHover={{ scale: 1.04, boxShadow: "0 0 45px rgba(243,146,0,0.6), 0 4px 24px rgba(0,0,0,0.4)" }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-              >
-                <span>{t.hero.ctaPrimary}</span>
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </motion.a>
-
-              <motion.a
-                href="#how-it-works"
-                className="flex items-center gap-2 px-8 py-4 rounded-full border border-slate-300 text-slate-700 hover:text-slate-900 hover:border-slate-400 dark:border-white/15 dark:text-white/70 dark:hover:text-white dark:hover:border-white/30 font-dm text-base transition-colors"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-              >
-                {t.hero.ctaSecondary}
-              </motion.a>
-            </motion.div>
-
-            {/* Stats Row */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.65 }}
-              className="flex gap-8 pt-4 border-t border-slate-200 dark:border-white/8"
-            >
-              {stats.map((stat, i) => (
+            {/* Subheading, CTAs & Stats */}
+            <AnimatePresence>
+              {!isExploring && (
                 <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 + i * 0.1 }}
-                  className="flex flex-col gap-1"
+                  initial={{ opacity: 0, height: 0, y: 15 }}
+                  animate={{ opacity: 1, height: "auto", y: 0 }}
+                  exit={{ opacity: 0, height: 0, y: -15 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="flex flex-col gap-6 overflow-hidden"
                 >
-                  <div className="font-syne font-extrabold text-2xl text-slate-900 dark:text-white">
-                    {stat.value}
-                    <span className="text-[#F39200]">{stat.unit}</span>
+                  {/* Subheading */}
+                  <p className={`text-slate-600 dark:text-slate-300 text-lg sm:text-xl md:text-2xl max-w-2xl ${
+                    thai ? "font-thai leading-loose" : "font-dm leading-relaxed"
+                  }`}>
+                    {t.hero.sub}
+                  </p>
+
+                  {/* CTAs */}
+                  <div className="flex flex-wrap gap-4 items-center pt-2">
+                    <motion.a
+                      href="#assessment"
+                      className="flex items-center gap-2 px-8 py-4 rounded-full bg-[#F39200] text-[#050A14] font-syne font-bold text-base tracking-wide"
+                      style={{ boxShadow: "0 0 30px rgba(243,146,0,0.4), 0 4px 20px rgba(0,0,0,0.3)" }}
+                      whileHover={{ scale: 1.04, boxShadow: "0 0 45px rgba(243,146,0,0.6), 0 4px 24px rgba(0,0,0,0.4)" }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                    >
+                      <span>{t.hero.ctaPrimary}</span>
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </motion.a>
+
+                    <motion.a
+                      href="#how-it-works"
+                      className="flex items-center gap-2 px-8 py-4 rounded-full border border-slate-300 text-slate-700 hover:text-slate-900 hover:border-slate-400 dark:border-white/15 dark:text-white/70 dark:hover:text-white dark:hover:border-white/30 font-dm text-base transition-colors"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.97 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                    >
+                      {t.hero.ctaSecondary}
+                    </motion.a>
                   </div>
-                  <div className={`text-xs text-slate-500 dark:text-white/40 tracking-wide ${thai ? "font-thai" : "font-dm"}`}>{t.hero.stats[i].label}</div>
+
+                  {/* Stats Row */}
+                  <div className="flex gap-8 pt-6 border-t border-slate-200 dark:border-white/8 mt-2">
+                    {stats.map((stat, i) => (
+                      <div key={stat.label} className="flex flex-col gap-1">
+                        <div className="font-syne font-extrabold text-2xl text-slate-900 dark:text-white">
+                          {stat.value}
+                          <span className="text-[#F39200]">{stat.unit}</span>
+                        </div>
+                        <div className={`text-xs text-slate-500 dark:text-white/40 tracking-wide ${thai ? "font-thai" : "font-dm"}`}>
+                          {t.hero.stats[i].label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </motion.div>
-              ))}
-            </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
 
-          {/* Right: Neural Orb */}
+          {/* Right: Neural Orb / Sphere wrapper */}
           <motion.div
             style={{ y: orbY, scale: orbScale }}
             className="relative flex items-center justify-center h-[500px] lg:h-[800px] w-full"
           >
-            {/* Neural Orb wrapper pushed to the right, low-opacity on mobile */}
-            <div className="absolute top-1/2 right-[-60%] lg:right-[-45%] xl:right-[-55%] -translate-y-1/2 w-[1000px] h-[1000px] z-0 pointer-events-auto flex items-center justify-center opacity-40 lg:opacity-100">
+            <motion.div
+              animate={isExploring 
+                ? { 
+                    scale: isDesktop ? 1.05 : 0.8, 
+                    x: isDesktop ? -520 : 0, 
+                    y: isDesktop ? 40 : 220,
+                    opacity: isDesktop ? (isDark ? 0.45 : 0.22) : (isDark ? 0.35 : 0.18)
+                  } 
+                : { 
+                    scale: 1, 
+                    x: 0, 
+                    y: 0,
+                    opacity: isDark ? 1 : 0.85
+                  }
+              }
+              transition={{ type: "spring", stiffness: 180, damping: 26 }}
+              className="absolute top-1/2 right-[-60%] lg:right-[-45%] xl:right-[-55%] -translate-y-1/2 w-[1000px] h-[1000px] pointer-events-auto flex items-center justify-center opacity-40 lg:opacity-100 z-10"
+            >
               {/* Outer glow ring */}
               <motion.div
                 className="absolute w-[720px] h-[720px] rounded-full hidden lg:block"
@@ -221,27 +301,218 @@ export default function HeroSection() {
                 transition={{ duration: 1.2, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
                 className="relative w-full h-full flex items-center justify-center"
               >
-                <InteractiveCareerSphere />
+                <InteractiveCareerSphere 
+                  isExploring={isExploring}
+                  setIsExploring={setIsExploring}
+                  activeBranch={activeBranch}
+                  setActiveBranch={setActiveBranch}
+                  selectedGroup={selectedGroup}
+                  setSelectedGroup={setSelectedGroup}
+                  selectedCareer={selectedCareer}
+                  setSelectedCareer={setSelectedCareer}
+                />
               </motion.div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
+
+        {/* Dynamic explorer panel */}
+        <AnimatePresence>
+          {isExploring && (
+            <motion.div
+              initial={{ opacity: 0, x: 200 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 200 }}
+              transition={{ type: "spring", stiffness: 200, damping: 25 }}
+              className="absolute top-28 bottom-16 right-4 w-[calc(100%-2rem)] sm:w-[380px] lg:w-[410px] xl:w-[430px] z-30 pointer-events-auto bg-white/70 dark:bg-[#070b14]/40 backdrop-blur-2xl border border-slate-200/50 dark:border-white/5 rounded-3xl p-6 shadow-2xl flex flex-col"
+            >
+              {/* Header row */}
+              <div className="flex items-center justify-between">
+                <span className={`text-xs font-bold text-slate-400 dark:text-slate-400 uppercase tracking-widest ${thai ? "font-thai" : "font-dm"}`}>
+                  {panelTexts.title}
+                </span>
+                <button
+                  onClick={() => setIsExploring(false)}
+                  className="w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Branch Toggle Buttons */}
+              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-white/5 rounded-2xl border border-slate-200/50 dark:border-white/5 mt-4">
+                <button
+                  onClick={() => {
+                    setActiveBranch("DT");
+                    const defaultGroup = DT_BRANCH[0].name;
+                    setSelectedGroup(defaultGroup);
+                    setSelectedCareer(DT_BRANCH[0].careers[0]?.name || "");
+                  }}
+                  className={`py-2 text-xs font-bold rounded-xl transition-all duration-300 ${
+                    activeBranch === "DT"
+                      ? "bg-[#2563EB] text-white shadow-md"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  }`}
+                >
+                  {panelTexts.dtLabel}
+                </button>
+                <button
+                  onClick={() => {
+                    setActiveBranch("DC");
+                    const defaultGroup = DC_BRANCH[0].name;
+                    setSelectedGroup(defaultGroup);
+                    setSelectedCareer(DC_BRANCH[0].careers[0]?.name || "");
+                  }}
+                  className={`py-2 text-xs font-bold rounded-xl transition-all duration-300 ${
+                    activeBranch === "DC"
+                      ? "bg-[#F39200] text-[#050A14] shadow-md"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  }`}
+                >
+                  {panelTexts.dcLabel}
+                </button>
+              </div>
+
+              {/* Group display header */}
+              <div className="mt-5">
+                <div className="text-[10px] tracking-widest text-[#F39200] dark:text-amber-400 font-extrabold uppercase">
+                  {activeBranch === "DT" ? panelTexts.branchHeaderDT : panelTexts.branchHeaderDC}
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 dark:text-white leading-tight mt-1">
+                  {selectedGroup}
+                </h3>
+              </div>
+
+              {/* Dropdown to change main group */}
+              <div className="mt-4 flex flex-col gap-1.5">
+                <label className={`text-[10px] text-slate-400 dark:text-white/40 uppercase font-bold tracking-wider ${thai ? "font-thai" : ""}`}>
+                  {panelTexts.groupSelectLabel}
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedGroup}
+                    onChange={(e) => {
+                      const groupName = e.target.value;
+                      setSelectedGroup(groupName);
+                      const grp = (activeBranch === "DT" ? DT_BRANCH : DC_BRANCH).find(g => g.name === groupName);
+                      if (grp && grp.careers.length > 0) {
+                        setSelectedCareer(grp.careers[0].name);
+                      }
+                    }}
+                    className="w-full appearance-none bg-slate-100 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 rounded-xl pl-4 pr-10 py-3 text-slate-800 dark:text-white text-sm outline-none focus:border-blue-500/50 dark:focus:border-blue-400/50 transition-all font-semibold cursor-pointer"
+                  >
+                    {(activeBranch === "DT" ? DT_BRANCH : DC_BRANCH).map((g) => (
+                      <option key={g.name} value={g.name} className="bg-white dark:bg-[#0c1220] text-slate-800 dark:text-white">
+                        {g.name}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none text-slate-500 dark:text-slate-400">
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none">
+                      <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              {/* Global view study plan and compulsory courses CTA button */}
+              <Link
+                href={`/career-group/${getGroupSlug(selectedGroup)}`}
+                className={`w-full flex items-center justify-center gap-2 px-5 py-3 rounded-2xl font-bold text-xs shadow-md transition-all duration-300 mt-4 border border-transparent ${
+                  activeBranch === "DT"
+                    ? "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30"
+                    : "bg-[#F39200] text-[#050A14] hover:bg-[#d88200] hover:shadow-lg hover:shadow-brand-orange/30"
+                }`}
+              >
+                <span className={thai ? "font-thai font-bold" : "font-syne font-bold"}>
+                  {panelTexts.viewCoursesCTA}
+                </span>
+              </Link>
+
+              {/* List Header */}
+              <div className={`text-[10px] text-slate-400 dark:text-white/40 uppercase font-bold tracking-wider mt-6 ${thai ? "font-thai" : ""}`}>
+                {panelTexts.listHeader}
+              </div>
+
+              {/* Scrollable careers list */}
+              <div className="flex-1 min-h-0 overflow-y-auto mt-2 pr-1 scrollbar-thin flex flex-col gap-2">
+                {activeGroupObj?.careers.map((career) => {
+                  const isExpanded = selectedCareer === career.name;
+                  return (
+                    <div
+                      key={career.name}
+                      className={`rounded-xl border transition-all duration-300 overflow-hidden ${
+                        isExpanded
+                          ? "bg-slate-50 dark:bg-white/5 border-slate-300 dark:border-white/20 shadow-md"
+                          : "bg-transparent border-slate-200/50 dark:border-white/5 hover:bg-slate-100/50 dark:hover:bg-white/[0.02] cursor-pointer"
+                      }`}
+                      onClick={() => setSelectedCareer(isExpanded ? "" : career.name)}
+                    >
+                      {/* Career Row */}
+                      <div className="px-6 py-4 flex items-center justify-between">
+                        <div className="flex flex-col">
+                          <span className="font-bold text-sm text-slate-800 dark:text-white">
+                            {career.name}
+                          </span>
+                          {thai && career.nameTh && (
+                            <span className="text-xs text-slate-500 dark:text-slate-400 font-thai mt-0.5 leading-relaxed">
+                              {career.nameTh}
+                            </span>
+                          )}
+                        </div>
+                        {/* Chevron */}
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 14 14"
+                          fill="none"
+                          className={`text-slate-400 transition-transform duration-300 ${isExpanded ? "rotate-90" : ""}`}
+                        >
+                          <path d="M5 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+
+                      {/* Expanded description */}
+                      {isExpanded && (
+                        <div 
+                          onClick={(e) => e.stopPropagation()}
+                          className="px-6 pb-6 pt-3.5 border-t border-slate-200/50 dark:border-white/5">
+                          <p className={`text-xs text-slate-600 dark:text-slate-300 leading-relaxed ${thai ? "font-thai" : ""}`}>
+                            {thai ? career.description : (career.descriptionEn || career.description)}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+                {(!activeGroupObj || activeGroupObj.careers.length === 0) && (
+                  <div className="text-center py-6 text-xs text-slate-500">
+                    {panelTexts.noSubCareers}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-      >
-        <span className="text-xs font-dm text-slate-400 dark:text-white/30 tracking-widest uppercase">Scroll</span>
+      {!isExploring && (
         <motion.div
-          className="w-px h-8 bg-gradient-to-b from-slate-400 dark:from-white/30 to-transparent"
-          animate={{ scaleY: [1, 0.5, 1], opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        />
-      </motion.div>
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ delay: 1.5 }}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        >
+          <span className="text-xs font-dm text-slate-400 dark:text-white/30 tracking-widest uppercase">Scroll</span>
+          <motion.div
+            className="w-px h-8 bg-gradient-to-b from-slate-400 dark:from-white/30 to-transparent"
+            animate={{ scaleY: [1, 0.5, 1], opacity: [0.5, 1, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </motion.div>
+      )}
     </section>
   );
 }

@@ -31,13 +31,13 @@ function cleanName(id: string): string {
 function domainColor(domain: string): string {
   switch (domain.toLowerCase()) {
     case 'skills':
-      return 'bg-blue-500/20 text-blue-400';
+      return 'bg-blue-500/10 text-blue-500 border border-blue-500/20';
     case 'attitudes':
-      return 'bg-purple-500/20 text-purple-400';
+      return 'bg-purple-500/10 text-purple-500 border border-purple-500/20';
     case 'knowledge':
-      return 'bg-emerald-500/20 text-emerald-400';
+      return 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20';
     default:
-      return 'bg-gray-500/20 text-gray-400';
+      return 'bg-gray-500/10 text-gray-500 border border-gray-500/20';
   }
 }
 
@@ -117,20 +117,20 @@ export default function WhatIfSlider({
   return (
     <div
       className={cn(
-        'bg-gray-900/60 backdrop-blur-xl border border-white/10 rounded-2xl p-6',
+        'bg-card/50 dark:bg-card/30 backdrop-blur-md border border-border/60 dark:border-white/5 rounded-2xl p-6 shadow-sm',
         className,
       )}
     >
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2.5 rounded-xl bg-[#F39200]/15">
-          <SlidersHorizontal size={20} className="text-[#F39200]" />
+        <div className="p-2.5 rounded-xl bg-brand-orange/10 border border-brand-orange/20">
+          <SlidersHorizontal size={20} className="text-brand-orange" />
         </div>
         <div>
-          <h3 className={`text-lg font-semibold text-white ${thai ? "font-thai leading-relaxed" : ""}`}>
+          <h3 className={`text-lg font-bold text-foreground ${thai ? "font-thai leading-relaxed" : ""}`}>
             {t.simulator.title}
           </h3>
-          <p className={`text-sm text-gray-400 ${thai ? "font-thai leading-relaxed" : ""}`}>
+          <p className={`text-xs text-muted-foreground ${thai ? "font-thai leading-relaxed" : ""}`}>
             {thai ? "ปรับทักษะของคุณเพื่อดูการเปลี่ยนแปลงของอันดับอาชีพ" : "Adjust your skills to see how rankings change"}
           </p>
         </div>
@@ -148,25 +148,26 @@ export default function WhatIfSlider({
               {/* Label row */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-white">
+                  <span className="text-sm font-semibold text-foreground">
                     {cleanName(gap.competency_id)}
                   </span>
                   <span
                     className={cn(
-                      'text-[10px] px-1.5 py-0.5 rounded-full font-medium',
+                      'text-[9px] px-2 py-0.5 rounded font-extrabold uppercase',
                       domainColor(gap.domain),
                     )}
                   >
                     {gap.domain}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-mono text-white">{value}</span>
-                  <span className="text-xs text-gray-500">/</span>
-                  <span className="text-sm font-mono text-[#F39200]">{gap.career_required}</span>
+
+                <div className="flex items-center gap-1.5">
+                  <span className="text-sm font-mono text-foreground">{value}</span>
+                  <span className="text-xs text-muted-foreground/60">/</span>
+                  <span className="text-sm font-mono text-brand-orange font-bold">{gap.career_required}</span>
                   {met && (
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                      <Check size={12} className="text-emerald-400" />
+                    <span className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
+                      <Check size={11} className="text-emerald-500" />
                     </span>
                   )}
                 </div>
@@ -176,7 +177,7 @@ export default function WhatIfSlider({
               <div className="relative">
                 {/* Career required marker */}
                 <div
-                  className="absolute top-1/2 -translate-y-1/2 w-0.5 h-4 bg-[#F39200]/70 rounded-full z-10 pointer-events-none"
+                  className="absolute top-1/2 -translate-y-1/2 w-0.5 h-4 bg-brand-orange rounded-full z-10 pointer-events-none"
                   style={{ left: `${gap.career_required}%` }}
                 />
                 <input
@@ -189,7 +190,7 @@ export default function WhatIfSlider({
                   }
                   className="w-full h-2 rounded-full appearance-none cursor-pointer slider-whatif"
                   style={{
-                    background: `linear-gradient(to right, ${met ? '#10B981' : '#3B82F6'} 0%, ${met ? '#10B981' : '#3B82F6'} ${pct}%, rgba(255,255,255,0.1) ${pct}%, rgba(255,255,255,0.1) 100%)`,
+                    background: `linear-gradient(to right, ${met ? '#10B981' : '#3B82F6'} 0%, ${met ? '#10B981' : '#3B82F6'} ${pct}%, rgba(120,120,120,0.15) ${pct}%, rgba(120,120,120,0.15) 100%)`,
                   }}
                 />
               </div>
@@ -199,8 +200,8 @@ export default function WhatIfSlider({
       </div>
 
       {/* Divider */}
-      <div className="border-t border-white/10 pt-6">
-        <h4 className={`text-sm font-semibold text-gray-300 mb-4 uppercase tracking-wider ${thai ? "font-thai leading-relaxed" : ""}`}>
+      <div className="border-t border-border/60 pt-6">
+        <h4 className={`text-xs font-extrabold text-foreground/80 mb-4 uppercase tracking-wider ${thai ? "font-thai leading-relaxed" : ""}`}>
           {thai ? "การวิเคราะห์อันดับ 3 อาชีพเป้าหมาย" : "Projected Top 3"}
         </h4>
 
@@ -213,25 +214,25 @@ export default function WhatIfSlider({
             return (
               <div
                 key={career.career_id}
-                className="flex items-center gap-4 bg-white/5 border border-white/5 rounded-xl p-3 transition-all duration-300"
+                className="flex items-center gap-4 bg-muted/40 dark:bg-white/[0.02] border border-border/50 dark:border-white/5 rounded-xl p-3 hover:bg-muted/50 dark:hover:bg-white/[0.04] transition-all duration-300"
               >
                 {/* Rank */}
-                <span className="text-xl font-bold text-white/70 w-8 text-center font-mono">
+                <span className="text-lg font-extrabold text-foreground/70 w-8 text-center font-mono">
                   {career.rank}
                 </span>
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white truncate">{career.career_name}</p>
+                  <p className="text-sm font-semibold text-foreground truncate">{career.career_name}</p>
                   <div className="flex items-center gap-2 mt-1">
                     {/* Match bar */}
-                    <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
+                    <div className="flex-1 h-1.5 bg-muted-foreground/15 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-blue-500 to-[#F39200] rounded-full transition-all duration-500"
                         style={{ width: `${career.match_percentage}%` }}
                       />
                     </div>
-                    <span className="text-xs font-mono text-gray-400 min-w-[3rem] text-right">
+                    <span className="text-xs font-mono text-muted-foreground min-w-[3rem] text-right">
                       {formatPercent(career.match_percentage)}
                     </span>
                   </div>
@@ -239,18 +240,18 @@ export default function WhatIfSlider({
 
                 {/* Change badge */}
                 {diff > 0 && (
-                  <span className="flex items-center gap-0.5 text-xs font-semibold bg-emerald-500/15 text-emerald-400 px-2 py-1 rounded-lg">
-                    <TrendingUp size={12} />↑{diff}
+                  <span className="flex items-center gap-0.5 text-xs font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2 py-0.5 rounded-lg">
+                    <TrendingUp size={11} />↑{diff}
                   </span>
                 )}
                 {diff < 0 && (
-                  <span className="flex items-center gap-0.5 text-xs font-semibold bg-red-500/15 text-red-400 px-2 py-1 rounded-lg">
-                    <TrendingDown size={12} />↓{Math.abs(diff)}
+                  <span className="flex items-center gap-0.5 text-xs font-bold bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded-lg">
+                    <TrendingDown size={11} />↓{Math.abs(diff)}
                   </span>
                 )}
                 {diff === 0 && (
-                  <span className="flex items-center gap-0.5 text-xs font-medium bg-white/5 text-gray-500 px-2 py-1 rounded-lg">
-                    <Minus size={12} />—
+                  <span className="flex items-center gap-0.5 text-xs font-bold bg-muted/30 dark:bg-white/5 text-muted-foreground border border-border/40 px-2 py-0.5 rounded-lg">
+                    <Minus size={11} />—
                   </span>
                 )}
               </div>
@@ -268,22 +269,23 @@ export default function WhatIfSlider({
           height: 18px;
           border-radius: 50%;
           background: #F39200;
-          border: 2px solid rgba(255, 255, 255, 0.5);
+          border: 2px solid var(--background);
           cursor: pointer;
-          box-shadow: 0 0 8px rgba(243, 146, 0, 0.4);
-          transition: box-shadow 0.2s;
+          box-shadow: 0 0 8px rgba(243, 146, 0, 0.3);
+          transition: box-shadow 0.2s, transform 0.2s;
         }
         .slider-whatif::-webkit-slider-thumb:hover {
-          box-shadow: 0 0 14px rgba(243, 146, 0, 0.6);
+          box-shadow: 0 0 14px rgba(243, 146, 0, 0.5);
+          transform: scale(1.1);
         }
         .slider-whatif::-moz-range-thumb {
           width: 18px;
           height: 18px;
           border-radius: 50%;
           background: #F39200;
-          border: 2px solid rgba(255, 255, 255, 0.5);
+          border: 2px solid var(--background);
           cursor: pointer;
-          box-shadow: 0 0 8px rgba(243, 146, 0, 0.4);
+          box-shadow: 0 0 8px rgba(243, 146, 0, 0.3);
         }
       `}</style>
     </div>
