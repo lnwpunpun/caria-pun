@@ -99,11 +99,10 @@ function MatchCard({
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ type: "spring", stiffness: 350, damping: 30 }}
-      className="relative rounded-2xl p-5 overflow-hidden"
+      className="relative rounded-2xl p-5 overflow-hidden border bg-slate-50 dark:bg-[#0a1322]"
       style={{
-        background: "linear-gradient(135deg, rgba(13,26,48,0.95) 0%, rgba(5,10,20,0.98) 100%)",
-        border: `1px solid ${color}25`,
-        boxShadow: rank === 1 ? `0 0 30px ${color}15` : "none",
+        borderColor: `${color}25`,
+        boxShadow: rank === 1 ? `0 0 30px ${color}15` : undefined,
       }}
     >
       {/* Rank indicator */}
@@ -115,7 +114,7 @@ function MatchCard({
           >
             #{rank}
           </div>
-          <span className="font-syne font-semibold text-white text-sm">{career.title}</span>
+          <span className="font-syne font-semibold text-foreground text-sm">{career.title}</span>
         </div>
         {/* Animated match % */}
         <motion.span
@@ -128,7 +127,7 @@ function MatchCard({
       </div>
 
       {/* Animated progress bar */}
-      <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+      <div className="h-1.5 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
         <motion.div
           className="h-full rounded-full"
           style={{ background: `linear-gradient(90deg, ${color}60, ${color})` }}
@@ -180,7 +179,7 @@ export default function SimulatorSection() {
   };
 
   return (
-    <section id="simulator" className="py-24 relative" style={{ background: "#050A14" }}>
+    <section id="simulator" className="py-24 relative bg-background">
       {/* Ambient */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -204,10 +203,10 @@ export default function SimulatorSection() {
               What-If Simulator
             </span>
           </div>
-          <h2 className="font-syne font-extrabold text-4xl lg:text-5xl text-white mb-4">
+          <h2 className="font-syne font-extrabold text-4xl lg:text-5xl text-foreground mb-4">
             Explore Your Upskilling Path
           </h2>
-          <p className="text-white/50 font-dm text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground font-dm text-lg max-w-xl mx-auto">
             Adjust your skill levels and watch career match scores update in real-time. Find your optimal learning investment.
           </p>
         </motion.div>
@@ -223,14 +222,7 @@ export default function SimulatorSection() {
             className="w-full"
           >
             {/* Perfectly flat resting container */}
-            <div
-              style={{
-                background: "linear-gradient(135deg, rgba(13,26,48,0.95) 0%, rgba(5,10,20,0.98) 100%)",
-                border: "1px solid rgba(243,146,0,0.12)",
-                boxShadow: "0 0 40px rgba(243,146,0,0.06), 0 30px 60px rgba(0,0,0,0.4)",
-              }}
-              className="rounded-3xl p-8"
-            >
+            <div className="rounded-3xl p-8 border bg-white border-slate-200 shadow-[0_10px_40px_rgb(0,0,0,0.06)] dark:bg-[#0d1726] dark:border-[#F39200]/12 dark:shadow-[0_0_40px_rgba(243,146,0,0.06),0_30px_60px_rgba(0,0,0,0.4)]">
               <div className="flex items-center gap-3 mb-8">
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
@@ -242,8 +234,8 @@ export default function SimulatorSection() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-syne font-bold text-white text-lg">Skill Calibration</h3>
-                  <p className="text-xs font-dm text-white/40">Drag sliders to simulate upskilling</p>
+                  <h3 className="font-syne font-bold text-foreground text-lg">Skill Calibration</h3>
+                  <p className="text-xs font-dm text-muted-foreground">Drag sliders to simulate upskilling</p>
                 </div>
               </div>
 
@@ -267,19 +259,19 @@ export default function SimulatorSection() {
                           className="w-2.5 h-2.5 rounded-full"
                           style={{ background: skill.color, boxShadow: `0 0 8px ${skill.color}` }}
                         />
-                        <span className="text-sm font-dm text-white/80">{skill.label}</span>
+                        <span className="text-sm font-dm text-foreground">{skill.label}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <motion.span
                           key={skill.value}
-                          initial={{ scale: 1.4, color: skill.color }}
-                          animate={{ scale: 1, color: "#ffffff" }}
+                          initial={{ scale: 1.4 }}
+                          animate={{ scale: 1 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="font-syne font-bold text-lg tabular-nums w-8 text-right"
+                          className="font-syne font-bold text-lg tabular-nums w-8 text-right text-foreground"
                         >
                           {skill.value}
                         </motion.span>
-                        <span className="text-xs font-dm text-white/30">/100</span>
+                        <span className="text-xs font-dm text-muted-foreground">/100</span>
                       </div>
                     </div>
 
@@ -296,7 +288,7 @@ export default function SimulatorSection() {
                     </div>
 
                     {/* Level indicator */}
-                    <div className="flex justify-between mt-1.5 text-xs font-dm text-white/20">
+                    <div className="flex justify-between mt-1.5 text-xs font-dm text-muted-foreground">
                       <span>0</span>
                       <span
                         className="font-dm text-xs"
@@ -313,7 +305,7 @@ export default function SimulatorSection() {
               {/* Reset button */}
               <motion.button
                 onClick={() => setSkills(initialSkills)}
-                className="mt-8 w-full py-3 rounded-full border border-white/10 text-white/40 hover:text-white/70 hover:border-white/20 font-dm text-sm transition-colors"
+                className="mt-8 w-full py-3 rounded-full border border-slate-200 dark:border-white/10 text-muted-foreground hover:text-foreground hover:border-slate-300 dark:hover:border-white/20 font-dm text-sm transition-colors"
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
               >
@@ -332,14 +324,7 @@ export default function SimulatorSection() {
             className="lg:sticky lg:top-24 z-20 self-start w-full"
           >
             {/* Perfectly flat resting container */}
-            <div
-              style={{
-                background: "linear-gradient(135deg, rgba(13,26,48,0.95) 0%, rgba(5,10,20,0.98) 100%)",
-                border: "1px solid rgba(30,144,255,0.12)",
-                boxShadow: "0 0 40px rgba(30,144,255,0.06), 0 30px 60px rgba(0,0,0,0.4)",
-              }}
-              className="rounded-3xl p-8"
-            >
+            <div className="rounded-3xl p-8 border bg-white border-slate-200 shadow-[0_10px_40px_rgb(0,0,0,0.06)] dark:bg-[#0d1726] dark:border-[#1E90FF]/12 dark:shadow-[0_0_40px_rgba(30,144,255,0.06),0_30px_60px_rgba(0,0,0,0.4)]">
               <div className="flex items-center gap-3 mb-8">
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
@@ -350,8 +335,8 @@ export default function SimulatorSection() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-syne font-bold text-white text-lg">Live Rankings</h3>
-                  <p className="text-xs font-dm text-white/40">Updates as you calibrate skills</p>
+                  <h3 className="font-syne font-bold text-foreground text-lg">Live Rankings</h3>
+                  <p className="text-xs font-dm text-muted-foreground">Updates as you calibrate skills</p>
                 </div>
                 <div className="ml-auto flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#4ADE80] animate-pulse" />
@@ -384,9 +369,9 @@ export default function SimulatorSection() {
                 animate={{ borderColor: ["rgba(243,146,0,0.1)", "rgba(243,146,0,0.25)", "rgba(243,146,0,0.1)"] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
-                <p className="text-xs font-dm text-white/50 leading-relaxed">
+                <p className="text-xs font-dm text-muted-foreground leading-relaxed">
                   <span className="text-[#F39200] font-semibold">Tip:</span> Increasing your{" "}
-                  <span className="text-white/80">Machine Learning</span> score by 20 points would boost your Data Scientist match by approximately{" "}
+                  <span className="text-foreground">Machine Learning</span> score by 20 points would boost your Data Scientist match by approximately{" "}
                   <span className="text-[#F39200] font-semibold">+7%</span>.
                 </p>
               </motion.div>

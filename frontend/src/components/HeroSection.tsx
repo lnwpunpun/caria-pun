@@ -40,21 +40,34 @@ export default function HeroSection() {
   return (
     <section
       ref={ref}
-      className="relative min-h-screen flex items-center overflow-hidden"
-      style={{ background: "radial-gradient(ellipse 95% 85% at 72% 45%, #0A1422 0%, #050A14 45%, #030712 100%)" }}
+      className="relative min-h-screen flex items-center overflow-hidden bg-[#f4f7fc] dark:bg-[#030712]"
     >
-      {/* Cool glow behind the 3D nexus (right) */}
+      {/* Dark-mode cinematic base */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none hidden dark:block"
         style={{
-          background: "radial-gradient(ellipse 55% 60% at 74% 48%, rgba(45,156,255,0.10) 0%, transparent 65%)",
+          background: "radial-gradient(ellipse 95% 85% at 72% 45%, #0A1422 0%, #050A14 45%, #030712 100%)",
         }}
       />
-      {/* Warm glow behind the headline (left) to lift text off the canvas */}
+      {/* Light-mode airy base */}
+      <div
+        className="absolute inset-0 pointer-events-none dark:hidden"
+        style={{
+          background: "radial-gradient(ellipse 95% 85% at 72% 45%, #ffffff 0%, #eef3fb 55%, #e6edf8 100%)",
+        }}
+      />
+      {/* Cool glow behind the 3D nexus (right) — works on both themes */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: "radial-gradient(ellipse 45% 55% at 18% 42%, rgba(243,146,0,0.07) 0%, transparent 68%)",
+          background: "radial-gradient(ellipse 55% 60% at 74% 48%, rgba(45,156,255,0.12) 0%, transparent 65%)",
+        }}
+      />
+      {/* Warm glow behind the headline (left) */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse 45% 55% at 18% 42%, rgba(243,146,0,0.10) 0%, transparent 68%)",
         }}
       />
 
@@ -72,7 +85,7 @@ export default function HeroSection() {
           {/* Left: Text Content */}
           <motion.div
             style={{ y: textY, opacity }}
-            className="relative flex flex-col gap-6 z-10 max-w-xl"
+            className="relative flex flex-col gap-8 z-10 max-w-2xl"
           >
             {/* Badge */}
             <motion.div
@@ -92,18 +105,15 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-              className="font-syne font-extrabold text-5xl lg:text-6xl xl:text-7xl leading-[1.05] tracking-tight"
+              className="font-syne font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight leading-[1.1] text-slate-900 dark:text-white"
             >
-              <span className="text-white">Discover Your</span>
+              Discover Your
               <br />
-              <span
-                className="text-transparent bg-clip-text"
-                style={{ backgroundImage: "linear-gradient(135deg, #F39200 0%, #FFB84D 50%, #F39200 100%)" }}
-              >
+              <span className="text-[#F39200]">
                 Digital Career
               </span>
               <br />
-              <span className="text-white/80">Path.</span>
+              Path.
             </motion.h1>
 
             {/* Subheading */}
@@ -111,7 +121,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.35 }}
-              className="text-white/55 font-dm text-lg leading-relaxed max-w-lg"
+              className="text-slate-600 dark:text-slate-300 font-dm text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl"
             >
               CARIA-GAP maps your competencies across 66 digital skills, identifies your career gaps, and delivers a precision-engineered roadmap to your ideal role.
             </motion.p>
@@ -139,7 +149,7 @@ export default function HeroSection() {
 
               <motion.a
                 href="#how-it-works"
-                className="flex items-center gap-2 px-8 py-4 rounded-full border border-white/15 text-white/70 hover:text-white hover:border-white/30 font-dm text-base transition-colors"
+                className="flex items-center gap-2 px-8 py-4 rounded-full border border-slate-300 text-slate-700 hover:text-slate-900 hover:border-slate-400 dark:border-white/15 dark:text-white/70 dark:hover:text-white dark:hover:border-white/30 font-dm text-base transition-colors"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
@@ -153,7 +163,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.65 }}
-              className="flex gap-8 pt-4 border-t border-white/8"
+              className="flex gap-8 pt-4 border-t border-slate-200 dark:border-white/8"
             >
               {stats.map((stat, i) => (
                 <motion.div
@@ -163,11 +173,11 @@ export default function HeroSection() {
                   transition={{ delay: 0.7 + i * 0.1 }}
                   className="flex flex-col gap-1"
                 >
-                  <div className="font-syne font-extrabold text-2xl text-white">
+                  <div className="font-syne font-extrabold text-2xl text-slate-900 dark:text-white">
                     {stat.value}
                     <span className="text-[#F39200]">{stat.unit}</span>
                   </div>
-                  <div className="text-xs font-dm text-white/40 tracking-wide">{stat.label}</div>
+                  <div className="text-xs font-dm text-slate-500 dark:text-white/40 tracking-wide">{stat.label}</div>
                 </motion.div>
               ))}
             </motion.div>
@@ -220,9 +230,9 @@ export default function HeroSection() {
         transition={{ delay: 1.5 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <span className="text-xs font-dm text-white/30 tracking-widest uppercase">Scroll</span>
+        <span className="text-xs font-dm text-slate-400 dark:text-white/30 tracking-widest uppercase">Scroll</span>
         <motion.div
-          className="w-px h-8 bg-gradient-to-b from-white/30 to-transparent"
+          className="w-px h-8 bg-gradient-to-b from-slate-400 dark:from-white/30 to-transparent"
           animate={{ scaleY: [1, 0.5, 1], opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
         />

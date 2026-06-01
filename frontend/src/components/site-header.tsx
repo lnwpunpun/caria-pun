@@ -36,8 +36,8 @@ export function SiteHeader() {
         className={cn(
           "mx-auto flex max-w-6xl items-center justify-between rounded-full px-3 py-2.5 transition-all duration-500",
           scrolled
-            ? "bg-white/75 dark:bg-[#0a0f1c]/70 backdrop-blur-xl border border-slate-200/70 dark:border-white/10 shadow-[0_8px_40px_-12px_rgba(0,16,40,0.25)] dark:shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)] text-foreground"
-            : "border border-transparent text-white",
+            ? "bg-white/75 dark:bg-[#0a0f1c]/70 backdrop-blur-xl border border-slate-200/70 dark:border-white/10 shadow-[0_8px_40px_-12px_rgba(0,16,40,0.25)] dark:shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)] text-slate-900 dark:text-slate-100"
+            : "border border-transparent text-slate-900 dark:text-slate-100",
         )}
       >
         <a href="#top" className="pl-2">
@@ -53,8 +53,8 @@ export function SiteHeader() {
               className={cn(
                 "rounded-full px-4 py-2 text-sm font-medium transition-colors",
                 scrolled
-                  ? "text-foreground/70 hover:bg-foreground/5 hover:text-foreground"
-                  : "text-white/75 hover:bg-white/10 hover:text-white",
+                  ? "text-slate-600 dark:text-slate-300 hover:bg-slate-900/5 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
+                  : "text-slate-700 dark:text-slate-200 hover:bg-slate-900/5 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white",
               )}
             >
               {item.label}
@@ -63,7 +63,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ThemeToggle onTop={!scrolled} />
+          <ThemeToggle onTop={false} />
           <a
             href="#assessment"
             className="group hidden items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_10px_30px_-8px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
@@ -76,7 +76,9 @@ export function SiteHeader() {
             onClick={() => setOpen((v) => !v)}
             className={cn(
               "inline-flex size-10 items-center justify-center rounded-full border md:hidden",
-              scrolled ? "border-foreground/10 text-foreground" : "border-white/15 text-white",
+              scrolled
+                ? "border-slate-200 text-slate-900 dark:border-white/10 dark:text-white"
+                : "border-slate-300/50 text-slate-800 dark:border-white/15 dark:text-white",
             )}
             aria-label="Toggle menu"
             aria-expanded={open}

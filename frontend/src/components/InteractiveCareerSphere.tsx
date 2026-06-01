@@ -12,11 +12,16 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Html } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { useRef, useState, useEffect, useMemo } from "react";
+import { useTheme } from "next-themes";
 import * as THREE from "three";
 
 const RADIUS = 2.5;
+// Dark theme: bright colours that glow additively on a deep background.
 const COLOR_ORANGE = new THREE.Color("#F39200"); // SUT Orange — left
 const COLOR_BLUE = new THREE.Color("#2D9CFF"); //   Nexus Blue — right
+// Light theme: deeper, saturated colours that read on a near-white background.
+const COLOR_ORANGE_LIGHT = new THREE.Color("#E0700A");
+const COLOR_BLUE_LIGHT = new THREE.Color("#2563EB");
 
 // Career nodes anchored to whichever mesh vertex sits nearest each direction.
 // Directions favour the front hemisphere (z > 0) so labels read on load.
@@ -28,7 +33,7 @@ const LABEL_TARGETS: { label: string; dir: [number, number, number] }[] = [
   { label: "Software Eng.", dir: [0.18, -0.82, 0.5] },
 ];
 
-function Nexus() {
+function Nexus({ light }: { light: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   const occluderRef = useRef<THREE.Mesh>(null);
 
@@ -57,13 +62,17 @@ function Nexus() {
     const uniqueCount = verts.length / 3;
 
     // 3. Per-vertex colour: orange (left) → blue (right) with brightness jitter.
+    const cOrange = light ? COLOR_ORANGE_LIGHT : COLOR_ORANGE;
+    const cBlue = light ? COLOR_BLUE_LIGHT : COLOR_BLUE;
     const colors = new Float32Array(uniqueCount * 3);
     const tmp = new THREE.Color();
     for (let i = 0; i < uniqueCount; i++) {
       const x = verts[i * 3];
       const m = THREE.MathUtils.smoothstep(x, -0.75, 0.75); // 0 left → 1 right
-      tmp.copy(COLOR_ORANGE).lerp(COLOR_BLUE, m);
-      const b = 0.5 + Math.random() * 0.5; // organic dot-to-dot brightness
+      tmp.copy(cOrange).lerp(cBlue, m);
+      // Light mode keeps colours mostly saturated; dark mode varies brightness
+      // wider so additive dots twinkle.
+      const b = light ? 0.7 + Math.random() * 0.3 : 0.5 + Math.random() * 0.5;
       colors[i * 3] = tmp.r * b;
       colors[i * 3 + 1] = tmp.g * b;
       colors[i * 3 + 2] = tmp.b * b;
@@ -135,7 +144,7 @@ function Nexus() {
     });
 
     return { pointsGeo: pGeo, linesGeo: lGeo, dotTexture: tex, labeledNodes: labeled };
-  }, []);
+  }, [light]);
 
   // Slow, premium rotation. Colours start orange-left / blue-right on load.
   useFrame((state) => {
@@ -158,13 +167,15 @@ function Nexus() {
         <lineBasicMaterial
           vertexColors
           transparent
-          opacity={0.2}
+          opacity={light ? 0.5 : 0.2}
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
+          toneMapped={false}
+          blending={light ? THREE.NormalBlending : THREE.AdditiveBlending}
         />
       </lineSegments>
 
-      {/* Vertex dots — round, vertex coloured, gently glowing. */}
+      {/* Vertex dots — round, vertex coloured. Glow additively in dark mode,
+          solid normal-blended dots in light mode. */}
       <points geometry={pointsGeo}>
         <pointsMaterial
           map={dotTexture}
@@ -172,11 +183,11 @@ function Nexus() {
           size={0.06}
           sizeAttenuation
           transparent
-          opacity={0.95}
+          opacity={light ? 0.9 : 0.95}
           alphaTest={0.01}
           depthWrite={false}
           toneMapped={false}
-          blending={THREE.AdditiveBlending}
+          blending={light ? THREE.NormalBlending : THREE.AdditiveBlending}
         />
       </points>
 
@@ -185,7 +196,7 @@ function Nexus() {
         <group key={node.label} position={node.position}>
           <mesh>
             <sphereGeometry args={[0.05, 16, 16]} />
-            <meshBasicMaterial color="#FFC14D" toneMapped={false} />
+            <meshBasicMaterial color={light ? "#E0700A" : "#FFC14D"} toneMapped={false} />
           </mesh>
           <Html
             center
@@ -193,9 +204,9 @@ function Nexus() {
             occlude={[occluderRef]}
             zIndexRange={[30, 0]}
           >
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-[#070B14]/80 backdrop-blur-md shadow-[0_2px_24px_rgba(0,0,0,0.55)] whitespace-nowrap cursor-pointer pointer-events-auto transition-all hover:bg-white/[0.08] hover:border-[#F39200]/50 hover:scale-105">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-200 bg-white/85 shadow-[0_4px_20px_rgba(0,0,0,0.12)] backdrop-blur-md transition-all hover:scale-105 hover:border-[#F39200]/50 dark:border-white/10 dark:bg-[#070B14]/80 dark:shadow-[0_2px_24px_rgba(0,0,0,0.55)] whitespace-nowrap cursor-pointer pointer-events-auto">
               <span className="w-2 h-2 rounded-full bg-[#F39200] shadow-[0_0_8px_#F39200]" />
-              <span className="text-[11px] font-semibold tracking-wide text-white">{node.label}</span>
+              <span className="text-[11px] font-semibold tracking-wide text-slate-800 dark:text-white">{node.label}</span>
             </div>
           </Html>
         </group>
@@ -206,11 +217,14 @@ function Nexus() {
 
 export default function InteractiveCareerSphere() {
   const [mounted, setMounted] = useState(false);
+  const { resolvedTheme } = useTheme();
   useEffect(() => setMounted(true), []);
+
+  const light = mounted && resolvedTheme === "light";
 
   if (!mounted) {
     return (
-      <div className="w-full h-full rounded-full bg-white/[0.01] border border-white/5 flex items-center justify-center">
+      <div className="w-full h-full flex items-center justify-center">
         <div className="w-8 h-8 rounded-full border-2 border-[#F39200]/30 border-t-[#F39200] animate-spin" />
       </div>
     );
@@ -224,7 +238,7 @@ export default function InteractiveCareerSphere() {
         dpr={[1, 2]}
         style={{ background: "transparent" }}
       >
-        <Nexus />
+        <Nexus light={light} />
 
         <OrbitControls
           enablePan={false}
@@ -235,10 +249,13 @@ export default function InteractiveCareerSphere() {
           rotateSpeed={0.4}
         />
 
-        {/* Subtle bloom: only the brighter dots glow, the web stays razor-sharp. */}
-        <EffectComposer enableNormalPass={false}>
-          <Bloom intensity={1.1} luminanceThreshold={0.45} luminanceSmoothing={0.6} mipmapBlur />
-        </EffectComposer>
+        {/* Bloom only in dark mode — on a light background additive bloom just
+            washes the scene out, so we render crisp normal-blended geometry. */}
+        {!light && (
+          <EffectComposer enableNormalPass={false}>
+            <Bloom intensity={1.1} luminanceThreshold={0.45} luminanceSmoothing={0.6} mipmapBlur />
+          </EffectComposer>
+        )}
       </Canvas>
     </div>
   );

@@ -117,9 +117,9 @@ function StepCard({ step, index }: { step: typeof steps[0]; index: number }) {
           <div className="flex-1 h-px" style={{ background: `linear-gradient(90deg, ${step.color}30, transparent)` }} />
         </div>
 
-        <h3 className="font-syne font-bold text-xl text-white mb-1">{step.title}</h3>
-        <p className="text-sm font-dm text-white/50 mb-3">{step.subtitle}</p>
-        <p className="text-sm font-dm text-white/60 leading-relaxed">{step.description}</p>
+        <h3 className="font-syne font-bold text-xl text-foreground mb-1">{step.title}</h3>
+        <p className="text-sm font-dm text-muted-foreground mb-3">{step.subtitle}</p>
+        <p className="text-sm font-dm text-muted-foreground leading-relaxed">{step.description}</p>
 
         {/* Detail pill */}
         <div
@@ -165,10 +165,10 @@ export default function HowItWorks() {
             <div className="w-2 h-2 rounded-full bg-[#1E90FF]" />
             <span className="text-xs font-dm text-[#1E90FF] tracking-widest uppercase">The Process</span>
           </div>
-          <h2 className="font-syne font-extrabold text-4xl lg:text-5xl text-white mb-4">
+          <h2 className="font-syne font-extrabold text-4xl lg:text-5xl text-foreground mb-4">
             How CARIA-GAP Works
           </h2>
-          <p className="text-white/50 font-dm text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground font-dm text-lg max-w-xl mx-auto">
             Three precision-engineered steps from raw input to career clarity.
           </p>
         </motion.div>

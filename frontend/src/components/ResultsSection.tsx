@@ -72,13 +72,12 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
       className={`relative ${isTop ? "lg:-mt-4 lg:mb-4" : ""}`}
     >
       <motion.div
-        className="relative rounded-3xl overflow-hidden h-full"
+        className={`relative rounded-3xl overflow-hidden h-full border bg-white shadow-[0_10px_40px_rgb(0,0,0,0.06)] dark:bg-[#0d1726] ${
+          isTop
+            ? "border-[#F39200]/30 dark:shadow-[0_0_40px_rgba(243,146,0,0.12),0_20px_60px_rgba(0,0,0,0.45)]"
+            : "border-slate-200 dark:border-white/10 dark:shadow-[0_20px_60px_rgba(0,0,0,0.4)]"
+        }`}
         style={{
-          background: "linear-gradient(135deg, rgba(13,26,48,0.95) 0%, rgba(5,10,20,0.98) 100%)",
-          border: `1px solid ${career.color}20`,
-          boxShadow: isTop
-            ? `0 0 40px ${career.color}15, 0 30px 80px rgba(0,0,0,0.5)`
-            : "0 20px 60px rgba(0,0,0,0.4)",
           rotateX: cardRotateX,
           scale: cardScale,
         }}
@@ -91,7 +90,7 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
       >
         {/* Card BG texture */}
         <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
+          className="absolute inset-0 opacity-[0.04] dark:opacity-20 pointer-events-none"
           style={{
             backgroundImage: `url(${CARD_BG_URL})`,
             backgroundSize: "cover",
@@ -122,8 +121,8 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
                 #{career.rank}
               </div>
               <div>
-                <p className="text-xs font-dm text-white/40 tracking-wide">{career.department}</p>
-                <h3 className="font-syne font-bold text-white text-xl leading-tight">{career.title}</h3>
+                <p className="text-xs font-dm text-muted-foreground tracking-wide">{career.department}</p>
+                <h3 className="font-syne font-bold text-foreground text-xl leading-tight">{career.title}</h3>
               </div>
             </div>
 
@@ -135,13 +134,13 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
               >
                 {career.match}%
               </div>
-              <div className="text-xs font-dm text-white/35">Match Score</div>
+              <div className="text-xs font-dm text-muted-foreground">Match Score</div>
             </div>
           </div>
 
           {/* Match bar */}
           <div className="mb-5">
-            <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+            <div className="h-1.5 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
               <motion.div
                 className="h-full rounded-full"
                 style={{ background: `linear-gradient(90deg, ${career.color}80, ${career.color})` }}
@@ -153,7 +152,7 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
           </div>
 
           {/* Description */}
-          <p className="text-sm font-dm text-white/55 leading-relaxed mb-5">{career.description}</p>
+          <p className="text-sm font-dm text-muted-foreground leading-relaxed mb-5">{career.description}</p>
 
           {/* Skills */}
           <div className="flex flex-wrap gap-2 mb-5">
@@ -173,15 +172,15 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
           </div>
 
           {/* Footer stats */}
-          <div className="flex items-center justify-between pt-4 border-t border-white/6">
+          <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-white/10">
             <div className="flex items-center gap-1.5">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M7 1v12M1 7h12" stroke={career.color} strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
               </svg>
-              <span className="text-xs font-dm text-white/40">{career.gaps} skill gaps</span>
+              <span className="text-xs font-dm text-muted-foreground">{career.gaps} skill gaps</span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-xs font-dm text-white/40">{career.salary}</span>
+              <span className="text-xs font-dm text-muted-foreground">{career.salary}</span>
               <span
                 className="text-xs font-dm flex items-center gap-1"
                 style={{ color: "#4ADE80" }}
@@ -220,7 +219,7 @@ export default function ResultsSection() {
   const titleInView = useInView(titleRef, { once: true, margin: "-60px" });
 
   return (
-    <section id="results" className="py-24 relative overflow-hidden" style={{ background: "#050A14" }}>
+    <section id="results" className="py-24 relative overflow-hidden bg-slate-50 dark:bg-[#0a0f1c]">
       {/* Background gradient */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -244,10 +243,10 @@ export default function ResultsSection() {
               Career Intelligence
             </span>
           </div>
-          <h2 className="font-syne font-extrabold text-4xl lg:text-5xl text-white mb-4">
+          <h2 className="font-syne font-extrabold text-4xl lg:text-5xl text-foreground mb-4">
             Your Top Career Matches
           </h2>
-          <p className="text-white/50 font-dm text-lg max-w-xl mx-auto">
+          <p className="text-muted-foreground font-dm text-lg max-w-xl mx-auto">
             Precision-ranked pathways based on your competency profile and real-time market demand signals.
           </p>
         </motion.div>
