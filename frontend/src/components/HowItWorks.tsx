@@ -7,6 +7,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { useLanguage } from "@/components/language-provider";
 
 const steps = [
   {
@@ -141,6 +142,8 @@ function StepCard({ step, index }: { step: typeof steps[0]; index: number }) {
 export default function HowItWorks() {
   const titleRef = useRef<HTMLDivElement>(null);
   const titleInView = useInView(titleRef, { once: true, margin: "-60px" });
+  const { t, lang } = useLanguage();
+  const thai = lang === "th";
 
   return (
     <section id="how-it-works" className="py-24 relative bg-slate-50 dark:bg-[#0a0f1c]">
@@ -163,13 +166,13 @@ export default function HowItWorks() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#1E90FF]/20 bg-[#1E90FF]/5 mb-5">
             <div className="w-2 h-2 rounded-full bg-[#1E90FF]" />
-            <span className="text-xs font-dm text-[#1E90FF] tracking-widest uppercase">The Process</span>
+            <span className={`text-xs text-[#1E90FF] ${thai ? "font-thai" : "font-dm tracking-widest uppercase"}`}>{t.howItWorks.eyebrow}</span>
           </div>
-          <h2 className="font-syne font-extrabold text-4xl lg:text-5xl text-foreground mb-4">
-            How CARIA-GAP Works
+          <h2 className={`font-extrabold text-4xl lg:text-5xl text-foreground mb-4 ${thai ? "font-thai leading-snug" : "font-syne"}`}>
+            {t.howItWorks.title}
           </h2>
-          <p className="text-muted-foreground font-dm text-lg max-w-xl mx-auto">
-            Three precision-engineered steps from raw input to career clarity.
+          <p className={`text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto ${thai ? "font-thai leading-loose" : "font-dm leading-relaxed"}`}>
+            {t.howItWorks.subtitle}
           </p>
         </motion.div>
 

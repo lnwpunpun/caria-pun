@@ -7,6 +7,7 @@
 
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { useLanguage } from "@/components/language-provider";
 
 const CARD_BG_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663715925716/C5srhVpvKrV4qWgj4NxM6w/career-card-bg-5L8EkNTMfS6jDs3zeQRXYj.webp";
 
@@ -217,6 +218,8 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
 export default function ResultsSection() {
   const titleRef = useRef<HTMLDivElement>(null);
   const titleInView = useInView(titleRef, { once: true, margin: "-60px" });
+  const { t, lang } = useLanguage();
+  const thai = lang === "th";
 
   return (
     <section id="results" className="py-24 relative overflow-hidden bg-slate-50 dark:bg-[#0a0f1c]">
@@ -239,15 +242,15 @@ export default function ResultsSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#F39200]/20 bg-[#F39200]/5 mb-5">
             <div className="w-2 h-2 rounded-full bg-[#F39200]" />
-            <span className="text-xs font-dm text-[#F39200] tracking-widest uppercase">
-              Career Intelligence
+            <span className={`text-xs text-[#F39200] ${thai ? "font-thai" : "font-dm tracking-widest uppercase"}`}>
+              {t.results.eyebrow}
             </span>
           </div>
-          <h2 className="font-syne font-extrabold text-4xl lg:text-5xl text-foreground mb-4">
-            Your Top Career Matches
+          <h2 className={`font-extrabold text-4xl lg:text-5xl text-foreground mb-4 ${thai ? "font-thai leading-snug" : "font-syne"}`}>
+            {t.results.title}
           </h2>
-          <p className="text-muted-foreground font-dm text-lg max-w-xl mx-auto">
-            Precision-ranked pathways based on your competency profile and real-time market demand signals.
+          <p className={`text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto ${thai ? "font-thai leading-loose" : "font-dm leading-relaxed"}`}>
+            {t.results.subtitle}
           </p>
         </motion.div>
 

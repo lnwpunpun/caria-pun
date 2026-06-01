@@ -11,6 +11,7 @@ import { MOCK_TOP10, MOCK_GAP_ANALYSIS } from "@/lib/mockData";
 import { calculateMES, adjustScores } from "@/lib/mes-client";
 import type { CareerVector } from "@/types";
 import { Slider } from "@/components/ui/slider";
+import { useLanguage } from "@/components/language-provider";
 
 // Number ticker hook
 function useNumberTicker(value: number, duration = 0.4) {
@@ -143,6 +144,8 @@ export default function SimulatorSection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [skills, setSkills] = useState(initialSkills);
+  const { t, lang } = useLanguage();
+  const thai = lang === "th";
 
   const updateSkill = (id: string, value: number) => {
     setSkills((prev) => prev.map((s) => (s.id === id ? { ...s, value } : s)));
@@ -199,15 +202,15 @@ export default function SimulatorSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#F39200]/20 bg-[#F39200]/5 mb-5">
             <div className="w-2 h-2 rounded-full bg-[#F39200] animate-pulse" />
-            <span className="text-xs font-dm text-[#F39200] tracking-widest uppercase">
-              What-If Simulator
+            <span className={`text-xs text-[#F39200] ${thai ? "font-thai" : "font-dm tracking-widest uppercase"}`}>
+              {t.simulator.eyebrow}
             </span>
           </div>
-          <h2 className="font-syne font-extrabold text-4xl lg:text-5xl text-foreground mb-4">
-            Explore Your Upskilling Path
+          <h2 className={`font-extrabold text-4xl lg:text-5xl text-foreground mb-4 ${thai ? "font-thai leading-snug" : "font-syne"}`}>
+            {t.simulator.title}
           </h2>
-          <p className="text-muted-foreground font-dm text-lg max-w-xl mx-auto">
-            Adjust your skill levels and watch career match scores update in real-time. Find your optimal learning investment.
+          <p className={`text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto ${thai ? "font-thai leading-loose" : "font-dm leading-relaxed"}`}>
+            {t.simulator.subtitle}
           </p>
         </motion.div>
 

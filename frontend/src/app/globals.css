@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -134,6 +135,10 @@
   html {
     scroll-behavior: smooth;
   }
+}
+
+@utility font-thai {
+  font-family: 'IBM Plex Sans Thai', var(--font-sans), system-ui, sans-serif;
 }
 
 @utility glass {

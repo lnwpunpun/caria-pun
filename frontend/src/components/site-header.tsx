@@ -6,17 +6,20 @@ import { ArrowRight, Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Logo } from "@/components/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageToggle } from "@/components/language-toggle"
+import { useLanguage } from "@/components/language-provider"
 
 const NAV = [
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Assessment", href: "#assessment" },
-  { label: "Results", href: "#results" },
-  { label: "Simulator", href: "#simulator" },
-]
+  { key: "howItWorks", href: "#how-it-works" },
+  { key: "assessment", href: "#assessment" },
+  { key: "results", href: "#results" },
+  { key: "simulator", href: "#simulator" },
+] as const
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const { t } = useLanguage()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16)
@@ -57,18 +60,19 @@ export function SiteHeader() {
                   : "text-slate-700 dark:text-slate-200 hover:bg-slate-900/5 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white",
               )}
             >
-              {item.label}
+              {t.nav[item.key]}
             </a>
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
+          <LanguageToggle />
           <ThemeToggle onTop={false} />
           <a
             href="#assessment"
             className="group hidden items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_10px_30px_-8px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
           >
-            Start Assessment
+            {t.nav.start}
             <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </a>
           <button
@@ -102,7 +106,7 @@ export function SiteHeader() {
                 onClick={() => setOpen(false)}
                 className="rounded-2xl px-4 py-3 text-sm font-medium text-foreground/80 hover:bg-foreground/5"
               >
-                {item.label}
+                {t.nav[item.key]}
               </a>
             ))}
             <a
@@ -110,7 +114,7 @@ export function SiteHeader() {
               onClick={() => setOpen(false)}
               className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3 text-sm font-semibold text-brand-orange-foreground"
             >
-              Start Assessment <ArrowRight className="size-4" />
+              {t.nav.start} <ArrowRight className="size-4" />
             </a>
           </nav>
         </motion.div>

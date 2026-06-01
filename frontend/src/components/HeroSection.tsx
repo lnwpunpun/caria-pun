@@ -8,6 +8,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import dynamic from "next/dynamic";
+import { useLanguage } from "@/components/language-provider";
 
 const InteractiveCareerSphere = dynamic(
   () => import("@/components/InteractiveCareerSphere"),
@@ -36,6 +37,8 @@ export default function HeroSection() {
   const orbScale = useTransform(scrollYProgress, [0, 1], [1, 0.85]);
   const textY = useTransform(scrollYProgress, [0, 1], [0, 60]);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const { t, lang } = useLanguage();
+  const thai = lang === "th";
 
   return (
     <section
@@ -95,8 +98,8 @@ export default function HeroSection() {
               className="inline-flex items-center gap-2 self-start px-4 py-1.5 rounded-full border border-[#F39200]/30 bg-[#F39200]/5"
             >
               <div className="w-2 h-2 rounded-full bg-[#F39200] animate-pulse" />
-              <span className="text-xs font-dm text-[#F39200] tracking-widest uppercase">
-                AI-Powered Career Intelligence
+              <span className={`text-xs text-[#F39200] ${thai ? "font-thai" : "font-dm tracking-widest uppercase"}`}>
+                {t.hero.badge}
               </span>
             </motion.div>
 
@@ -105,15 +108,15 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-              className="font-syne font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight leading-[1.1] text-slate-900 dark:text-white"
+              className={`font-extrabold text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-tight text-slate-900 dark:text-white ${
+                thai ? "font-thai leading-snug" : "font-syne leading-[1.1]"
+              }`}
             >
-              Discover Your
+              {t.hero.line1}
               <br />
-              <span className="text-[#F39200]">
-                Digital Career
-              </span>
+              <span className="text-[#F39200]">{t.hero.accent}</span>
               <br />
-              Path.
+              {t.hero.line3}
             </motion.h1>
 
             {/* Subheading */}
@@ -121,9 +124,11 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.35 }}
-              className="text-slate-600 dark:text-slate-300 font-dm text-lg sm:text-xl md:text-2xl leading-relaxed max-w-2xl"
+              className={`text-slate-600 dark:text-slate-300 text-lg sm:text-xl md:text-2xl max-w-2xl ${
+                thai ? "font-thai leading-loose" : "font-dm leading-relaxed"
+              }`}
             >
-              CARIA-GAP maps your competencies across 66 digital skills, identifies your career gaps, and delivers a precision-engineered roadmap to your ideal role.
+              {t.hero.sub}
             </motion.p>
 
             {/* CTAs */}
@@ -141,7 +146,7 @@ export default function HeroSection() {
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
               >
-                <span>Discover Your Career</span>
+                <span>{t.hero.ctaPrimary}</span>
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -154,7 +159,7 @@ export default function HeroSection() {
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
-                See How It Works
+                {t.hero.ctaSecondary}
               </motion.a>
             </motion.div>
 
@@ -177,7 +182,7 @@ export default function HeroSection() {
                     {stat.value}
                     <span className="text-[#F39200]">{stat.unit}</span>
                   </div>
-                  <div className="text-xs font-dm text-slate-500 dark:text-white/40 tracking-wide">{stat.label}</div>
+                  <div className={`text-xs text-slate-500 dark:text-white/40 tracking-wide ${thai ? "font-thai" : "font-dm"}`}>{t.hero.stats[i].label}</div>
                 </motion.div>
               ))}
             </motion.div>

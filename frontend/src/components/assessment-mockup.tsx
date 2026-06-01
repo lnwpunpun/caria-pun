@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { motion } from "motion/react"
 import { Check } from "lucide-react"
+import { useLanguage } from "@/components/language-provider"
 
 const QUESTIONS = [
   "I enjoy breaking down complex problems into structured steps.",
@@ -20,6 +21,8 @@ function labelFor(v: number) {
 
 export function AssessmentMockup() {
   const [values, setValues] = useState<number[]>([72, 48, 88])
+  const { t, lang } = useLanguage()
+  const thai = lang === "th"
 
   return (
     <section id="assessment" className="relative overflow-hidden bg-background py-28 sm:py-36">
@@ -29,15 +32,14 @@ export function AssessmentMockup() {
       />
       <div className="relative mx-auto max-w-6xl px-6">
         <div className="mx-auto mb-14 max-w-2xl text-center">
-          <p className="text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">
-            Frictionless input
+          <p className={`text-xs font-medium text-muted-foreground ${thai ? "font-thai" : "uppercase tracking-[0.3em]"}`}>
+            {t.assessment.eyebrow}
           </p>
-          <h2 className="mt-3 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
-            An assessment that feels effortless
+          <h2 className={`mt-3 text-balance text-4xl font-semibold tracking-tight sm:text-5xl ${thai ? "font-thai leading-snug" : ""}`}>
+            {t.assessment.title}
           </h2>
-          <p className="mt-5 text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg">
-            Slide to answer. No long forms, no jargon — just a clean interface that
-            captures your attitudes with precision.
+          <p className={`mt-5 text-pretty text-lg text-muted-foreground sm:text-xl ${thai ? "font-thai leading-loose" : "leading-relaxed"}`}>
+            {t.assessment.subtitle}
           </p>
         </div>
 
