@@ -237,8 +237,8 @@ export default function SimulatorSection() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-syne font-bold text-foreground text-lg">Skill Calibration</h3>
-                  <p className="text-xs font-dm text-muted-foreground">Drag sliders to simulate upskilling</p>
+                  <h3 className={`font-bold text-foreground text-lg ${thai ? "font-thai leading-relaxed" : "font-syne"}`}>{t.simulator.skillCalibration}</h3>
+                  <p className={`text-xs text-muted-foreground ${thai ? "font-thai leading-relaxed" : "font-dm"}`}>{t.simulator.dragSliders}</p>
                 </div>
               </div>
 
@@ -294,10 +294,10 @@ export default function SimulatorSection() {
                     <div className="flex justify-between mt-1.5 text-xs font-dm text-muted-foreground">
                       <span>0</span>
                       <span
-                        className="font-dm text-xs"
+                        className={`text-xs ${thai ? "font-thai leading-relaxed" : "font-dm"}`}
                         style={{ color: skill.color + "80" }}
                       >
-                        {skill.value < 30 ? "Novice" : skill.value < 60 ? "Intermediate" : skill.value < 80 ? "Advanced" : "Expert"}
+                        {skill.value < 30 ? t.simulator.novice : skill.value < 60 ? t.simulator.intermediate : skill.value < 80 ? t.simulator.advanced : t.simulator.expert}
                       </span>
                       <span>100</span>
                     </div>
@@ -308,11 +308,11 @@ export default function SimulatorSection() {
               {/* Reset button */}
               <motion.button
                 onClick={() => setSkills(initialSkills)}
-                className="mt-8 w-full py-3 rounded-full border border-slate-200 dark:border-white/10 text-muted-foreground hover:text-foreground hover:border-slate-300 dark:hover:border-white/20 font-dm text-sm transition-colors"
+                className={`mt-8 w-full py-3 rounded-full border border-slate-200 dark:border-white/10 text-muted-foreground hover:text-foreground hover:border-slate-300 dark:hover:border-white/20 text-sm transition-colors ${thai ? "font-thai leading-relaxed" : "font-dm"}`}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
               >
-                Reset to Baseline
+                {t.simulator.resetBaseline}
               </motion.button>
             </div>
           </motion.div>
@@ -338,8 +338,8 @@ export default function SimulatorSection() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-syne font-bold text-foreground text-lg">Live Rankings</h3>
-                  <p className="text-xs font-dm text-muted-foreground">Updates as you calibrate skills</p>
+                  <h3 className={`font-bold text-foreground text-lg ${thai ? "font-thai leading-relaxed" : "font-syne"}`}>{t.simulator.liveRankings}</h3>
+                  <p className={`text-xs text-muted-foreground ${thai ? "font-thai leading-relaxed" : "font-dm"}`}>{t.simulator.liveRankingsSub}</p>
                 </div>
                 <div className="ml-auto flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-[#4ADE80] animate-pulse" />
@@ -372,16 +372,25 @@ export default function SimulatorSection() {
                 animate={{ borderColor: ["rgba(243,146,0,0.1)", "rgba(243,146,0,0.25)", "rgba(243,146,0,0.1)"] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
-                <p className="text-xs font-dm text-muted-foreground leading-relaxed">
-                  <span className="text-[#F39200] font-semibold">Tip:</span> Increasing your{" "}
-                  <span className="text-foreground">Machine Learning</span> score by 20 points would boost your Data Scientist match by approximately{" "}
-                  <span className="text-[#F39200] font-semibold">+7%</span>.
-                </p>
+                {thai ? (
+                  <p className="text-xs text-muted-foreground leading-relaxed font-thai">
+                    <span className="text-[#F39200] font-semibold">เคล็ดลับ:</span> การเพิ่มทักษะ{" "}
+                    <span className="text-foreground">Machine Learning</span> อีก 20 คะแนน จะช่วยเพิ่มโอกาสแมตช์กับ{" "}
+                    <span className="text-foreground">Data Scientist</span> ถึง{" "}
+                    <span className="text-[#F39200] font-semibold">+7%</span>
+                  </p>
+                ) : (
+                  <p className="text-xs font-dm text-muted-foreground leading-relaxed">
+                    <span className="text-[#F39200] font-semibold">Tip:</span> Increasing your{" "}
+                    <span className="text-foreground">Machine Learning</span> score by 20 points would boost your Data Scientist match by approximately{" "}
+                    <span className="text-[#F39200] font-semibold">+7%</span>.
+                  </p>
+                )}
               </motion.div>
 
               {/* Action */}
               <motion.button
-                className="mt-4 w-full py-4 rounded-full font-syne font-bold text-[#050A14] text-sm tracking-wide"
+                className={`mt-4 w-full py-4 rounded-full font-bold text-[#050A14] text-sm tracking-wide ${thai ? "font-thai leading-relaxed" : "font-syne"}`}
                 style={{
                   background: "linear-gradient(135deg, #F39200, #FFB84D)",
                   boxShadow: "0 0 20px rgba(243,146,0,0.3)",
@@ -390,7 +399,7 @@ export default function SimulatorSection() {
                 whileTap={{ scale: 0.98 }}
                 transition={{ type: "spring", stiffness: 400, damping: 20 }}
               >
-                Generate My Learning Roadmap →
+                {t.simulator.generateRoadmap}
               </motion.button>
             </div>
           </motion.div>

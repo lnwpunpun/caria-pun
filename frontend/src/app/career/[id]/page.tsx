@@ -13,9 +13,12 @@ import Loading from "@/components/ui/Loading";
 import { api } from "@/lib/api";
 import { MOCK_GAP_ANALYSIS } from "@/lib/mockData";
 import type { GapAnalysisResponse, CompetencyScores } from "@/types";
+import { useLanguage } from "@/components/language-provider";
+import { CourseMatcher } from "@/components/results/CourseMatcher";
 
 export default function CareerGapPage() {
   const router = useRouter();
+  const { lang } = useLanguage();
   const params = useParams();
   const searchParams = useSearchParams();
 
@@ -175,6 +178,15 @@ export default function CareerGapPage() {
             gaps={data.gaps}
             maxItems={10}
             className="min-h-[300px]"
+          />
+        </div>
+
+        {/* SUT Course Curriculum Mapping & Career Group Matcher */}
+        <div className="mt-8">
+          <CourseMatcher
+            careerName={data.career.career_name}
+            gaps={data.gaps}
+            lang={lang}
           />
         </div>
 

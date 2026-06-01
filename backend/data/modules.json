@@ -1,0 +1,83 @@
+{
+  "_meta": {
+    "description": "DIGITECH SUT major modules (Personalized Module). target_careers reference careers.json DT IDs by career_group. Mock data for the B2B pivot.",
+    "source": "Career groups verbatim from careers.json (program=DT). Course mappings & module framing are plausible mocks for DIGITECH มทส.",
+    "academic_unit": "สำนักวิชาเทคโนโลยีดิจิทัล (DIGITECH) มหาวิทยาลัยเทคโนโลยีสุรนารี",
+    "digitech_plan_url": "https://digitech.sut.ac.th/Digitech-Plan/",
+    "total": 6
+  },
+  "modules": [
+    {
+      "module_id": "DIGITECH-ENT",
+      "name_th": "วิศวกรรมซอฟต์แวร์องค์กร",
+      "name_en": "Enterprise Software Engineering",
+      "group": "Enterprise Software",
+      "tagline_th": "สร้างระบบซอฟต์แวร์ระดับองค์กรที่เชื่อถือได้และขยายขนาดได้",
+      "target_careers": ["DT07", "DT08", "DT09", "DT10", "DT11", "DT12", "DT34", "DT35", "DT36"],
+      "key_competencies": ["S20_Programming", "S25_Systems_Analysis", "S26_Systems_Design", "S03_Complex_Problem_Solving", "K05_Computers_and_Electronics"],
+      "core_courses": ["204101", "204102", "204201", "204301", "204314"],
+      "elective_courses": ["204401", "204402", "204316"],
+      "digitech_plan_url": "https://digitech.sut.ac.th/Digitech-Plan/"
+    },
+    {
+      "module_id": "DIGITECH-DATA",
+      "name_th": "วิทยาการข้อมูลและการวิเคราะห์",
+      "name_en": "Data Science & Analytics",
+      "group": "Data Science",
+      "tagline_th": "เปลี่ยนข้อมูลดิบให้เป็นข้อมูลเชิงลึกและการตัดสินใจ",
+      "target_careers": ["DT14", "DT15", "DT16", "DT17", "DT18", "DT29", "DT30"],
+      "key_competencies": ["S14_Mathematics", "S18_Operations_Analysis", "S25_Systems_Analysis", "S03_Complex_Problem_Solving", "K17_Mathematics"],
+      "core_courses": ["204201", "204314", "204316", "204318", "204415"],
+      "elective_courses": ["204416", "204420"],
+      "digitech_plan_url": "https://digitech.sut.ac.th/Digitech-Plan/"
+    },
+    {
+      "module_id": "DIGITECH-WEB",
+      "name_th": "การพัฒนาเว็บแอปพลิเคชัน",
+      "name_en": "Web Application Development",
+      "group": "Web Application",
+      "tagline_th": "ออกแบบและพัฒนาเว็บแอปพลิเคชันที่ผู้ใช้รัก",
+      "target_careers": ["DT01", "DT02", "DT03", "DT04", "DT05", "DT06"],
+      "key_competencies": ["S20_Programming", "S27_Technology_Design", "K07_Design", "S26_Systems_Design", "K04_Communications_and_Media"],
+      "core_courses": ["204101", "204102", "204202", "204203", "204303"],
+      "elective_courses": ["204304", "204301"],
+      "digitech_plan_url": "https://digitech.sut.ac.th/Digitech-Plan/"
+    },
+    {
+      "module_id": "DIGITECH-CLOUD",
+      "name_th": "เทคโนโลยีคลาวด์และความมั่นคงปลอดภัย",
+      "name_en": "Cloud & Network Technology",
+      "group": "Cloud Technology",
+      "tagline_th": "วางโครงสร้างพื้นฐานคลาวด์ที่ปลอดภัยและพร้อมใช้งานเสมอ",
+      "target_careers": ["DT19", "DT20", "DT21", "DT22", "DT23", "DT26", "DT27", "DT28", "DT31"],
+      "key_competencies": ["S25_Systems_Analysis", "S28_Troubleshooting", "K28_Telecommunications", "S05_Critical_Thinking", "K25_Public_Safety_and_Security"],
+      "core_courses": ["204201", "204305", "204405", "204406"],
+      "elective_courses": ["204301"],
+      "digitech_plan_url": "https://digitech.sut.ac.th/Digitech-Plan/"
+    },
+    {
+      "module_id": "DIGITECH-AI",
+      "name_th": "ปัญญาประดิษฐ์และเทคโนโลยีอุบัติใหม่",
+      "name_en": "AI & Emerging Technology",
+      "group": "AI & Emerging Technology",
+      "tagline_th": "สร้างระบบอัจฉริยะด้วย Machine Learning และ AI",
+      "target_careers": ["DT24", "DT25", "DT32", "DT33"],
+      "key_competencies": ["S14_Mathematics", "S03_Complex_Problem_Solving", "S20_Programming", "S18_Operations_Analysis", "K17_Mathematics"],
+      "core_courses": ["204201", "204316", "204416", "204420"],
+      "elective_courses": ["204421", "204415"],
+      "digitech_plan_url": "https://digitech.sut.ac.th/Digitech-Plan/"
+    },
+    {
+      "module_id": "DIGITECH-ITSUP",
+      "name_th": "การสนับสนุนและบริการเทคโนโลยีสารสนเทศ",
+      "name_en": "IT Support & Service",
+      "group": "IT Support",
+      "tagline_th": "ดูแลและสนับสนุนระบบไอทีให้องค์กรเดินหน้าได้ไม่สะดุด",
+      "target_careers": ["DT13"],
+      "key_competencies": ["S28_Troubleshooting", "S15_Monitoring", "S02_Active_Listening", "K06_Customer_and_Personal_Service", "K05_Computers_and_Electronics"],
+      "core_courses": ["204101", "204210", "204305"],
+      "elective_courses": ["204406"],
+      "digitech_plan_url": "https://digitech.sut.ac.th/Digitech-Plan/"
+    }
+  ]
+}

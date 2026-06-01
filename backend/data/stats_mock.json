@@ -1,0 +1,52 @@
+{
+  "_meta": {
+    "description": "Mock aggregate assessment statistics for the DIGITECH Admin Analytics dashboard (B2B). Career names match careers.json; competency IDs match competencies.json; module names match modules.json groups.",
+    "source": "Synthetic data for pitch/demo only — not real student records."
+  },
+  "stat_id": "stat-2569-001",
+  "academic_year": 2569,
+  "total_assessments": 245,
+  "career_distribution": [
+    { "career_id": "DT08", "career_name": "Software Developer", "count": 38, "percentage": 15.5 },
+    { "career_id": "DT18", "career_name": "Data Scientist/Data Analyst", "count": 32, "percentage": 13.1 },
+    { "career_id": "DT06", "career_name": "UI/UX Designer", "count": 28, "percentage": 11.4 },
+    { "career_id": "DT04", "career_name": "Web Developer/.NET Programmer", "count": 24, "percentage": 9.8 },
+    { "career_id": "DT07", "career_name": "Mobile Developer", "count": 22, "percentage": 9.0 },
+    { "career_id": "DT25", "career_name": "AI Engineer", "count": 20, "percentage": 8.2 },
+    { "career_id": "DT27", "career_name": "DevOps Engineer", "count": 18, "percentage": 7.3 },
+    { "career_id": "DT31", "career_name": "Cybersecurity Analyst", "count": 16, "percentage": 6.5 },
+    { "career_id": "DT17", "career_name": "Data Engineer", "count": 15, "percentage": 6.1 },
+    { "career_id": "DT26", "career_name": "Cloud Architect", "count": 12, "percentage": 4.9 },
+    { "career_id": "OTHER", "career_name": "อื่น ๆ", "count": 20, "percentage": 8.2 }
+  ],
+  "career_group_distribution": [
+    { "group": "Enterprise Software", "module_id": "DIGITECH-ENT", "count": 78, "percentage": 31.8 },
+    { "group": "Data Science", "module_id": "DIGITECH-DATA", "count": 62, "percentage": 25.3 },
+    { "group": "Web Application", "module_id": "DIGITECH-WEB", "count": 45, "percentage": 18.4 },
+    { "group": "Cloud Technology", "module_id": "DIGITECH-CLOUD", "count": 35, "percentage": 14.3 },
+    { "group": "AI & Emerging Technology", "module_id": "DIGITECH-AI", "count": 18, "percentage": 7.3 },
+    { "group": "IT Support", "module_id": "DIGITECH-ITSUP", "count": 7, "percentage": 2.9 }
+  ],
+  "top_gaps_overall": [
+    { "competency_id": "S25_Systems_Analysis", "label_th": "การวิเคราะห์ระบบ", "label_en": "Systems Analysis", "domain": "skill", "avg_gap": -32.5, "students_below_threshold": 172 },
+    { "competency_id": "S20_Programming", "label_th": "การเขียนโปรแกรม", "label_en": "Programming", "domain": "skill", "avg_gap": -28.1, "students_below_threshold": 158 },
+    { "competency_id": "S26_Systems_Design", "label_th": "การออกแบบระบบ", "label_en": "Systems Design", "domain": "skill", "avg_gap": -26.4, "students_below_threshold": 149 },
+    { "competency_id": "S18_Operations_Analysis", "label_th": "การวิเคราะห์การปฏิบัติงาน", "label_en": "Operations Analysis", "domain": "skill", "avg_gap": -24.7, "students_below_threshold": 141 },
+    { "competency_id": "S03_Complex_Problem_Solving", "label_th": "การแก้ปัญหาที่ซับซ้อน", "label_en": "Complex Problem Solving", "domain": "skill", "avg_gap": -22.3, "students_below_threshold": 133 }
+  ],
+  "module_demand_forecast": [
+    { "module_id": "DIGITECH-ENT", "name_th": "วิศวกรรมซอฟต์แวร์องค์กร", "current_term": 78, "next_term_forecast": 86, "trend": "up" },
+    { "module_id": "DIGITECH-DATA", "name_th": "วิทยาการข้อมูลและการวิเคราะห์", "current_term": 62, "next_term_forecast": 74, "trend": "up" },
+    { "module_id": "DIGITECH-WEB", "name_th": "การพัฒนาเว็บแอปพลิเคชัน", "current_term": 45, "next_term_forecast": 42, "trend": "down" },
+    { "module_id": "DIGITECH-CLOUD", "name_th": "เทคโนโลยีคลาวด์และความมั่นคงปลอดภัย", "current_term": 35, "next_term_forecast": 48, "trend": "up" },
+    { "module_id": "DIGITECH-AI", "name_th": "ปัญญาประดิษฐ์และเทคโนโลยีอุบัติใหม่", "current_term": 18, "next_term_forecast": 30, "trend": "up" },
+    { "module_id": "DIGITECH-ITSUP", "name_th": "การสนับสนุนและบริการเทคโนโลยีสารสนเทศ", "current_term": 7, "next_term_forecast": 6, "trend": "down" }
+  ],
+  "year_over_year": [
+    { "competency_id": "S25_Systems_Analysis", "label_th": "การวิเคราะห์ระบบ", "gap_2568": -29.8, "gap_2569": -32.5 },
+    { "competency_id": "S20_Programming", "label_th": "การเขียนโปรแกรม", "gap_2568": -30.4, "gap_2569": -28.1 },
+    { "competency_id": "S26_Systems_Design", "label_th": "การออกแบบระบบ", "gap_2568": -22.1, "gap_2569": -26.4 },
+    { "competency_id": "S18_Operations_Analysis", "label_th": "การวิเคราะห์การปฏิบัติงาน", "gap_2568": -25.0, "gap_2569": -24.7 },
+    { "competency_id": "S03_Complex_Problem_Solving", "label_th": "การแก้ปัญหาที่ซับซ้อน", "gap_2568": -20.5, "gap_2569": -22.3 }
+  ]
+}

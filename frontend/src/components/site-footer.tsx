@@ -3,11 +3,34 @@
 import { motion } from "motion/react"
 import { ArrowRight } from "lucide-react"
 import { Logo } from "@/components/logo"
+import Link from "next/link"
 
 const COLUMNS = [
-  { title: "Product", links: ["How it works", "Assessment", "Radar analysis", "Simulator"] },
-  { title: "Company", links: ["About", "Careers", "Research", "Contact"] },
-  { title: "Resources", links: ["Documentation", "Competency map", "Privacy", "Terms"] },
+  {
+    title: "Product",
+    links: [
+      { label: "How it works", href: "#how-it-works" },
+      { label: "Assessment", href: "/assessment" },
+      { label: "Public Trends", href: "/analytics" },
+      { label: "B2B HR Portal", href: "/b2b-portal" },
+    ]
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "About SUT", href: "#" },
+      { label: "Research Plan", href: "#" },
+      { label: "Contact", href: "#" },
+    ]
+  },
+  {
+    title: "Resources",
+    links: [
+      { label: "Competency Map", href: "#" },
+      { label: "Privacy Policy", href: "#" },
+      { label: "Terms of Service", href: "#" },
+    ]
+  },
 ]
 
 export function SiteFooter() {
@@ -61,11 +84,11 @@ export function SiteFooter() {
             <div key={col.title}>
               <p className="text-sm font-semibold">{col.title}</p>
               <ul className="mt-4 flex flex-col gap-3">
-                {col.links.map((l) => (
-                  <li key={l}>
-                    <a href="#" className="text-sm text-white/50 transition-colors hover:text-white">
-                      {l}
-                    </a>
+                {col.links.map((link) => (
+                  <li key={link.label}>
+                    <Link href={link.href} className="text-sm text-white/50 transition-colors hover:text-white">
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>

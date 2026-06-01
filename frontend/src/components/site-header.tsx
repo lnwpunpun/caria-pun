@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { motion } from "motion/react"
-import { ArrowRight, Menu, X } from "lucide-react"
+import { ArrowRight, Menu, X, Trash2 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Logo } from "@/components/logo"
 import { ThemeToggle } from "@/components/theme-toggle"
@@ -68,6 +68,20 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <LanguageToggle />
           <ThemeToggle onTop={false} />
+          <button
+            type="button"
+            onClick={() => {
+              if (window.confirm("คุณต้องการลบข้อมูลส่วนบุคคล (Assessment Results) ทั้งหมดหรือไม่?")) {
+                localStorage.clear();
+                window.location.href = "/";
+              }
+            }}
+            className="group hidden items-center gap-2 rounded-full border border-danger/50 bg-danger/10 px-4 py-2.5 text-sm font-semibold text-danger transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
+            title="ลบข้อมูลส่วนบุคคล"
+          >
+            <Trash2 className="size-4" />
+            <span className="hidden lg:inline">ลบข้อมูล</span>
+          </button>
           <a
             href="#assessment"
             className="group hidden items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_10px_30px_-8px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"

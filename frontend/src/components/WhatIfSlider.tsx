@@ -5,6 +5,7 @@ import type { GapItem, CompetencyScores, CareerVector } from '@/types';
 import { recomputeRanking, type RankedCareer } from '@/lib/mes-client';
 import { cn, formatPercent } from '@/lib/utils';
 import { TrendingUp, TrendingDown, Minus, SlidersHorizontal, Check } from 'lucide-react';
+import { useLanguage } from '@/components/language-provider';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -110,6 +111,9 @@ export default function WhatIfSlider({
     [currentScores, allCareers, onRankingChange],
   );
 
+  const { t, lang } = useLanguage();
+  const thai = lang === 'th';
+
   return (
     <div
       className={cn(
@@ -123,8 +127,12 @@ export default function WhatIfSlider({
           <SlidersHorizontal size={20} className="text-[#F39200]" />
         </div>
         <div>
-          <h3 className="text-lg font-semibold text-white">What-If Simulator</h3>
-          <p className="text-sm text-gray-400">Adjust your skills to see how rankings change</p>
+          <h3 className={`text-lg font-semibold text-white ${thai ? "font-thai leading-relaxed" : ""}`}>
+            {t.simulator.title}
+          </h3>
+          <p className={`text-sm text-gray-400 ${thai ? "font-thai leading-relaxed" : ""}`}>
+            {thai ? "ปรับทักษะของคุณเพื่อดูการเปลี่ยนแปลงของอันดับอาชีพ" : "Adjust your skills to see how rankings change"}
+          </p>
         </div>
       </div>
 
@@ -192,8 +200,8 @@ export default function WhatIfSlider({
 
       {/* Divider */}
       <div className="border-t border-white/10 pt-6">
-        <h4 className="text-sm font-semibold text-gray-300 mb-4 uppercase tracking-wider">
-          Projected Top 3
+        <h4 className={`text-sm font-semibold text-gray-300 mb-4 uppercase tracking-wider ${thai ? "font-thai leading-relaxed" : ""}`}>
+          {thai ? "การวิเคราะห์อันดับ 3 อาชีพเป้าหมาย" : "Projected Top 3"}
         </h4>
 
         {/* Ranking cards */}

@@ -12,6 +12,7 @@ interface DropZoneProps {
 export function DropZone({ onFileSelect, className }: DropZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [pdpaAccepted, setPdpaAccepted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDrag = (e: React.DragEvent) => {
@@ -28,6 +29,7 @@ export function DropZone({ onFileSelect, className }: DropZoneProps) {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
+    if (!pdpaAccepted) return;
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const droppedFile = e.dataTransfer.files[0];
       if (droppedFile.type === 'application/pdf') {
@@ -56,20 +58,30 @@ export function DropZone({ onFileSelect, className }: DropZoneProps) {
   };
 
   return (
-    <div
-      className={cn(
-        'relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed transition-all duration-300 cursor-pointer overflow-hidden',
-        isDragging
-          ? 'border-accent bg-accent/5'
-          : 'border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10',
-        className
-      )}
-      onDragEnter={handleDrag}
-      onDragLeave={handleDrag}
-      onDragOver={handleDrag}
-      onDrop={handleDrop}
-      onClick={() => inputRef.current?.click()}
-    >
+    <div className={cn("flex flex-col gap-4 w-full", className)}>
+      <label className="flex items-center gap-2 text-sm text-gray-300 bg-white/5 p-3 rounded-xl border border-white/10 w-fit mx-auto cursor-pointer hover:bg-white/10 transition-colors">
+        <input 
+          type="checkbox" 
+          checked={pdpaAccepted} 
+          onChange={(e) => setPdpaAccepted(e.target.checked)}
+          className="rounded border-gray-600 bg-gray-800 text-accent focus:ring-accent w-4 h-4"
+        />
+        ฉันยอมรับเงื่อนไขการใช้งานและนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA)
+      </label>
+      <div
+        className={cn(
+          'relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed transition-all duration-300 overflow-hidden min-h-[200px]',
+          !pdpaAccepted ? 'cursor-not-allowed opacity-50 grayscale' : 'cursor-pointer',
+          isDragging && pdpaAccepted
+            ? 'border-accent bg-accent/5'
+            : 'border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10'
+        )}
+        onDragEnter={pdpaAccepted ? handleDrag : undefined}
+        onDragLeave={pdpaAccepted ? handleDrag : undefined}
+        onDragOver={pdpaAccepted ? handleDrag : undefined}
+        onDrop={pdpaAccepted ? handleDrop : undefined}
+        onClick={() => pdpaAccepted && inputRef.current?.click()}
+      >
       <input
         ref={inputRef}
         type="file"
@@ -111,6 +123,7 @@ export function DropZone({ onFileSelect, className }: DropZoneProps) {
       {!file && (
         <div className="absolute inset-0 z-0 bg-[linear-gradient(45deg,transparent_25%,rgba(255,255,255,0.03)_50%,transparent_75%,transparent_100%)] bg-[length:250%_250%,100%_100%] animate-shimmer pointer-events-none" />
       )}
+    </div>
     </div>
   );
 }

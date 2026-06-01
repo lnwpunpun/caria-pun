@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import CareerCard from "@/components/results/CareerCard";
+import { CareerRoadmapTimeline } from "@/components/results/CareerRoadmapTimeline";
 import Loading from "@/components/ui/Loading";
 import { api } from "@/lib/api";
 import { MOCK_TOP10 } from "@/lib/mockData";
@@ -117,6 +118,13 @@ function DashboardContent() {
                 />
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Personalized Career Roadmap Timeline */}
+        {careers.length > 0 && (
+          <div className="mt-16 pt-10 border-t border-white/5">
+            <CareerRoadmapTimeline />
           </div>
         )}
 

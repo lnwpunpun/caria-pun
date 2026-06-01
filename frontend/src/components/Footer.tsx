@@ -6,6 +6,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import Link from "next/link";
 
 export default function Footer() {
   const ref = useRef<HTMLDivElement>(null);
@@ -108,7 +109,22 @@ export default function Footer() {
           <div>
             <h4 className="font-syne font-semibold text-white/60 text-xs tracking-widest uppercase mb-4">Platform</h4>
             <ul className="flex flex-col gap-2.5">
-              {["Assessment", "Gap Analysis", "Career Cards", "Simulator", "Roadmap"].map((item) => (
+              <li>
+                <Link href="/assessment" className="text-sm font-dm text-white/40 hover:text-white/80 transition-colors">
+                  Assessment (แบบประเมิน)
+                </Link>
+              </li>
+              <li>
+                <Link href="/analytics" className="text-sm font-dm text-white/40 hover:text-white/80 transition-colors">
+                  Public Analytics (เทรนด์สถิติ)
+                </Link>
+              </li>
+              <li>
+                <Link href="/b2b-portal" className="text-sm font-dm text-white/40 hover:text-white/80 transition-colors">
+                  B2B Talent Matcher (ฝั่ง HR)
+                </Link>
+              </li>
+              {["Simulator", "Roadmap"].map((item) => (
                 <li key={item}>
                   <a href="#" className="text-sm font-dm text-white/40 hover:text-white/80 transition-colors">
                     {item}

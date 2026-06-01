@@ -8,6 +8,7 @@
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { useLanguage } from "@/components/language-provider";
+import { CareerRoadmapTimeline } from "@/components/results/CareerRoadmapTimeline";
 
 const CARD_BG_URL = "https://d2xsxph8kpxj0f.cloudfront.net/310519663715925716/C5srhVpvKrV4qWgj4NxM6w/career-card-bg-5L8EkNTMfS6jDs3zeQRXYj.webp";
 
@@ -59,6 +60,8 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const cardRotateX = useTransform(scrollYProgress, [0, 0.5, 1], [8, 0, -8]);
   const cardScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.98]);
+  const { t, lang } = useLanguage();
+  const thai = lang === "th";
 
   const isTop = career.rank === 1;
 
@@ -121,9 +124,9 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
               >
                 #{career.rank}
               </div>
-              <div>
-                <p className="text-xs font-dm text-muted-foreground tracking-wide">{career.department}</p>
-                <h3 className="font-syne font-bold text-foreground text-xl leading-tight">{career.title}</h3>
+              <div className={thai ? "font-thai" : ""}>
+                <p className="text-xs text-muted-foreground tracking-wide">{career.department}</p>
+                <h3 className="text-foreground text-xl leading-tight font-bold font-syne">{career.title}</h3>
               </div>
             </div>
 
@@ -135,7 +138,7 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
               >
                 {career.match}%
               </div>
-              <div className="text-xs font-dm text-muted-foreground">Match Score</div>
+              <div className={`text-xs text-muted-foreground ${thai ? "font-thai" : "font-dm"}`}>{t.results.matchScore}</div>
             </div>
           </div>
 
@@ -153,14 +156,21 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
           </div>
 
           {/* Description */}
-          <p className="text-sm font-dm text-muted-foreground leading-relaxed mb-5">{career.description}</p>
+          <p className={`text-sm text-muted-foreground mb-5 ${thai ? "font-thai leading-loose" : "font-dm leading-relaxed"}`}>
+            {career.rank === 1 
+              ? (thai ? "ออกแบบและพัฒนาโมเดล ML เพื่อสกัดข้อมูลเชิงลึก ขับเคลื่อนการตัดสินใจขององค์กรด้วยข้อมูล" : career.description)
+              : career.rank === 2
+              ? (thai ? "ออกแบบสถาปัตยกรรมคลาวด์ที่ยืดหยุ่นและปลอดภัย ขับเคลื่อนโครงสร้างพื้นฐานดิจิทัล" : career.description)
+              : (thai ? "เฝ้าระวัง ตรวจจับ และตอบสนองต่อภัยคุกคามความปลอดภัย ติดตั้งกลยุทธ์การป้องกันและตรวจสอบการปฏิบัติตามเกณฑ์ความปลอดภัยมาตรฐาน" : career.description)
+            }
+          </p>
 
           {/* Skills */}
           <div className="flex flex-wrap gap-2 mb-5">
             {career.skills.map((skill) => (
               <span
                 key={skill}
-                className="px-3 py-1 rounded-full text-xs font-dm"
+                className="px-3 py-1 rounded-full text-xs font-mono"
                 style={{
                   background: `${career.color}08`,
                   border: `1px solid ${career.color}20`,
@@ -173,23 +183,23 @@ function CareerCard({ career, index }: { career: typeof careers[0]; index: numbe
           </div>
 
           {/* Footer stats */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-white/10">
+          <div className={`flex items-center justify-between pt-4 border-t border-slate-200 dark:border-white/10 ${thai ? "font-thai" : "font-dm"}`}>
             <div className="flex items-center gap-1.5">
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
                 <path d="M7 1v12M1 7h12" stroke={career.color} strokeWidth="1.5" strokeLinecap="round" opacity="0.5"/>
               </svg>
-              <span className="text-xs font-dm text-muted-foreground">{career.gaps} skill gaps</span>
+              <span className="text-xs text-muted-foreground">{career.gaps} {t.results.skillGaps}</span>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-xs font-dm text-muted-foreground">{career.salary}</span>
+              <span className="text-xs text-muted-foreground font-mono">{career.salary}</span>
               <span
-                className="text-xs font-dm flex items-center gap-1"
+                className="text-xs flex items-center gap-1"
                 style={{ color: "#4ADE80" }}
               >
                 <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                   <path d="M5 8V2M2 5l3-3 3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                {career.trend}
+                {thai ? career.trend.replace("demand", t.results.skillGaps === "ทักษะที่ต้องพัฒนา" ? "ความต้องการตลาด" : "demand") : career.trend}
               </span>
             </div>
           </div>
@@ -260,6 +270,9 @@ export default function ResultsSection() {
             <CareerCard key={career.rank} career={career} index={i} />
           ))}
         </div>
+
+        {/* Timeline */}
+        <CareerRoadmapTimeline />
       </div>
     </section>
   );

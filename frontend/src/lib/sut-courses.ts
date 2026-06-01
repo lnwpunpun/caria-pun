@@ -1,0 +1,267 @@
+export interface SutCourse {
+  course_id: string;
+  name_th: string;
+  name_en: string;
+  credits: number;
+  module: string;
+  year: number;
+  term: number;
+  competency_tags: string[];
+  prerequisite: string[];
+  description: string;
+}
+
+export const SUT_COURSES: SutCourse[] = [
+  {
+    course_id: "204101",
+    name_th: "พื้นฐานการเขียนโปรแกรม",
+    name_en: "Fundamentals of Programming",
+    credits: 4,
+    module: "Foundation",
+    year: 1,
+    term: 1,
+    competency_tags: ["S20_Programming", "K05_Computers_and_Electronics"],
+    prerequisite: [],
+    description: "พื้นฐานการเขียนโปรแกรมเชิงโครงสร้าง ตัวแปร เงื่อนไข การวนซ้ำ และฟังก์ชัน"
+  },
+  {
+    course_id: "204102",
+    name_th: "การเขียนโปรแกรมเชิงวัตถุ",
+    name_en: "Object-Oriented Programming",
+    credits: 4,
+    module: "Foundation",
+    year: 1,
+    term: 2,
+    competency_tags: ["S20_Programming", "S26_Systems_Design"],
+    prerequisite: ["204101"],
+    description: "แนวคิดเชิงวัตถุ คลาส อ็อบเจกต์ การสืบทอด และการออกแบบโปรแกรมที่ดูแลรักษาได้"
+  },
+  {
+    course_id: "204201",
+    name_th: "โครงสร้างข้อมูลและอัลกอริทึม",
+    name_en: "Data Structures and Algorithms",
+    credits: 4,
+    module: "Foundation",
+    year: 2,
+    term: 1,
+    competency_tags: ["S03_Complex_Problem_Solving", "S14_Mathematics", "S20_Programming"],
+    prerequisite: ["204102"],
+    description: "โครงสร้างข้อมูลพื้นฐาน การวิเคราะห์ความซับซ้อน และการออกแบบอัลกอริทึม"
+  },
+  {
+    course_id: "204202",
+    name_th: "การเขียนโปรแกรมเว็บแอปพลิเคชัน",
+    name_en: "Web Application Programming",
+    credits: 3,
+    module: "Web Application",
+    year: 2,
+    term: 2,
+    competency_tags: ["S20_Programming", "S27_Technology_Design"],
+    prerequisite: ["204102"],
+    description: "การพัฒนาเว็บฝั่งไคลเอนต์และเซิร์ฟเวอร์ HTML/CSS/JavaScript และ REST API"
+  },
+  {
+    course_id: "204203",
+    name_th: "หลักการออกแบบ UI/UX",
+    name_en: "UI/UX Design Principles",
+    credits: 3,
+    module: "Web Application",
+    year: 2,
+    term: 2,
+    competency_tags: ["K07_Design", "S27_Technology_Design", "K04_Communications_and_Media"],
+    prerequisite: [],
+    description: "หลักการออกแบบประสบการณ์ผู้ใช้ การทำ Wireframe, Prototype และการทดสอบกับผู้ใช้"
+  },
+  {
+    course_id: "204210",
+    name_th: "การจัดการบริการเทคโนโลยีสารสนเทศ",
+    name_en: "IT Service Management",
+    credits: 3,
+    module: "IT Support",
+    year: 2,
+    term: 1,
+    competency_tags: ["S28_Troubleshooting", "S15_Monitoring", "K06_Customer_and_Personal_Service"],
+    prerequisite: [],
+    description: "กระบวนการ ITIL การดูแลระบบ การแก้ปัญหา และการบริการผู้ใช้งาน"
+  },
+  {
+    course_id: "204301",
+    name_th: "วิศวกรรมซอฟต์แวร์",
+    name_en: "Software Engineering",
+    credits: 4,
+    module: "Enterprise Software",
+    year: 3,
+    term: 1,
+    competency_tags: ["S25_Systems_Analysis", "S26_Systems_Design", "S03_Complex_Problem_Solving"],
+    prerequisite: ["204201"],
+    description: "วงจรการพัฒนาซอฟต์แวร์ การเก็บความต้องการ การออกแบบ และกระบวนการ Agile"
+  },
+  {
+    course_id: "204303",
+    name_th: "เฟรมเวิร์กฟรอนต์เอนด์สมัยใหม่",
+    name_en: "Modern Front-End Frameworks",
+    credits: 3,
+    module: "Web Application",
+    year: 3,
+    term: 1,
+    competency_tags: ["S20_Programming", "S27_Technology_Design"],
+    prerequisite: ["204202"],
+    description: "การพัฒนา Single Page Application ด้วยเฟรมเวิร์กสมัยใหม่ เช่น React/Next.js"
+  },
+  {
+    course_id: "204304",
+    name_th: "การตลาดดิจิทัลและ SEO",
+    name_en: "Digital Marketing and SEO",
+    credits: 3,
+    module: "Web Application",
+    year: 3,
+    term: 2,
+    competency_tags: ["K26_Sales_and_Marketing", "K04_Communications_and_Media"],
+    prerequisite: [],
+    description: "กลยุทธ์การตลาดออนไลน์ การทำ SEO/SEM และการวัดผลด้วยเครื่องมือวิเคราะห์"
+  },
+  {
+    course_id: "204305",
+    name_th: "เครือข่ายคอมพิวเตอร์",
+    name_en: "Computer Networks",
+    credits: 4,
+    module: "Cloud Technology",
+    year: 3,
+    term: 1,
+    competency_tags: ["K28_Telecommunications", "S25_Systems_Analysis", "K05_Computers_and_Electronics"],
+    prerequisite: [],
+    description: "สถาปัตยกรรมเครือข่าย โปรโตคอล TCP/IP การกำหนดเส้นทาง และความปลอดภัยเครือข่าย"
+  },
+  {
+    course_id: "204314",
+    name_th: "ระบบฐานข้อมูล",
+    name_en: "Database Systems",
+    credits: 4,
+    module: "Enterprise Software",
+    year: 3,
+    term: 1,
+    competency_tags: ["S25_Systems_Analysis", "K05_Computers_and_Electronics", "S20_Programming"],
+    prerequisite: ["204201"],
+    description: "การออกแบบฐานข้อมูลเชิงสัมพันธ์ SQL การ Normalize และพื้นฐาน NoSQL"
+  },
+  {
+    course_id: "204316",
+    name_th: "วิศวกรรมข้อมูล",
+    name_en: "Data Engineering",
+    credits: 3,
+    module: "Data Science",
+    year: 3,
+    term: 2,
+    competency_tags: ["S18_Operations_Analysis", "S20_Programming", "S25_Systems_Analysis"],
+    prerequisite: ["204314"],
+    description: "การสร้าง Data Pipeline, ETL, Data Warehouse และการจัดการข้อมูลขนาดใหญ่"
+  },
+  {
+    course_id: "204318",
+    name_th: "สถิติสำหรับวิทยาการข้อมูล",
+    name_en: "Statistics for Data Science",
+    credits: 3,
+    module: "Data Science",
+    year: 3,
+    term: 2,
+    competency_tags: ["S14_Mathematics", "K17_Mathematics"],
+    prerequisite: [],
+    description: "ความน่าจะเป็น การอนุมานเชิงสถิติ และการวิเคราะห์ข้อมูลเชิงพรรณนาและเชิงอนุมาน"
+  },
+  {
+    course_id: "204401",
+    name_th: "สถาปัตยกรรมและการออกแบบซอฟต์แวร์",
+    name_en: "Software Architecture and Design",
+    credits: 3,
+    module: "Enterprise Software",
+    year: 4,
+    term: 1,
+    competency_tags: ["S26_Systems_Design", "S10_Judgment_and_Decision_Making", "S25_Systems_Analysis"],
+    prerequisite: ["204301"],
+    description: "รูปแบบสถาปัตยกรรม Microservices, Design Patterns และการออกแบบระบบที่ขยายขนาดได้"
+  },
+  {
+    course_id: "204402",
+    name_th: "การประกันคุณภาพและการทดสอบซอฟต์แวร์",
+    name_en: "Software Quality Assurance and Testing",
+    credits: 3,
+    module: "Enterprise Software",
+    year: 4,
+    term: 1,
+    competency_tags: ["S31_Quality_Control_Analysis", "S28_Troubleshooting"],
+    prerequisite: ["204301"],
+    description: "หลักการทดสอบซอฟต์แวร์ Unit/Integration Test, Test Automation และ CI/CD"
+  },
+  {
+    course_id: "204405",
+    name_th: "การประมวลผลบนคลาวด์และ DevOps",
+    name_en: "Cloud Computing and DevOps",
+    credits: 4,
+    module: "Cloud Technology",
+    year: 4,
+    term: 1,
+    competency_tags: ["S25_Systems_Analysis", "K05_Computers_and_Electronics", "S15_Monitoring"],
+    prerequisite: ["204305"],
+    description: "บริการคลาวด์ Containerization, Kubernetes, IaC และวัฒนธรรม DevOps"
+  },
+  {
+    course_id: "204406",
+    name_th: "พื้นฐานความมั่นคงปลอดภัยไซเบอร์",
+    name_en: "Cybersecurity Fundamentals",
+    credits: 3,
+    module: "Cloud Technology",
+    year: 4,
+    term: 1,
+    competency_tags: ["S05_Critical_Thinking", "K25_Public_Safety_and_Security", "S28_Troubleshooting"],
+    prerequisite: ["204305"],
+    description: "หลักการความมั่นคงปลอดภัยไซเบอร์ การประเมินช่องโหว่ และการป้องกันภัยคุกคาม"
+  },
+  {
+    course_id: "204415",
+    name_th: "การทำเหมืองข้อมูล",
+    name_en: "Data Mining",
+    credits: 4,
+    module: "Data Science",
+    year: 4,
+    term: 1,
+    competency_tags: ["S03_Complex_Problem_Solving", "S14_Mathematics", "K17_Mathematics"],
+    prerequisite: ["204314"],
+    description: "เทคนิคการค้นหาความรู้จากข้อมูลขนาดใหญ่ การจัดกลุ่ม การจำแนก และกฎความสัมพันธ์"
+  },
+  {
+    course_id: "204416",
+    name_th: "การเรียนรู้ของเครื่อง",
+    name_en: "Machine Learning",
+    credits: 4,
+    module: "AI & Emerging Technology",
+    year: 4,
+    term: 1,
+    competency_tags: ["S14_Mathematics", "S03_Complex_Problem_Solving", "S20_Programming"],
+    prerequisite: ["204318"],
+    description: "อัลกอริทึมการเรียนรู้แบบมีผู้สอนและไม่มีผู้สอน การประเมินและปรับจูนโมเดล"
+  },
+  {
+    course_id: "204420",
+    name_th: "การเรียนรู้เชิงลึก",
+    name_en: "Deep Learning",
+    credits: 3,
+    module: "AI & Emerging Technology",
+    year: 4,
+    term: 2,
+    competency_tags: ["S14_Mathematics", "S20_Programming", "S03_Complex_Problem_Solving"],
+    prerequisite: ["204416"],
+    description: "โครงข่ายประสาทเทียม CNN, RNN, Transformer และการประยุกต์ใช้งานจริง"
+  },
+  {
+    course_id: "204421",
+    name_th: "การประมวลผลภาษาธรรมชาติ",
+    name_en: "Natural Language Processing",
+    credits: 3,
+    module: "AI & Emerging Technology",
+    year: 4,
+    term: 2,
+    competency_tags: ["S03_Complex_Problem_Solving", "S20_Programming", "S14_Mathematics"],
+    prerequisite: ["204416"],
+    description: "การประมวลผลข้อความ Word Embeddings, Language Models และงาน NLP สมัยใหม่"
+  }
+];

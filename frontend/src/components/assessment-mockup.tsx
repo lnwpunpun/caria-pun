@@ -5,23 +5,18 @@ import { motion } from "motion/react"
 import { Check } from "lucide-react"
 import { useLanguage } from "@/components/language-provider"
 
-const QUESTIONS = [
-  "I enjoy breaking down complex problems into structured steps.",
-  "I adapt quickly when tools, processes, or priorities change.",
-  "I actively seek feedback to improve my work.",
-]
 
-function labelFor(v: number) {
-  if (v < 20) return "Strongly disagree"
-  if (v < 40) return "Disagree"
-  if (v < 60) return "Neutral"
-  if (v < 80) return "Agree"
-  return "Strongly agree"
+function labelFor(v: number, t: any) {
+  if (v < 20) return t.assessment.stronglyDisagreeLabel
+  if (v < 40) return t.assessment.disagreeLabel
+  if (v < 60) return t.assessment.neutralLabel
+  if (v < 80) return t.assessment.agreeLabel
+  return t.assessment.stronglyAgreeLabel
 }
 
 export function AssessmentMockup() {
-  const [values, setValues] = useState<number[]>([72, 48, 88])
   const { t, lang } = useLanguage()
+  const [values, setValues] = useState<number[]>([72, 48, 88])
   const thai = lang === "th"
 
   return (
@@ -55,22 +50,22 @@ export function AssessmentMockup() {
               <span className="flex size-9 items-center justify-center rounded-full bg-brand-blue text-xs font-semibold text-white">
                 A
               </span>
-              <div>
-                <p className="text-sm font-semibold">Attitude module</p>
-                <p className="text-xs text-muted-foreground">Section 2 of 6</p>
+              <div className={thai ? "font-thai" : ""}>
+                <p className="text-sm font-semibold">{t.assessment.module}</p>
+                <p className="text-xs text-muted-foreground">{t.assessment.section}</p>
               </div>
             </div>
-            <span className="rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground">
-              3 questions
+            <span className={`rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground ${thai ? "font-thai" : ""}`}>
+              {t.assessment.questionsCount}
             </span>
           </div>
 
           <div className="flex flex-col gap-9">
-            {QUESTIONS.map((q, i) => (
+            {t.assessment.questions.map((q, i) => (
               <div key={q}>
                 <div className="mb-4 flex items-start justify-between gap-4">
-                  <p className="text-sm font-medium leading-relaxed sm:text-base">{q}</p>
-                  <span className="shrink-0 rounded-full bg-brand-orange/10 px-3 py-1 text-xs font-semibold text-brand-orange">
+                  <p className={`text-sm font-medium leading-relaxed sm:text-base ${thai ? "font-thai leading-loose" : ""}`}>{q}</p>
+                  <span className="shrink-0 rounded-full bg-brand-orange/10 px-3 py-1 text-xs font-semibold text-brand-orange font-mono">
                     {values[i]}
                   </span>
                 </div>
@@ -90,10 +85,10 @@ export function AssessmentMockup() {
                   className="caria-slider w-full"
                   style={{ "--val": `${values[i]}%` } as React.CSSProperties}
                 />
-                <div className="mt-2 flex justify-between text-[11px] text-muted-foreground">
-                  <span>Disagree</span>
-                  <span className="font-medium text-foreground">{labelFor(values[i])}</span>
-                  <span>Agree</span>
+                <div className={`mt-2 flex justify-between text-[11px] text-muted-foreground ${thai ? "font-thai" : ""}`}>
+                  <span>{t.assessment.disagree}</span>
+                  <span className="font-medium text-foreground">{labelFor(values[i], t)}</span>
+                  <span>{t.assessment.agree}</span>
                 </div>
               </div>
             ))}
@@ -101,10 +96,10 @@ export function AssessmentMockup() {
 
           <button
             type="button"
-            className="mt-10 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange py-3.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_14px_40px_-12px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.01] active:scale-[0.99]"
+            className={`mt-10 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-orange py-3.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_14px_40px_-12px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.01] active:scale-[0.99] ${thai ? "font-thai" : ""}`}
           >
             <Check className="size-4" />
-            Save &amp; continue
+            {t.assessment.saveAndContinue}
           </button>
         </motion.div>
       </div>
