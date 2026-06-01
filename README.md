@@ -4,7 +4,23 @@
 
 โปรเจกต์นี้แบ่งออกเป็น 2 ส่วนหลัก:
 1. **Backend**: FastAPI (Python) สำหรับประมวลผลอัลกอริทึม CARIA
-2. **Frontend**: Next.js (React + TypeScript + Tailwind CSS v4 + Three.js) สำหรับการแสดงผลแบบ Interactive 3D และจำลองสถานการณ์
+2. **Frontend**: Next.js (React + TypeScript + Tailwind CSS v4) สำหรับการแสดงผลแบบ Interactive 3D, แอนิเมชัน และการจำลองสถานการณ์
+
+---
+
+## ✨ ฟีเจอร์และเทคโนโลยีที่ใช้ (Features & Technologies)
+
+**Frontend:**
+- **Framework:** Next.js 14, React 18
+- **Styling:** Tailwind CSS v4
+- **3D Interactive Graphics:** Three.js, `@react-three/fiber`, `@react-three/drei` (สร้างทรงกลมอาชีพ 3 มิติ โต้ตอบได้)
+- **Animations:** Framer Motion (จัดการแอนิเมชัน UI, Page Transitions, และ Micro-interactions)
+- **Data Visualization:** Recharts (สำหรับแสดงกราฟผลลัพธ์ Assessment และ Simulator)
+- **Icons & UI Utilities:** Lucide React, Next Themes (รองรับ Dark Mode), `clsx`, `tailwind-merge`
+
+**Backend:**
+- **Framework:** FastAPI (Python)
+- **Features:** CARIA Algorithm, Mock Data Fallback Mode
 
 ---
 
@@ -91,6 +107,7 @@
    pnpm dev
    ```
    *หน้าเว็บจะทำงานที่: `http://localhost:3000`*
+   *(หมายเหตุ: กรณีที่รัน pnpm dev แล้วพบปัญหาแคชบน Windows แนะนำให้ลบโฟลเดอร์ `.next` ออกแล้วรัน pnpm dev ใหม่)*
 
 ---
 
@@ -109,7 +126,7 @@
 
 ## 💡 ระบบจำลองออฟไลน์ (Offline Fallback Mode)
 * โปรเจกต์นี้ได้รับการออกแบบมาให้ทำงานได้แม้ไม่เปิดใช้งาน Backend (เช่น สำหรับการสาธิตอย่างรวดเร็ว)
-* หากเชื่อมต่อกับ Backend ไม่ได้ ระบบจะเปลี่ยนไปใช้ **Mock Data** สำหรับผลการแนะนำอาชีพและการวิเคราะห์ช่องว่างความสามารถโดยอัตโนมัติ ทำให้ผู้ใช้ยังสามารถเล่นหน้าเว็บและเห็นการทำงานของ 3D Interactive ได้อย่างไม่มีสะดุด
+* หากเชื่อมต่อกับ Backend ไม่ได้ ระบบจะเปลี่ยนไปใช้ **Mock Data** สำหรับผลการแนะนำอาชีพและการวิเคราะห์ช่องว่างความสามารถโดยอัตโนมัติ ทำให้ผู้ใช้ยังสามารถเล่นหน้าเว็บและเห็นการทำงานของ 3D Interactive และ Animation ได้อย่างไม่มีสะดุด
 
 ---
 
@@ -121,13 +138,15 @@ caria-gap/
 │   ├── main.py               # จุดเริ่มต้นของ FastAPI
 │   ├── requirements.txt      # รายการ Library ของ Python
 │   ├── routers/              # เส้นทาง API (Assessment, Gap Analysis, Recommendations)
+│   ├── data/                 # แหล่งรวม Mock Data (JSON)
 │   └── models/               # การจัดการข้อมูลและคำนวณทางคณิตศาสตร์
 │
 ├── frontend/                 # หน้าตาเว็บไซต์แบบ Interactive
 │   ├── src/
-│   │   ├── components/       # UI Components (3D Sphere, Simulator, Charts)
-│   │   └── lib/              # ฟังก์ชันติดต่อ API และ Mock Data
-│   ├── package.json          # ไฟล์กำหนดสคริปต์และ Module ฝั่ง Frontend
+│   │   ├── app/              # หน้าเว็บ (Routing: Dashboard, Career, Assessment)
+│   │   ├── components/       # UI Components (3D Sphere, Simulator, Charts, Animations)
+│   │   └── lib/              # ฟังก์ชันติดต่อ API และ Data Lists
+│   ├── package.json          # ไฟล์กำหนดสคริปต์และ Module ฝั่ง Frontend (Framer Motion, Three.js ฯลฯ)
 │   └── pnpm-lock.yaml        # บันทึกเวอร์ชันที่ถูกต้องของ Frontend
 │
 └── README.md                 # คู่มือการใช้งานนี้
