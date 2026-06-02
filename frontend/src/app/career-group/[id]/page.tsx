@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
@@ -18,6 +18,10 @@ export default function CareerGroupPage() {
   
   const groupSlug = params.id as string;
   const [selectedCourse, setSelectedCourse] = useState<SutCourse | null>(null);
+
+  useEffect(() => {
+    router.replace("/assessment");
+  }, [router]);
 
   // Find matching group by comparing slugified names from DT and DC branches
   const groupData = useMemo(() => {

@@ -14,6 +14,7 @@ import { useLanguage } from "@/components/language-provider"
 
 /** Determine which step index (0-based) is active based on pathname */
 function getActiveStep(pathname: string): number {
+  if (pathname.startsWith('/career/')) return 2; // Step 3 ("ปิด Gap")
   for (let i = STEPS.length - 1; i >= 0; i--) {
     if (pathname.startsWith(STEPS[i].path)) return i;
   }
@@ -38,16 +39,9 @@ export default function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed inset-x-0 top-0 z-50 px-4 pt-4"
+      className="sticky top-0 z-50 w-full border-b border-slate-200/80 dark:border-white/10 bg-white/90 dark:bg-[#070c19]/90 backdrop-blur-md px-6 py-4 shadow-sm"
     >
-      <div
-        className={cn(
-          "mx-auto flex max-w-6xl items-center justify-between rounded-full px-3 py-2.5 transition-all duration-500",
-          scrolled
-            ? "bg-white/75 dark:bg-[#0a0f1c]/70 backdrop-blur-xl border border-slate-200/70 dark:border-white/10 shadow-[0_8px_40px_-12px_rgba(0,16,40,0.25)] dark:shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)] text-slate-900 dark:text-slate-100"
-            : "border border-transparent text-slate-900 dark:text-slate-100",
-        )}
-      >
+      <div className="mx-auto flex max-w-6xl w-full items-center justify-between text-slate-900 dark:text-slate-100">
         <Link href="/" className="pl-2">
           <Logo />
           <span className="sr-only">SUT-CARIA home</span>
@@ -81,15 +75,15 @@ export default function Navbar() {
                 >
                   <div
                     className={cn(
-                      'w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold',
-                      'transition-all duration-300 border',
-                      isCompleted && 'bg-emerald-500 border-emerald-500 text-white shadow-lg shadow-emerald-500/30',
-                      isActive && 'bg-brand-orange border-brand-orange text-brand-orange-foreground shadow-lg shadow-brand-orange/30 animate-pulse-glow',
-                      isFuture && 'border-slate-300 dark:border-white/20 text-slate-400 dark:text-white/40 group-hover/step:border-slate-500 group-hover/step:text-slate-600 dark:group-hover/step:border-white/50 dark:group-hover/step:text-white/80',
+                       'w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold',
+                       'transition-all duration-300 border',
+                       isCompleted && 'bg-slate-100 dark:bg-white/5 border-slate-350 dark:border-white/10 text-slate-500 dark:text-white/40 shadow-sm',
+                       isActive && 'bg-brand-orange border-brand-orange text-brand-orange-foreground shadow-lg shadow-brand-orange/30 animate-pulse-glow',
+                       isFuture && 'border-slate-300 dark:border-white/20 text-slate-400 dark:text-white/40 group-hover/step:border-slate-500 group-hover/step:text-slate-600 dark:group-hover/step:border-white/50 dark:group-hover/step:text-white/80',
                     )}
                   >
                     {isCompleted ? (
-                      <Check className="w-3 h-3" strokeWidth={3} />
+                      <Check className="w-3 h-3 text-slate-500 dark:text-white/40" strokeWidth={3} />
                     ) : (
                       step.id
                     )}
@@ -97,7 +91,7 @@ export default function Navbar() {
                   <span
                     className={cn(
                       'text-sm font-medium whitespace-nowrap transition-colors duration-300',
-                      isCompleted && 'text-emerald-500',
+                      isCompleted && 'text-slate-400 dark:text-white/30',
                       isActive && 'text-brand-orange',
                       isFuture && 'text-slate-500 dark:text-white/40',
                     )}
@@ -114,27 +108,47 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <LanguageToggle />
           <ThemeToggle onTop={false} />
-          <button
-            type="button"
-            onClick={() => {
-              if (window.confirm("คุณต้องการลบข้อมูลส่วนบุคคล (Assessment Results) ทั้งหมดหรือไม่?")) {
-                localStorage.clear();
-                window.location.href = "/";
-              }
-            }}
-            className="group hidden items-center gap-2 rounded-full border border-danger/50 bg-danger/10 px-4 py-2.5 text-sm font-semibold text-danger transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
-            title="ลบข้อมูลส่วนบุคคล"
-          >
-            <Trash2 className="size-4" />
-            <span className="hidden lg:inline">ลบข้อมูล</span>
-          </button>
-          <a
-            href="/assessment"
-            className="group hidden items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_10px_30px_-8px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
-          >
-            {t.nav.start}
-            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </a>
+          {pathname.startsWith("/career/") ? (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  alert("บันทึกแผนการเรียนสำเร็จ! ระบบกำลังนำคุณกลับไปยังหน้าผลลัพธ์อาชีพ...");
+                  window.location.href = `/dashboard`;
+                }}
+                className="group hidden items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_10px_30px_-8px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
+              >
+                <span>บันทึกแผนการเรียน (Save Roadmap)</span>
+              </button>
+              <div className="flex items-center justify-center size-9 rounded-full bg-slate-100 dark:bg-white/10 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 font-bold select-none text-xs">
+                JD
+              </div>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  if (window.confirm("คุณต้องการลบข้อมูลส่วนบุคคล (Assessment Results) ทั้งหมดหรือไม่?")) {
+                    localStorage.clear();
+                    window.location.href = "/";
+                  }
+                }}
+                className="group hidden items-center gap-2 rounded-full border border-danger/50 bg-danger/10 px-4 py-2.5 text-sm font-semibold text-danger transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
+                title="ลบข้อมูลส่วนบุคคล"
+              >
+                <Trash2 className="size-4" />
+                <span className="hidden lg:inline">ลบข้อมูล</span>
+              </button>
+              <Link
+                href="/assessment"
+                className="group hidden items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_10px_30px_-8px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
+              >
+                {t.nav.start}
+                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </motion.header>

@@ -1,123 +1,75 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
-import type { GapItem, CompetencyScores, CareerVector } from '@/types';
-import { recomputeRanking, type RankedCareer } from '@/lib/mes-client';
-import { cn, formatPercent } from '@/lib/utils';
-import { TrendingUp, TrendingDown, Minus, SlidersHorizontal, Check } from 'lucide-react';
+import { useMemo } from 'react';
+import type { GapItem } from '@/types';
+import { cn } from '@/lib/utils';
+import { SlidersHorizontal, GraduationCap, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/components/language-provider';
-
-/* ------------------------------------------------------------------ */
-/*  Types                                                              */
-/* ------------------------------------------------------------------ */
+import { SUT_COURSES, SutCourse } from '@/lib/sut-courses';
+import { Switch } from '@/components/ui/switch';
 
 interface WhatIfSliderProps {
   gaps: GapItem[];
-  currentScores: CompetencyScores;
-  allCareers: CareerVector[];
-  onRankingChange?: (newRanking: RankedCareer[]) => void;
+  closedGaps: Set<string>;
+  onToggleGap: (competencyId: string) => void;
   className?: string;
 }
 
-/* ------------------------------------------------------------------ */
-/*  Helpers                                                            */
-/* ------------------------------------------------------------------ */
+const COMP_TO_SUT_COURSE: Record<string, string> = {
+  'S16_Negotiation': 'DGT20 0700',
+  'S19_Persuasion': 'DGT20 0800',
+  'K26_Sales_and_Marketing': 'DGT20 1200',
+  'K07_Design': '1101070',
+  'A03_Enterprising': 'วิชาโท',
+};
 
-/** Remove prefix like "S01_" and replace underscores with spaces. */
+function normalize(str: string): string {
+  return str
+    .replace(/^[A-Z]\d{2}_/, '')
+    .replace(/_/g, ' ')
+    .replace(/\s+/g, '')
+    .replace(/&/g, 'and')
+    .toLowerCase();
+}
+
 function cleanName(id: string): string {
   return id.replace(/^[A-Z]\d{2}_/, '').replace(/_/g, ' ');
 }
 
-function domainColor(domain: string): string {
-  switch (domain.toLowerCase()) {
-    case 'skills':
-      return 'bg-blue-500/10 text-blue-500 border border-blue-500/20';
-    case 'attitudes':
-      return 'bg-purple-500/10 text-purple-500 border border-purple-500/20';
-    case 'knowledge':
-      return 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20';
-    default:
-      return 'bg-gray-500/10 text-gray-500 border border-gray-500/20';
+function getSutCourseForCompetency(competencyId: string): SutCourse | null {
+  const mappedId = COMP_TO_SUT_COURSE[competencyId];
+  if (mappedId) {
+    const course = SUT_COURSES.find(c => c.course_id === mappedId);
+    if (course) return course;
   }
+  const clean = cleanName(competencyId).toLowerCase();
+  return SUT_COURSES.find(c =>
+    c.competency_tags.some(t => normalize(t) === normalize(competencyId)) ||
+    c.name_en.toLowerCase().includes(clean) ||
+    c.name_th.includes(clean)
+  ) || null;
 }
-
-/* ------------------------------------------------------------------ */
-/*  Component                                                          */
-/* ------------------------------------------------------------------ */
 
 export default function WhatIfSlider({
   gaps,
-  currentScores,
-  allCareers,
-  onRankingChange,
+  closedGaps,
+  onToggleGap,
   className,
 }: WhatIfSliderProps) {
-  /* Top 5 gaps */
-  const topGaps = useMemo(
-    () =>
-      [...gaps]
-        .sort((a, b) => b.gap_score - a.gap_score)
-        .slice(0, 5),
-    [gaps],
-  );
-
-  /* Slider state */
-  const [sliderValues, setSliderValues] = useState<Record<string, number>>(() => {
-    const init: Record<string, number> = {};
-    topGaps.forEach((g) => {
-      init[g.competency_id] = currentScores[g.competency_id] ?? g.student_score;
-    });
-    return init;
-  });
-
-  /* Rankings */
-  const [rankings, setRankings] = useState<RankedCareer[]>([]);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  /* Base rank map (original positions before any slider changes) */
-  const baseRankMap = useMemo<Record<string, number>>(() => {
-    const base = recomputeRanking(currentScores, allCareers);
-    const map: Record<string, number> = {};
-    base.forEach((c) => {
-      map[c.career_id] = c.rank;
-    });
-    return map;
-  }, [currentScores, allCareers]);
-
-  /* Initial ranking */
-  useEffect(() => {
-    const initial = recomputeRanking(currentScores, allCareers).slice(0, 3);
-    setRankings(initial);
-  }, [currentScores, allCareers]);
-
-  /* Handle slider change with debounce */
-  const handleSliderChange = useCallback(
-    (competencyId: string, value: number) => {
-      setSliderValues((prev) => {
-        const next = { ...prev, [competencyId]: value };
-
-        /* Debounced re-ranking */
-        if (debounceRef.current) clearTimeout(debounceRef.current);
-        debounceRef.current = setTimeout(() => {
-          const modified = { ...currentScores, ...next };
-          const full = recomputeRanking(modified, allCareers);
-          setRankings(full.slice(0, 3));
-          onRankingChange?.(full);
-        }, 100);
-
-        return next;
-      });
-    },
-    [currentScores, allCareers, onRankingChange],
-  );
-
-  const { t, lang } = useLanguage();
+  const { lang } = useLanguage();
   const thai = lang === 'th';
+
+  // Sort by gap score descending and take top 3
+  const topGaps = useMemo(() => {
+    return [...gaps]
+      .sort((a, b) => b.gap_score - a.gap_score)
+      .slice(0, 3);
+  }, [gaps]);
 
   return (
     <div
       className={cn(
-        'bg-card/50 dark:bg-card/30 backdrop-blur-md border border-border/60 dark:border-white/5 rounded-2xl p-6 shadow-sm',
+        'bg-card/50 dark:bg-card/30 backdrop-blur-md border border-border/60 dark:border-white/5 rounded-2xl p-6 shadow-sm flex flex-col',
         className,
       )}
     >
@@ -128,166 +80,80 @@ export default function WhatIfSlider({
         </div>
         <div>
           <h3 className={`text-lg font-bold text-foreground ${thai ? "font-thai leading-relaxed" : ""}`}>
-            {t.simulator.title}
+            {thai ? "แผนปิดช่องว่างทักษะ (Your Upskilling Path)" : "Your Upskilling Path"}
           </h3>
           <p className={`text-xs text-muted-foreground ${thai ? "font-thai leading-relaxed" : ""}`}>
-            {thai ? "ปรับทักษะของคุณเพื่อดูการเปลี่ยนแปลงของอันดับอาชีพ" : "Adjust your skills to see how rankings change"}
+            {thai ? "จำลองการเรียนวิชาแนะนำ มทส. เพื่อประเมินผลลัพธ์แบบ Real-time" : "Simulate SUT course completions to view real-time adjustments"}
           </p>
         </div>
       </div>
 
-      {/* Sliders */}
-      <div className="space-y-5 mb-8">
+      {/* Actionable List */}
+      <div className="space-y-4 flex-1">
         {topGaps.map((gap) => {
-          const value = sliderValues[gap.competency_id] ?? gap.student_score;
-          const pct = value;
-          const met = value >= gap.career_required;
+          const isClosed = closedGaps.has(gap.competency_id);
+          const course = getSutCourseForCompetency(gap.competency_id);
 
           return (
-            <div key={gap.competency_id} className="space-y-2">
-              {/* Label row */}
+            <div
+              key={gap.competency_id}
+              className={cn(
+                'p-4 rounded-xl border transition-all duration-300 flex flex-col gap-3 select-none',
+                isClosed
+                  ? 'bg-emerald-500/5 dark:bg-emerald-500/10 border-emerald-500/30 dark:border-emerald-500/20'
+                  : 'bg-muted/40 dark:bg-white/[0.01] border-border/50 dark:border-white/5 hover:border-brand-orange/30'
+              )}
+            >
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-foreground">
+                {/* Skill info */}
+                <div className="flex flex-col gap-0.5">
+                  <span className={cn(
+                    'text-sm font-semibold text-foreground tracking-wide transition-all',
+                    isClosed && 'text-emerald-500 dark:text-emerald-400 font-bold'
+                  )}>
                     {cleanName(gap.competency_id)}
                   </span>
-                  <span
-                    className={cn(
-                      'text-[9px] px-2 py-0.5 rounded font-extrabold uppercase',
-                      domainColor(gap.domain),
-                    )}
-                  >
-                    {gap.domain}
+                  <span className="text-[10px] text-red-500 dark:text-red-400/90 font-medium">
+                    {thai ? `(ขาด ${gap.gap_score} จุด)` : `(gap: ${gap.gap_score} pts)`}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5">
-                  <span className="text-sm font-mono text-foreground">{value}</span>
-                  <span className="text-xs text-muted-foreground/60">/</span>
-                  <span className="text-sm font-mono text-brand-orange font-bold">{gap.career_required}</span>
-                  {met && (
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                      <Check size={11} className="text-emerald-500" />
+                {/* Switch Toggle */}
+                <div className="flex items-center gap-2">
+                  {isClosed && (
+                    <span className="text-[10px] font-bold text-emerald-500 flex items-center gap-0.5">
+                      <CheckCircle size={12} />
+                      {thai ? 'เรียนเสร็จแล้ว' : 'Completed'}
                     </span>
                   )}
+                  <Switch
+                    checked={isClosed}
+                    onCheckedChange={() => onToggleGap(gap.competency_id)}
+                  />
                 </div>
               </div>
 
-              {/* Slider track */}
-              <div className="relative">
-                {/* Career required marker */}
-                <div
-                  className="absolute top-1/2 -translate-y-1/2 w-0.5 h-4 bg-brand-orange rounded-full z-10 pointer-events-none"
-                  style={{ left: `${gap.career_required}%` }}
-                />
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  value={value}
-                  onChange={(e) =>
-                    handleSliderChange(gap.competency_id, Number(e.target.value))
-                  }
-                  className="w-full h-2 rounded-full appearance-none cursor-pointer slider-whatif"
-                  style={{
-                    background: `linear-gradient(to right, ${met ? '#10B981' : '#3B82F6'} 0%, ${met ? '#10B981' : '#3B82F6'} ${pct}%, rgba(120,120,120,0.15) ${pct}%, rgba(120,120,120,0.15) 100%)`,
-                  }}
-                />
-              </div>
+              {/* Course advisory details block */}
+              {course && (
+                <div className="pt-2.5 border-t border-border/40 dark:border-white/5 flex flex-col gap-1.5">
+                  <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground font-bold font-mono">
+                    <GraduationCap size={12} className="text-brand-orange" />
+                    <span>CODE: {course.course_id}</span>
+                    <span>•</span>
+                    <span>{course.credits} {thai ? "หน่วยกิต" : "Credits"}</span>
+                  </div>
+                  <h4 className="text-xs font-bold text-foreground/90 font-thai">
+                    {thai ? course.name_th : course.name_en}
+                  </h4>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed font-thai font-medium line-clamp-2">
+                    {course.description}
+                  </p>
+                </div>
+              )}
             </div>
           );
         })}
       </div>
-
-      {/* Divider */}
-      <div className="border-t border-border/60 pt-6">
-        <h4 className={`text-xs font-extrabold text-foreground/80 mb-4 uppercase tracking-wider ${thai ? "font-thai leading-relaxed" : ""}`}>
-          {thai ? "การวิเคราะห์อันดับ 3 อาชีพเป้าหมาย" : "Projected Top 3"}
-        </h4>
-
-        {/* Ranking cards */}
-        <div className="space-y-3">
-          {rankings.map((career) => {
-            const baseRank = baseRankMap[career.career_id] ?? career.rank;
-            const diff = baseRank - career.rank; // positive = improved
-
-            return (
-              <div
-                key={career.career_id}
-                className="flex items-center gap-4 bg-muted/40 dark:bg-white/[0.02] border border-border/50 dark:border-white/5 rounded-xl p-3 hover:bg-muted/50 dark:hover:bg-white/[0.04] transition-all duration-300"
-              >
-                {/* Rank */}
-                <span className="text-lg font-extrabold text-foreground/70 w-8 text-center font-mono">
-                  {career.rank}
-                </span>
-
-                {/* Info */}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-foreground truncate">{career.career_name}</p>
-                  <div className="flex items-center gap-2 mt-1">
-                    {/* Match bar */}
-                    <div className="flex-1 h-1.5 bg-muted-foreground/15 rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-[#F39200] rounded-full transition-all duration-500"
-                        style={{ width: `${career.match_percentage}%` }}
-                      />
-                    </div>
-                    <span className="text-xs font-mono text-muted-foreground min-w-[3rem] text-right">
-                      {formatPercent(career.match_percentage)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Change badge */}
-                {diff > 0 && (
-                  <span className="flex items-center gap-0.5 text-xs font-bold bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 px-2 py-0.5 rounded-lg">
-                    <TrendingUp size={11} />↑{diff}
-                  </span>
-                )}
-                {diff < 0 && (
-                  <span className="flex items-center gap-0.5 text-xs font-bold bg-red-500/10 text-red-500 border border-red-500/20 px-2 py-0.5 rounded-lg">
-                    <TrendingDown size={11} />↓{Math.abs(diff)}
-                  </span>
-                )}
-                {diff === 0 && (
-                  <span className="flex items-center gap-0.5 text-xs font-bold bg-muted/30 dark:bg-white/5 text-muted-foreground border border-border/40 px-2 py-0.5 rounded-lg">
-                    <Minus size={11} />—
-                  </span>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Slider thumb styles */}
-      <style jsx>{`
-        .slider-whatif::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          background: #F39200;
-          border: 2px solid var(--background);
-          cursor: pointer;
-          box-shadow: 0 0 8px rgba(243, 146, 0, 0.3);
-          transition: box-shadow 0.2s, transform 0.2s;
-        }
-        .slider-whatif::-webkit-slider-thumb:hover {
-          box-shadow: 0 0 14px rgba(243, 146, 0, 0.5);
-          transform: scale(1.1);
-        }
-        .slider-whatif::-moz-range-thumb {
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          background: #F39200;
-          border: 2px solid var(--background);
-          cursor: pointer;
-          box-shadow: 0 0 8px rgba(243, 146, 0, 0.3);
-        }
-      `}</style>
     </div>
   );
 }

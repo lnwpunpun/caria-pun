@@ -1,28 +1,25 @@
 /**
- * CARIA-GAP What-If Simulator — Precision Instrument UI
- * Design: Precision sliders, real-time number-ticker, live ranking updates
- * Framer Motion: number-ticker animation, card reorder spring, scroll reveal
+ * CARIA-GAP What-If Simulator — Premium AI Command Center
+ * Same MES logic & state, upgraded to a cinematic glassmorphism UI:
+ * glowing sliders, live re-ranking with fluid bars, real-time delta badges,
+ * an AI-suggestion callout, and a gradient CTA.
  */
 "use client";
 
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { MOCK_TOP10, MOCK_GAP_ANALYSIS } from "@/lib/mockData";
-import { calculateMES, adjustScores } from "@/lib/mes-client";
-import type { CareerVector } from "@/types";
-import { Slider } from "@/components/ui/slider";
 import { useLanguage } from "@/components/language-provider";
+import { BrainCircuit, Sparkles, RotateCcw, ArrowUp, Target, Briefcase, PenTool, Palette, Rocket, SlidersHorizontal } from "lucide-react";
 
-// Number ticker hook
+// Animated number ticker
 function useNumberTicker(value: number, duration = 0.4) {
   const [displayValue, setDisplayValue] = useState(value);
   const prevValue = useRef(value);
-
   useEffect(() => {
     const start = prevValue.current;
     const end = value;
     prevValue.current = value;
-
     const startTime = performance.now();
     const tick = (now: number) => {
       const elapsed = (now - startTime) / (duration * 1000);
@@ -36,41 +33,40 @@ function useNumberTicker(value: number, duration = 0.4) {
     };
     requestAnimationFrame(tick);
   }, [value, duration]);
-
   return displayValue;
 }
 
+const SKILL_ICONS = [Target, Briefcase, PenTool, Palette, Rocket];
 
 const initialSkills = MOCK_GAP_ANALYSIS.gaps.slice(0, 5).map((g, i) => {
   const colors = ["#F39200", "#1E90FF", "#A78BFA", "#4ADE80", "#F472B6"];
   return {
     id: g.competency_id,
-    label: g.competency_id.replace(/^[ASK]\d{2}_/, '').replace(/_/g, ' '),
+    label: g.competency_id.replace(/^[ASK]\d{2}_/, "").replace(/_/g, " "),
     value: g.student_score,
     originalValue: g.student_score,
-    color: colors[i % colors.length]
+    color: colors[i % colors.length],
   };
 });
 
-const careerTargets = MOCK_TOP10.top10_careers.slice(0, 3).map(c => {
+const careerTargets = MOCK_TOP10.top10_careers.slice(0, 3).map((c) => {
   return {
     id: c.career_id,
     title: c.career_name,
     base: c.match_percentage,
     weights: {
-      // Just assign some random weights to the top gaps for simulation
       [initialSkills[0]?.id]: 0.35,
-      [initialSkills[1]?.id]: 0.20,
+      [initialSkills[1]?.id]: 0.2,
       [initialSkills[2]?.id]: 0.15,
-      [initialSkills[3]?.id]: 0.20,
-      [initialSkills[4]?.id]: 0.10,
-    }
+      [initialSkills[3]?.id]: 0.2,
+      [initialSkills[4]?.id]: 0.1,
+    },
   };
 });
 
 function computeMatch(skills: typeof initialSkills, career: typeof careerTargets[0]) {
   let improvement = 0;
-  skills.forEach(s => {
+  skills.forEach((s) => {
     const diff = Math.max(0, s.value - s.originalValue);
     const w = career.weights[s.id as keyof typeof career.weights] || 0;
     improvement += (diff / 100) * w * 100;
@@ -78,62 +74,74 @@ function computeMatch(skills: typeof initialSkills, career: typeof careerTargets
   return Math.min(99, Math.round(career.base + improvement));
 }
 
+const RANK_COLORS = ["#F39200", "#1E90FF", "#A78BFA"];
+
 function MatchCard({
   career,
   match,
   rank,
-  index,
+  delta,
 }: {
   career: typeof careerTargets[0];
   match: number;
   rank: number;
-  index: number;
+  delta: number;
 }) {
   const displayMatch = useNumberTicker(match);
-  const colors = ["#F39200", "#1E90FF", "#A78BFA"];
-  const color = colors[rank - 1] || "#fff";
+  const color = RANK_COLORS[rank - 1] || "#94a3b8";
 
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.95 }}
+      initial={{ opacity: 0, scale: 0.96 }}
       animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
+      exit={{ opacity: 0, scale: 0.96 }}
       transition={{ type: "spring", stiffness: 350, damping: 30 }}
-      className="relative rounded-2xl p-5 overflow-hidden border bg-slate-50 dark:bg-[#0a1322]"
-      style={{
-        borderColor: `${color}25`,
-        boxShadow: rank === 1 ? `0 0 30px ${color}15` : undefined,
-      }}
+      className="relative overflow-hidden rounded-2xl border bg-white p-4 dark:bg-white/[0.03]"
+      style={{ borderColor: `${color}33`, boxShadow: rank === 1 ? `0 0 26px ${color}22` : undefined }}
     >
-      {/* Rank indicator */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
           <div
-            className="w-7 h-7 rounded-full flex items-center justify-center font-syne font-bold text-xs"
-            style={{ background: `${color}15`, border: `1px solid ${color}30`, color }}
+            className="flex size-7 shrink-0 items-center justify-center rounded-full font-syne text-xs font-bold"
+            style={{ background: `${color}1f`, color }}
           >
             #{rank}
           </div>
-          <span className="font-syne font-semibold text-foreground text-sm">{career.title}</span>
+          <span className="truncate font-syne text-sm font-semibold text-foreground">{career.title}</span>
         </div>
-        {/* Animated match % */}
-        <motion.span
-          className="font-syne font-extrabold text-2xl tabular-nums"
-          style={{ color }}
-          key={match}
-        >
-          {displayMatch}%
-        </motion.span>
+        <div className="flex items-center gap-2">
+          <AnimatePresence>
+            {delta > 0 && (
+              <motion.span
+                initial={{ opacity: 0, x: 6, scale: 0.8 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-bold text-emerald-500"
+              >
+                +{delta}% <ArrowUp className="size-2.5" />
+              </motion.span>
+            )}
+          </AnimatePresence>
+          <motion.span
+            key={match}
+            initial={{ scale: 1.2 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.2 }}
+            className="font-syne text-2xl font-extrabold tabular-nums"
+            style={{ color }}
+          >
+            {displayMatch}%
+          </motion.span>
+        </div>
       </div>
 
-      {/* Animated progress bar */}
-      <div className="h-1.5 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+      <div className="h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
         <motion.div
           className="h-full rounded-full"
-          style={{ background: `linear-gradient(90deg, ${color}60, ${color})` }}
+          style={{ background: `linear-gradient(90deg, ${color}80, ${color})`, boxShadow: `0 0 10px ${color}66` }}
           animate={{ width: `${match}%` }}
-          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          transition={{ type: "spring", stiffness: 120, damping: 20 }}
         />
       </div>
     </motion.div>
@@ -151,257 +159,217 @@ export default function SimulatorSection() {
     setSkills((prev) => prev.map((s) => (s.id === id ? { ...s, value } : s)));
   };
 
-  // Compute matches and sort by score
   const matches = careerTargets
     .map((c) => ({ career: c, match: computeMatch(skills, c) }))
     .sort((a, b) => b.match - a.match);
 
-  const slidersContainerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const sliderItemVariants = {
-    hidden: { opacity: 0, y: 50, rotateX: 25, scale: 0.9 },
-    show: {
-      opacity: 1,
-      y: 0,
-      rotateX: 0,
-      scale: 1,
-      transition: {
-        type: "spring" as const,
-        stiffness: 80,
-        damping: 12,
-      },
-    },
-  };
+  const levelText = (v: number) =>
+    v < 30
+      ? thai ? "ระดับเริ่มต้น" : "Novice"
+      : v < 60
+        ? thai ? "ระดับกลาง" : "Intermediate"
+        : v < 80
+          ? thai ? "ระดับสูง" : "Advanced"
+          : thai ? "เชี่ยวชาญ" : "Expert";
 
   return (
-    <section id="simulator" className="py-24 relative bg-background">
-      {/* Ambient */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse 50% 40% at 30% 50%, rgba(243,146,0,0.04) 0%, transparent 60%)",
-        }}
-      />
+    <section id="simulator" className="relative overflow-hidden bg-background py-24">
+      {/* Cinematic ambient glows */}
+      <div aria-hidden="true" className="pointer-events-none absolute -left-40 top-1/4 size-96 rounded-full bg-brand-orange/10 blur-[130px]" />
+      <div aria-hidden="true" className="pointer-events-none absolute -right-40 bottom-1/4 size-96 rounded-full bg-[#1E90FF]/10 blur-[130px]" />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="relative mx-auto max-w-7xl px-6">
         {/* Header */}
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-          className="text-center mb-16"
+          className="mb-16 text-center"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#F39200]/20 bg-[#F39200]/5 mb-5">
-            <div className="w-2 h-2 rounded-full bg-[#F39200] animate-pulse" />
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#F39200]/20 bg-[#F39200]/5 px-4 py-1.5">
+            <div className="h-2 w-2 animate-pulse rounded-full bg-[#F39200]" />
             <span className={`text-xs text-[#F39200] ${thai ? "font-thai" : "font-dm tracking-widest uppercase"}`}>
               {t.simulator.eyebrow}
             </span>
           </div>
-          <h2 className={`font-extrabold text-4xl lg:text-5xl text-foreground mb-4 ${thai ? "font-thai leading-snug" : "font-syne"}`}>
+          <h2 className={`mb-4 text-4xl font-extrabold text-foreground lg:text-5xl ${thai ? "font-thai leading-snug" : "font-syne"}`}>
             {t.simulator.title}
           </h2>
-          <p className={`text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto ${thai ? "font-thai leading-loose" : "font-dm leading-relaxed"}`}>
+          <p className={`mx-auto max-w-2xl text-lg text-muted-foreground md:text-xl ${thai ? "font-thai leading-loose" : "font-dm leading-relaxed"}`}>
             {t.simulator.subtitle}
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          {/* Left: Skill Sliders with 3D scroll reveal wrapper */}
+        <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
+          {/* LEFT: Competency Control */}
           <motion.div
-            initial={{ opacity: 0, y: 100, rotateX: 25 }}
-            whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ type: "spring", bounce: 0.3, duration: 1 }}
-            style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
-            className="w-full"
+            transition={{ type: "spring", bounce: 0.25, duration: 0.9 }}
+            className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-slate-900/60 md:p-8"
           >
-            {/* Perfectly flat resting container */}
-            <div className="rounded-3xl p-8 border bg-white border-slate-200 shadow-[0_10px_40px_rgb(0,0,0,0.06)] dark:bg-[#0d1726] dark:border-[#F39200]/12 dark:shadow-[0_0_40px_rgba(243,146,0,0.06),0_30px_60px_rgba(0,0,0,0.4)]">
-              <div className="flex items-center gap-3 mb-8">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center"
-                  style={{ background: "rgba(243,146,0,0.1)", border: "1px solid rgba(243,146,0,0.25)" }}
-                >
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M3 9h12M9 3v12" stroke="#F39200" strokeWidth="1.5" strokeLinecap="round"/>
-                    <circle cx="9" cy="9" r="2" fill="#F39200"/>
-                  </svg>
-                </div>
-                <div>
-                  <h3 className={`font-bold text-foreground text-lg ${thai ? "font-thai leading-relaxed" : "font-syne"}`}>{t.simulator.skillCalibration}</h3>
-                  <p className={`text-xs text-muted-foreground ${thai ? "font-thai leading-relaxed" : "font-dm"}`}>{t.simulator.dragSliders}</p>
-                </div>
+            <div className="mb-8 flex items-center gap-3">
+              <div className="flex size-11 items-center justify-center rounded-2xl bg-brand-orange/10 text-brand-orange">
+                <SlidersHorizontal className="size-5" />
               </div>
+              <div>
+                <h3 className={`text-lg font-bold text-foreground ${thai ? "font-thai" : "font-syne"}`}>
+                  {thai ? "จำลองการปรับระดับทักษะ" : "Skill Calibration"}
+                </h3>
+                <p className={`text-xs text-muted-foreground ${thai ? "font-thai" : "font-dm"}`}>
+                  {thai ? "เลื่อนแถบเพื่อจำลองการพัฒนาทักษะ" : "Drag sliders to simulate upskilling"}
+                </p>
+              </div>
+            </div>
 
-              {/* Sliders Staggered Container */}
-              <motion.div
-                className="flex flex-col gap-8"
-                variants={slidersContainerVariants}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: "-100px" }}
-                style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
-              >
-                {skills.map((skill) => (
-                  <motion.div
-                    key={skill.id}
-                    variants={sliderItemVariants}
-                  >
-                    <div className="flex items-center justify-between mb-3">
+            <div className="flex flex-col gap-7">
+              {skills.map((skill, i) => {
+                const Icon = SKILL_ICONS[i % SKILL_ICONS.length];
+                const changed = skill.value !== skill.originalValue;
+                return (
+                  <div key={skill.id}>
+                    <div className="mb-3 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <div
-                          className="w-2.5 h-2.5 rounded-full"
-                          style={{ background: skill.color, boxShadow: `0 0 8px ${skill.color}` }}
-                        />
-                        <span className="text-sm font-dm text-foreground">{skill.label}</span>
+                        <Icon className="size-4" style={{ color: skill.color }} />
+                        <span className="text-sm font-medium text-foreground">{skill.label}</span>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-baseline gap-1">
                         <motion.span
                           key={skill.value}
-                          initial={{ scale: 1.4 }}
+                          initial={{ scale: 1.3 }}
                           animate={{ scale: 1 }}
                           transition={{ duration: 0.2, ease: "easeOut" }}
-                          className="font-syne font-bold text-lg tabular-nums w-8 text-right text-foreground"
+                          className={`w-9 text-right font-syne text-lg font-extrabold tabular-nums ${changed ? "text-brand-orange" : "text-foreground"}`}
                         >
                           {skill.value}
                         </motion.span>
-                        <span className="text-xs font-dm text-muted-foreground">/100</span>
+                        <span className="text-xs text-muted-foreground">/100</span>
                       </div>
                     </div>
 
-                    {/* Precision slider with custom styling */}
+                    {/* Glowing slider */}
                     <div className="relative">
-                      <Slider
-                        value={[skill.value]}
-                        onValueChange={([v]) => updateSkill(skill.id, v)}
+                      <input
+                        type="range"
                         min={0}
                         max={100}
-                        step={1}
-                        className="precision-slider"
+                        value={skill.value}
+                        aria-label={skill.label}
+                        onChange={(e) => updateSkill(skill.id, Number(e.target.value))}
+                        className="caria-slider w-full"
+                        style={{ "--val": `${skill.value}%` } as React.CSSProperties}
                       />
                     </div>
 
-                    {/* Level indicator */}
-                    <div className="flex justify-between mt-1.5 text-xs font-dm text-muted-foreground">
+                    <div className="mt-1.5 flex justify-between text-xs text-muted-foreground">
                       <span>0</span>
-                      <span
-                        className={`text-xs ${thai ? "font-thai leading-relaxed" : "font-dm"}`}
-                        style={{ color: skill.color + "80" }}
-                      >
-                        {skill.value < 30 ? t.simulator.novice : skill.value < 60 ? t.simulator.intermediate : skill.value < 80 ? t.simulator.advanced : t.simulator.expert}
+                      <span className="font-medium" style={{ color: `${skill.color}` }}>
+                        {levelText(skill.value)}
                       </span>
                       <span>100</span>
                     </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* Reset button */}
-              <motion.button
-                onClick={() => setSkills(initialSkills)}
-                className={`mt-8 w-full py-3 rounded-full border border-slate-200 dark:border-white/10 text-muted-foreground hover:text-foreground hover:border-slate-300 dark:hover:border-white/20 text-sm transition-colors ${thai ? "font-thai leading-relaxed" : "font-dm"}`}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-              >
-                {t.simulator.resetBaseline}
-              </motion.button>
+                  </div>
+                );
+              })}
             </div>
+
+            <motion.button
+              onClick={() => setSkills(initialSkills)}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              className="mt-8 flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-slate-300 hover:text-foreground dark:border-white/10 dark:hover:border-white/20"
+            >
+              <RotateCcw className="size-3.5" />
+              {thai ? "รีเซ็ตค่าเริ่มต้น" : "Reset to Baseline"}
+            </motion.button>
           </motion.div>
 
-          {/* Right: Live Rankings sticky layout with 3D Reveal wrapper */}
+          {/* RIGHT: Live MES Prediction Engine */}
           <motion.div
-            initial={{ opacity: 0, y: 100, rotateX: 25 }}
-            whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ type: "spring", bounce: 0.3, duration: 1, delay: 0.15 }}
-            style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
-            className="lg:sticky lg:top-24 z-20 self-start w-full"
+            transition={{ type: "spring", bounce: 0.25, duration: 0.9, delay: 0.12 }}
+            className="rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-slate-900/60 md:p-8 lg:sticky lg:top-24"
           >
-            {/* Perfectly flat resting container */}
-            <div className="rounded-3xl p-8 border bg-white border-slate-200 shadow-[0_10px_40px_rgb(0,0,0,0.06)] dark:bg-[#0d1726] dark:border-[#1E90FF]/12 dark:shadow-[0_0_40px_rgba(30,144,255,0.06),0_30px_60px_rgba(0,0,0,0.4)]">
-              <div className="flex items-center gap-3 mb-8">
-                <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center"
-                  style={{ background: "rgba(30,144,255,0.1)", border: "1px solid rgba(30,144,255,0.25)" }}
-                >
-                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <path d="M9 2l2.5 5 5.5.8-4 3.9.9 5.5L9 14.5 4.1 17.2l.9-5.5L1 7.8 6.5 7z" stroke="#1E90FF" strokeWidth="1.5" strokeLinejoin="round" fill="none"/>
-                  </svg>
-                </div>
-                <div>
-                  <h3 className={`font-bold text-foreground text-lg ${thai ? "font-thai leading-relaxed" : "font-syne"}`}>{t.simulator.liveRankings}</h3>
-                  <p className={`text-xs text-muted-foreground ${thai ? "font-thai leading-relaxed" : "font-dm"}`}>{t.simulator.liveRankingsSub}</p>
-                </div>
-                <div className="ml-auto flex items-center gap-1.5">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#4ADE80] animate-pulse" />
-                  <span className="text-xs font-dm text-[#4ADE80]">Live</span>
-                </div>
-              </div>
-
-              {/* Animated career cards */}
-              <div className="flex flex-col gap-4">
-                <AnimatePresence mode="popLayout">
-                  {matches.map(({ career, match }, i) => (
-                    <MatchCard
-                      key={career.id}
-                      career={career}
-                      match={match}
-                      rank={i + 1}
-                      index={i}
-                    />
-                  ))}
-                </AnimatePresence>
-              </div>
-
-              {/* Insight callout */}
+            <div className="mb-8 flex items-center gap-3">
               <motion.div
-                className="mt-6 p-4 rounded-2xl"
-                style={{
-                  background: "rgba(243,146,0,0.05)",
-                  border: "1px solid rgba(243,146,0,0.15)",
-                }}
-                animate={{ borderColor: ["rgba(243,146,0,0.1)", "rgba(243,146,0,0.25)", "rgba(243,146,0,0.1)"] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 9, ease: "linear" }}
+                className="flex size-11 items-center justify-center rounded-2xl bg-[#1E90FF]/10 text-[#1E90FF]"
               >
-                {thai ? (
-                  <p className="text-xs text-muted-foreground leading-relaxed font-thai">
-                    <span className="text-[#F39200] font-semibold">เคล็ดลับ:</span> การเพิ่มทักษะ{" "}
-                    <span className="text-foreground">Machine Learning</span> อีก 20 คะแนน จะช่วยเพิ่มโอกาสแมตช์กับ{" "}
-                    <span className="text-foreground">Data Scientist</span> ถึง{" "}
-                    <span className="text-[#F39200] font-semibold">+7%</span>
-                  </p>
-                ) : (
-                  <p className="text-xs font-dm text-muted-foreground leading-relaxed">
-                    <span className="text-[#F39200] font-semibold">Tip:</span> Increasing your{" "}
-                    <span className="text-foreground">Machine Learning</span> score by 20 points would boost your Data Scientist match by approximately{" "}
-                    <span className="text-[#F39200] font-semibold">+7%</span>.
-                  </p>
-                )}
+                <BrainCircuit className="size-5" />
               </motion.div>
-
-              {/* Action */}
-              <motion.button
-                className={`mt-4 w-full py-4 rounded-full font-bold text-[#050A14] text-sm tracking-wide ${thai ? "font-thai leading-relaxed" : "font-syne"}`}
-                style={{
-                  background: "linear-gradient(135deg, #F39200, #FFB84D)",
-                  boxShadow: "0 0 20px rgba(243,146,0,0.3)",
-                }}
-                whileHover={{ scale: 1.02, boxShadow: "0 0 30px rgba(243,146,0,0.5)" }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ type: "spring", stiffness: 400, damping: 20 }}
-              >
-                {t.simulator.generateRoadmap}
-              </motion.button>
+              <div>
+                <h3 className={`text-lg font-bold text-foreground ${thai ? "font-thai" : "font-syne"}`}>
+                  {thai ? "อันดับอาชีพแบบเรียลไทม์" : "Live Rankings"}
+                </h3>
+                <p className={`text-xs text-muted-foreground ${thai ? "font-thai" : "font-dm"}`}>
+                  {thai ? "อัปเดตทันทีเมื่อปรับระดับทักษะ" : "Updates as you calibrate skills"}
+                </p>
+              </div>
+              <div className="ml-auto flex items-center gap-1.5">
+                <span className="relative flex size-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex size-2 rounded-full bg-emerald-500" />
+                </span>
+                <span className="text-xs font-semibold text-emerald-500">Live</span>
+              </div>
             </div>
+
+            <div className="flex flex-col gap-4">
+              <AnimatePresence mode="popLayout">
+                {matches.map(({ career, match }, i) => (
+                  <MatchCard
+                    key={career.id}
+                    career={career}
+                    match={match}
+                    rank={i + 1}
+                    delta={match - career.base}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
+
+            {/* AI Suggestion */}
+            <motion.div
+              animate={{ boxShadow: ["0 0 0px rgba(243,146,0,0)", "0 0 18px rgba(243,146,0,0.22)", "0 0 0px rgba(243,146,0,0)"] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              className="mt-6 rounded-2xl border border-brand-orange/30 bg-brand-orange/[0.06] p-4"
+            >
+              <div className="flex gap-3">
+                <Sparkles className="size-5 shrink-0 text-brand-orange" />
+                <div>
+                  <p className="mb-1 text-[10px] font-bold uppercase tracking-wider text-brand-orange">AI Suggestion</p>
+                  <p className={`text-xs leading-relaxed text-muted-foreground ${thai ? "font-thai leading-loose" : ""}`}>
+                    {thai ? (
+                      <>
+                        การเพิ่มทักษะ <span className="font-semibold text-foreground">Machine Learning</span> อีก 20 คะแนน
+                        จะช่วยเพิ่มโอกาสแมตช์กับ <span className="font-semibold text-foreground">Data Scientist</span> ได้ถึง{" "}
+                        <span className="font-semibold text-brand-orange">+7%</span>
+                      </>
+                    ) : (
+                      <>
+                        Increasing your <span className="font-semibold text-foreground">Machine Learning</span> score by 20 points
+                        would boost your <span className="font-semibold text-foreground">Data Scientist</span> match by approximately{" "}
+                        <span className="font-semibold text-brand-orange">+7%</span>.
+                      </>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Grand CTA */}
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className={`mt-4 w-full rounded-full bg-gradient-to-r from-[#F39200] to-[#E0700A] px-6 py-4 text-center font-bold text-white shadow-[0_0_20px_rgba(243,146,0,0.4)] transition-shadow hover:shadow-[0_0_30px_rgba(243,146,0,0.6)] ${thai ? "font-thai" : "font-syne"}`}
+            >
+              {thai ? "สร้างแผนการเรียนรู้ของคุณ →" : "Generate My Learning Roadmap →"}
+            </motion.button>
           </motion.div>
         </div>
       </div>

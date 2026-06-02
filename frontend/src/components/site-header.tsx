@@ -69,13 +69,13 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <LanguageToggle />
           <ThemeToggle onTop={false} />
-          <a
-            href="/#assessment"
+          <Link
+            href="/assessment"
             className="group hidden items-center gap-2 rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-brand-orange-foreground shadow-[0_10px_30px_-8px_rgba(243,146,0,0.6)] transition-transform duration-300 hover:scale-[1.04] active:scale-95 sm:inline-flex"
           >
             {t.nav.start}
             <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </a>
+          </Link>
           <Link
             href="/settings"
             aria-label="บัญชีและการตั้งค่า"
@@ -118,13 +118,13 @@ export function SiteHeader() {
                 {t.nav[item.key]}
               </a>
             ))}
-            <a
-              href="#assessment"
+            <Link
+              href="/assessment"
               onClick={() => setOpen(false)}
               className="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-brand-orange px-5 py-3 text-sm font-semibold text-brand-orange-foreground"
             >
               {t.nav.start} <ArrowRight className="size-4" />
-            </a>
+            </Link>
           </nav>
         </motion.div>
       )}

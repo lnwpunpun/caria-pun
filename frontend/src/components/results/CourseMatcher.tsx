@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { SUT_COURSES, SutCourse } from "@/lib/sut-courses";
 import { DT_BRANCH, DC_BRANCH, CareerGroup } from "@/lib/careers-list";
 import { GraduationCap, Link2, BookMarked } from "lucide-react";
@@ -13,6 +14,7 @@ interface CourseMatcherProps {
 
 export function CourseMatcher({ careerName, gaps, lang }: CourseMatcherProps) {
   const thai = lang === "th";
+  const [selectedCourse, setSelectedCourse] = useState<SutCourse | null>(null);
 
   // Find career group and other careers in the same group
   const groupDetails = useMemo(() => {
@@ -137,7 +139,8 @@ export function CourseMatcher({ careerName, gaps, lang }: CourseMatcherProps) {
             {matchedCourses.map((course) => (
               <div
                 key={course.course_id}
-                className="p-4 rounded-xl border border-border/50 dark:border-white/5 bg-muted/30 dark:bg-white/[0.01] hover:bg-muted/50 dark:hover:bg-white/[0.03] transition-all hover:border-border/80 dark:hover:border-white/10 flex flex-col justify-between"
+                onClick={() => setSelectedCourse(course)}
+                className="p-4 rounded-xl border border-border/50 dark:border-white/5 bg-muted/30 dark:bg-white/[0.01] hover:bg-muted/50 dark:hover:bg-white/[0.03] transition-all hover:border-emerald-500/50 dark:hover:border-emerald-500/30 hover:shadow-md cursor-pointer flex flex-col justify-between select-none"
               >
                 <div>
                   <div className="flex items-start justify-between mb-1.5">
@@ -164,6 +167,7 @@ export function CourseMatcher({ careerName, gaps, lang }: CourseMatcherProps) {
                     href="https://digitech.sut.ac.th/Digitech-Plan/"
                     target="_blank"
                     rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                     className="text-[9px] font-extrabold text-emerald-500 hover:text-emerald-600 hover:underline flex items-center gap-0.5"
                   >
                     {thai ? "แผนการเรียน" : "Syllabus"}
@@ -183,6 +187,97 @@ export function CourseMatcher({ careerName, gaps, lang }: CourseMatcherProps) {
         )}
       </div>
 
+      {/* Course Details Modal Popup */}
+      <AnimatePresence>
+        {selectedCourse && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedCourse(null)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            
+            {/* Modal Box */}
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative w-full max-w-xl bg-white/95 dark:bg-[#070b14]/95 backdrop-blur-2xl border border-slate-200 dark:border-white/15 rounded-3xl p-6 shadow-2xl z-10 flex flex-col gap-6"
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedCourse(null)}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 flex items-center justify-center text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white transition-all"
+              >
+                ✕
+              </button>
+
+              {/* Course Title */}
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-xs font-mono font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500">
+                    {selectedCourse.course_id}
+                  </span>
+                  <span className="text-[10px] font-mono tracking-widest text-[#F39200] font-extrabold uppercase">
+                    SUT Course Curriculum
+                  </span>
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white leading-tight mt-2 font-thai">
+                  {selectedCourse.name_en}
+                </h3>
+                {thai && selectedCourse.name_th && (
+                  <p className="text-sm font-thai text-slate-500 dark:text-slate-400 mt-1 leading-relaxed font-semibold">
+                    {selectedCourse.name_th}
+                  </p>
+                )}
+              </div>
+
+              {/* Metadata Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4 rounded-2xl bg-slate-100 dark:bg-white/5 border border-slate-200/50 dark:border-white/5">
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-bold">{thai ? "หน่วยกิต" : "Credits"}</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">{selectedCourse.credits}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-bold">{thai ? "ชั้นปี / เทอม" : "Year / Term"}</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">Y{selectedCourse.year} / T{selectedCourse.term}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-bold">{thai ? "หมวดวิชา" : "Module"}</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-0.5 truncate">{selectedCourse.module}</span>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-bold">{thai ? "วิชาบังคับก่อน" : "Prerequisites"}</span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white mt-0.5 truncate">
+                    {selectedCourse.prerequisite.length > 0 ? selectedCourse.prerequisite.join(", ") : (thai ? "ไม่มี" : "None")}
+                  </span>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="flex flex-col gap-2">
+                <span className="text-[10px] text-slate-400 dark:text-white/40 uppercase font-bold tracking-wider">{thai ? "คำอธิบายรายวิชา" : "Description"}</span>
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-thai leading-loose">
+                  {selectedCourse.description}
+                </p>
+              </div>
+
+              {/* Footer CTA */}
+              <div className="flex justify-end pt-2 border-t border-slate-200/50 dark:border-white/5">
+                <button
+                  onClick={() => setSelectedCourse(null)}
+                  className="px-6 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 transition-all"
+                >
+                  {thai ? "ปิด" : "Close"}
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

@@ -13,7 +13,14 @@ import type { Top10Response, CareerResult } from "@/types";
 import { useLanguage } from "@/components/language-provider";
 import { useMockUser } from "@/lib/mock-auth";
 import { AuthButtons } from "@/components/auth/AuthButtons";
-import { CheckCircle2, Lock } from "lucide-react";
+import { CheckCircle2, Lock, Sparkles, AlertCircle, ArrowRight } from "lucide-react";
+import { CAREER_THAI_NAMES } from "@/lib/career-translations";
+import mockCareers from "@/lib/mock_careers.json";
+
+// Module-level cache to persist data across React Strict Mode double-mount in development
+// and prevent timing-based bugs when navigating to Dashboard.
+let cachedData: any = null;
+let hasLoadedData = false;
 
 function DashboardContent() {
   const router = useRouter();
@@ -33,11 +40,31 @@ function DashboardContent() {
         if (typeof window !== "undefined") {
           const cached = localStorage.getItem("caria_top10");
           if (cached) {
-            setData(JSON.parse(cached));
-            localStorage.removeItem("caria_top10");
+            const parsed = JSON.parse(cached);
+            cachedData = parsed;
+            hasLoadedData = true;
+            setData(parsed);
             setLoading(false);
+            localStorage.removeItem("caria_top10");
             return;
           }
+
+          // If we already loaded data in this lifecycle, use it
+          if (hasLoadedData) {
+            if (cachedData) {
+              setData(cachedData);
+              setLoading(false);
+              return;
+            } else {
+              router.push("/assessment");
+              return;
+            }
+          }
+
+          // Otherwise, redirect to assessment since we have no data
+          hasLoadedData = true;
+          router.push("/assessment");
+          return;
         }
         const res = await api.getRecommendations(userId);
         setData(res);
@@ -48,7 +75,7 @@ function DashboardContent() {
       }
     }
     load();
-  }, [userId]);
+  }, [userId, router]);
 
   const handleCareerClick = (career: CareerResult) => {
     router.push(`/career/${career.career_id}?user=${userId}`);
@@ -61,6 +88,29 @@ function DashboardContent() {
   const careers = data?.top10_careers || [];
   const top3 = careers.slice(0, 3);
   const rest = careers.slice(3);
+
+  // Retrieve selected dream career
+  const dreamCareerId = data?.dream_career_id || (typeof window !== "undefined" ? localStorage.getItem("caria_dream_career_id") : "") || "";
+  const dreamCareerObj = (mockCareers as { career_id: string; career_name: string; career_group: string; program: string }[]).find(
+    c => c.career_id === dreamCareerId
+  );
+  
+  const dreamCareerName = dreamCareerObj ? dreamCareerObj.career_name : "";
+  const dreamCareerLabel = dreamCareerId 
+    ? (CAREER_THAI_NAMES[dreamCareerId] || dreamCareerName)
+    : "";
+
+  // Perform MES Top 10 match check
+  const matchedRankIdx = careers.findIndex(c => c.career_id === dreamCareerId);
+  const isMatched = matchedRankIdx !== -1;
+  const matchRankNum = matchedRankIdx + 1;
+
+  // AI top recommendation for mismatch fallback
+  const topAiCareer = careers[0];
+  const topAiCareerName = topAiCareer ? topAiCareer.career_name : "";
+  const topAiCareerLabel = topAiCareer
+    ? (CAREER_THAI_NAMES[topAiCareer.career_id] || topAiCareerName)
+    : topAiCareerName;
 
   return (
     <div className="min-h-screen bg-background text-foreground font-thai relative overflow-hidden">
@@ -91,6 +141,75 @@ function DashboardContent() {
             User: {userId}
           </div>
         </div>
+
+        {/* Dream Career Comparison Banner */}
+        {dreamCareerId && (
+          <div className="mb-10 animate-in fade-in duration-500">
+            {isMatched ? (
+              <div className="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent p-6 md:p-8 shadow-lg shadow-emerald-500/5 backdrop-blur-md">
+                <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-500">
+                    <Sparkles className="size-7 text-emerald-500 animate-pulse" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
+                        {thai ? "ตรงกัน (Match)" : "Match"}
+                      </span>
+                      <span className="text-xs text-muted-foreground font-medium">
+                        {thai ? "เปรียบเทียบกับอาชีพในฝัน" : "Compared to Dream Career"}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 dark:text-white">
+                      {thai ? "ทักษะของคุณมาถูกทางแล้ว!" : "Your skills are on the right track!"}
+                    </h3>
+                    <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium max-w-3xl">
+                      {thai 
+                        ? `อาชีพในฝันของคุณ "${dreamCareerLabel}" ตรงกับผลลัพธ์ที่ AI แนะนำโดยอยู่ในอันดับที่ ${matchRankNum} ถือเป็นจุดเริ่มต้นที่ดีมากสำหรับการพัฒนาเพื่อเข้าสู่สายอาชีพนี้อย่างเป็นระบบ`
+                        : `Your dream career "${dreamCareerLabel}" aligns with the AI recommendations, ranking at #${matchRankNum}. This is an excellent starting point for systematic skill development.`}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="relative overflow-hidden rounded-3xl border border-brand-orange/20 bg-gradient-to-r from-brand-orange/10 via-amber-500/5 to-transparent p-6 md:p-8 shadow-lg shadow-brand-orange/5 backdrop-blur-md">
+                <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 bg-brand-orange/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="flex flex-col gap-5 md:flex-row md:items-center">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-orange/15 border border-brand-orange/30 text-brand-orange">
+                    <AlertCircle className="size-7 text-brand-orange" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-orange/15 text-brand-orange border border-brand-orange/30">
+                        {thai ? "ไม่ตรงกัน (Mismatch)" : "Mismatch"}
+                      </span>
+                      <span className="text-xs text-muted-foreground font-medium">
+                        {thai ? "วิเคราะห์การเรียนรู้เพิ่มเติม" : "Analyzing Skill Paths"}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 dark:text-white">
+                      {thai ? "วิเคราะห์เพิ่มเติมด้านทักษะ" : "Skill Alignment Advisory"}
+                    </h3>
+                    <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium max-w-3xl">
+                      {thai 
+                        ? `ทักษะปัจจุบันของคุณเหมาะกับอาชีพ "${topAiCareerLabel}" มากกว่า แต่ไม่ต้องห่วง! ทางทีมได้เตรียมข้อมูลทักษะและรายวิชาเรียนที่ต้องอัปเกรดเพื่อดันสกิลให้ถึงเป้าหมายอาชีพในฝันของคุณเรียบร้อยแล้ว`
+                        : `Your current competencies align better with "${topAiCareerLabel}", but don't worry! We have prepared a customized roadmap & SUT course checklist to bridge your gap to "${dreamCareerLabel}".`}
+                    </p>
+                  </div>
+                  {/* Call to Action to Mismatch Career Gap Analysis Roadmap */}
+                  <button
+                    onClick={() => router.push(`/career/${dreamCareerId}?user=${userId}`)}
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold bg-brand-orange text-white hover:bg-brand-orange/90 hover:scale-105 transition-all shadow-md shrink-0 active:scale-95"
+                  >
+                    <span>{thai ? `🚀 แผนการเรียนสู่ ${dreamCareerLabel.split(" (")[0]}` : `🚀 Roadmap to ${dreamCareerLabel.split(" (")[0]}`}</span>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Top 3 */}
         <div className="mb-6">

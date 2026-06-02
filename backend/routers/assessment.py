@@ -41,7 +41,14 @@ def submit_assessment(payload: AssessmentSubmit) -> Top10Response:
 
     db.save_assessment(
         payload.user_id,
-        {"scores": payload.scores, "top10": top10, "meta": payload.model_dump(), "assessment_id": assessment_id},
+        {
+            "scores": payload.scores,
+            "top10": top10,
+            "meta": payload.model_dump(),
+            "assessment_id": assessment_id,
+            "dream_career_group": payload.dream_career_group,
+            "dream_career_id": payload.dream_career_id,
+        },
     )
 
     return Top10Response(
@@ -49,4 +56,6 @@ def submit_assessment(payload: AssessmentSubmit) -> Top10Response:
         user_id=payload.user_id,
         timestamp=timestamp,
         top10_careers=[CareerResult(**c) for c in top10],
+        dream_career_group=payload.dream_career_group,
+        dream_career_id=payload.dream_career_id,
     )

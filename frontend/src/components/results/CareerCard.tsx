@@ -71,10 +71,10 @@ export default function CareerCard({ career, isTopRank, onClick, className }: Ca
       onClick={onClick}
       className={cn(
         'bg-white dark:bg-[#0a0f1c]/60 backdrop-blur-xl border rounded-2xl overflow-hidden cursor-pointer',
-        'hover:-translate-y-1 transition-all duration-300 group relative',
+        'hover:-translate-y-1 hover:border-brand-orange/40 transition-all duration-300 group relative',
         isTopRank
-          ? 'p-6 border-slate-200/60 dark:border-white/10 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_30px_-12px_rgba(0,0,0,0.5)]'
-          : 'p-4 border-slate-200/50 dark:border-white/5 shadow-[0_4px_20px_-12px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_20px_-12px_rgba(0,0,0,0.4)]',
+          ? 'p-6 border-slate-200/60 dark:border-white/10 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.12)] hover:shadow-[0_15px_35px_-10px_rgba(243,146,0,0.15)] dark:hover:shadow-[0_15px_35px_-10px_rgba(243,146,0,0.25)]'
+          : 'p-4 border-slate-200/50 dark:border-white/5 shadow-[0_4px_20px_-12px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_25px_-8px_rgba(0,0,0,0.12)] dark:hover:shadow-[0_10px_25px_-8px_rgba(0,0,0,0.4)]',
         className,
       )}
     >
@@ -181,13 +181,19 @@ export default function CareerCard({ career, isTopRank, onClick, className }: Ca
         </div>
       </div>
 
-      {/* Hover action */}
-      <div className={cn(
-        "flex items-center gap-1 text-brand-orange text-xs font-semibold mt-4 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300",
-        isTopRank ? "mt-4" : "mt-3"
-      )}>
-        <span>{thai ? 'ดูวิเคราะห์ช่องว่าง (Gap Analysis)' : 'View Gap Analysis'}</span>
-        <ChevronRight size={14} />
+      {/* Action Button at the bottom of the card (UX Flow Fix to Close Gap) */}
+      <div className={cn("mt-5 pt-4 border-t border-slate-100 dark:border-white/5 flex", isTopRank ? "justify-center" : "justify-start")}>
+        {isTopRank ? (
+          <div className="w-full py-3 px-4 rounded-xl bg-brand-orange text-white font-bold text-center text-xs shadow-md shadow-brand-orange/15 hover:bg-brand-orange/95 active:scale-[0.99] transition-all flex items-center justify-center gap-1.5">
+            <span>{thai ? "🔍 วิเคราะห์ช่องว่างทักษะ (Gap Analysis)" : "🔍 Skill Gap Analysis"}</span>
+            <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+          </div>
+        ) : (
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-brand-orange/30 text-brand-orange hover:bg-brand-orange/5 text-center text-xs font-bold transition-all">
+            <span>{thai ? "ดู Gap ทักษะ" : "View Skill Gap"}</span>
+            <ChevronRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+          </div>
+        )}
       </div>
     </div>
   );

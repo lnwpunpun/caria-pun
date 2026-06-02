@@ -12,6 +12,7 @@ import { useLanguage } from "@/components/language-provider";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { DT_BRANCH, DC_BRANCH, getGroupSlug } from "@/lib/careers-list";
+import mockCareers from "@/lib/mock_careers.json";
 
 const InteractiveCareerSphere = dynamic(
   () => import("@/components/InteractiveCareerSphere"),
@@ -36,6 +37,33 @@ const stats = [
 export default function HeroSection() {
   const ref = useRef<HTMLDivElement>(null);
   const [isExploring, setIsExploring] = useState(false);
+
+  // Helper to map career name to ID from mock_careers.json
+  const getCareerIdForAssessment = (careerName: string, branch: "DT" | "DC") => {
+    if (!careerName) return "";
+    const prog = branch === "DT" ? "DT" : "DM";
+    
+    // Find exact or partial match
+    let found = mockCareers.find(
+      (c: any) => c.program === prog && c.career_name.toLowerCase() === careerName.toLowerCase()
+    );
+    if (!found) {
+      found = mockCareers.find(
+        (c: any) => c.program === prog && c.career_name.toLowerCase().includes(careerName.toLowerCase())
+      );
+    }
+    if (!found) {
+      found = mockCareers.find(
+        (c: any) => c.program === prog && careerName.toLowerCase().includes(c.career_name.toLowerCase())
+      );
+    }
+    if (!found) {
+      found = mockCareers.find(
+        (c: any) => c.career_name.toLowerCase().includes(careerName.toLowerCase())
+      );
+    }
+    return found ? found.career_id : "";
+  };
   const [isDesktop, setIsDesktop] = useState(false);
   const [activeBranch, setActiveBranch] = useState<"DT" | "DC">("DT");
   const [selectedGroup, setSelectedGroup] = useState<string>("");
@@ -415,17 +443,19 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* Global view study plan and compulsory courses CTA button */}
               <Link
-                href={`/career-group/${getGroupSlug(selectedGroup)}`}
+                href={`/assessment?career=${getCareerIdForAssessment(selectedCareer || activeGroupObj?.careers[0]?.name || "", activeBranch)}`}
                 className={`w-full flex items-center justify-center gap-2 px-5 py-3 rounded-2xl font-bold text-xs shadow-md transition-all duration-300 mt-4 border border-transparent ${
                   activeBranch === "DT"
                     ? "bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/30"
                     : "bg-[#F39200] text-[#050A14] hover:bg-[#d88200] hover:shadow-lg hover:shadow-brand-orange/30"
                 }`}
               >
-                <span className={thai ? "font-thai font-bold" : "font-syne font-bold"}>
-                  {panelTexts.viewCoursesCTA}
+                <span className={thai ? "font-thai font-bold text-[10px] text-center" : "font-syne font-bold text-[10px] text-center"}>
+                  {thai 
+                    ? `🔥 พิสูจน์ DNA ของคุณว่าเหมาะกับสาย ${selectedGroup} หรือไม่? (Start Assessment)` 
+                    : `🔥 Prove if you fit the ${selectedGroup} path? (Start Assessment)`
+                  }
                 </span>
               </Link>
 

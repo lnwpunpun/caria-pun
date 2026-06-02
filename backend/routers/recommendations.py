@@ -31,4 +31,6 @@ def get_recommendations(user_id: str) -> Top10Response:
         user_id=user_id,
         timestamp=datetime.now(timezone.utc).isoformat(),
         top10_careers=[CareerResult(**c) for c in top10],
+        dream_career_group=record.get("dream_career_group"),
+        dream_career_id=record.get("dream_career_id"),
     )

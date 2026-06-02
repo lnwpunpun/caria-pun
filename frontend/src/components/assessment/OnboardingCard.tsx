@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Shield, Sparkles, CheckCircle2, ChevronRight } from "lucide-react";
+import { Shield, Sparkles, CheckCircle2, ChevronRight, PlayCircle, ExternalLink } from "lucide-react";
 
 interface OnboardingCardProps {
   onStart: () => void;
@@ -28,12 +28,12 @@ export function OnboardingCard({ onStart, lang }: OnboardingCardProps) {
       {/* Main Heading */}
       <div className="text-center mb-8">
         <h2 className="text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-white">
-          {thai ? "แบบทดสอบประเมินตนเอง 81 ข้อ" : "81-Question Self-Assessment"}
+          {thai ? "แบบทดสอบประเมินตนเอง 10 ข้อ (ฉบับทดลอง)" : "10-Question Self-Assessment (Demo)"}
         </h2>
         <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
           {thai
-            ? "ประเมินเชิงลึกทุกมิติ (ทักษะ, ความรู้, ทัศนคติ) ใช้เวลาประมาณ 10 นาที เพื่อผลการวิเคราะห์ที่มีความแม่นยำสูงที่สุด (ความแม่นยำ 83% ตามงานวิจัย)"
-            : "In-depth assessment of all dimensions (skills, knowledge, attitude) takes about 10 minutes to provide the most accurate analysis (83% precision based on research)."}
+            ? "ประเมินเชิงลึกแบบย่อ 10 ข้อ เพื่อทดลองใช้งานและวิเคราะห์สายอาชีพของคุณ ใช้เวลาประมาณ 2 นาที"
+            : "Brief evaluation of 10 questions to test the platform and analyze your matches. Takes about 2 minutes."}
         </p>
       </div>
 
@@ -81,7 +81,7 @@ export function OnboardingCard({ onStart, lang }: OnboardingCardProps) {
       </div>
 
       {/* PDPA Consent Checkbox */}
-      <div className="p-5 rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-900/50 mb-8">
+      <div className="p-5 rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-900/50 mb-8 transition-all">
         <div className="flex gap-3">
           <div className="mt-0.5 text-brand-orange">
             <Shield size={18} />
@@ -95,12 +95,13 @@ export function OnboardingCard({ onStart, lang }: OnboardingCardProps) {
                 ? "ข้อมูลคำตอบและเรซูเมของคุณจะนำไปใช้ในการประมวลผลอัลกอริทึมแนะนำอาชีพ และจะไม่ถูกเผยแพร่แก่ภายนอกโดยไม่ได้รับอนุญาต คุณสามารถใช้สิทธิ์ขอลบข้อมูลทั้งหมดผ่านแถบเมนูหลักได้ตลอดเวลา"
                 : "Your answers and resume details are used strictly to run the career matching engine. You can purge your personal logs anytime using the header menu."}
             </p>
-            <label className="mt-4 flex items-center gap-2 cursor-pointer select-none group">
+            
+            <label className="mt-4 flex items-center gap-2 select-none group cursor-pointer">
               <input
                 type="checkbox"
                 checked={agreed}
                 onChange={(e) => setAgreed(e.target.checked)}
-                className="size-4 rounded border-slate-300 dark:border-white/10 accent-brand-orange cursor-pointer"
+                className="size-4 rounded border-slate-300 dark:border-white/10 accent-brand-orange"
               />
               <span className="text-xs font-bold text-slate-700 dark:text-slate-300 group-hover:text-brand-orange transition-colors">
                 {thai

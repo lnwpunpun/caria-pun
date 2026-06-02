@@ -28,6 +28,8 @@ export interface SubmitPayload {
   gpa?: number;
   scores: Record<string, number>;
   input_method?: string;
+  dream_career_group?: string;
+  dream_career_id?: string;
 }
 
 const simulateDelay = (ms: number) => new Promise(res => setTimeout(res, ms));

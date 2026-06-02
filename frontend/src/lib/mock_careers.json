@@ -1,0 +1,470 @@
+[
+  {
+    "career_id": "DT01",
+    "career_name": "Web Content Writer",
+    "career_group": "Web Application",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT02",
+    "career_name": "Web Designer",
+    "career_group": "Web Application",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT03",
+    "career_name": "Web Marketer",
+    "career_group": "Web Application",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT04",
+    "career_name": "Web Developer/.NET Programmer",
+    "career_group": "Web Application",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT05",
+    "career_name": "Web Master",
+    "career_group": "Web Application",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT06",
+    "career_name": "UI/UX Designer",
+    "career_group": "Web Application",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT07",
+    "career_name": "Mobile Developer",
+    "career_group": "Enterprise Software",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT08",
+    "career_name": "Software Developer",
+    "career_group": "Enterprise Software",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT09",
+    "career_name": "System Analyst",
+    "career_group": "Enterprise Software",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT10",
+    "career_name": "Software Engineer",
+    "career_group": "Enterprise Software",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT11",
+    "career_name": "Software Tester",
+    "career_group": "Enterprise Software",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT12",
+    "career_name": "Embedded System Programmer",
+    "career_group": "Enterprise Software",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT13",
+    "career_name": "IT Support",
+    "career_group": "IT Support",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT14",
+    "career_name": "Data Curator",
+    "career_group": "Data Science",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT15",
+    "career_name": "Digital Data Curator",
+    "career_group": "Data Science",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT16",
+    "career_name": "Data Architect",
+    "career_group": "Data Science",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT17",
+    "career_name": "Data Engineer",
+    "career_group": "Data Science",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT18",
+    "career_name": "Data Scientist/Data Analyst",
+    "career_group": "Data Science",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT19",
+    "career_name": "Network Administrator",
+    "career_group": "Cloud Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT20",
+    "career_name": "Network System Engineer",
+    "career_group": "Cloud Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT21",
+    "career_name": "Network Analyst",
+    "career_group": "Cloud Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT22",
+    "career_name": "Security Administrator",
+    "career_group": "Cloud Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT23",
+    "career_name": "Penetration Tester",
+    "career_group": "Cloud Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT24",
+    "career_name": "Machine Learning Engineer",
+    "career_group": "AI & Emerging Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT25",
+    "career_name": "AI Engineer",
+    "career_group": "AI & Emerging Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT26",
+    "career_name": "Cloud Architect",
+    "career_group": "Cloud Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT27",
+    "career_name": "DevOps Engineer",
+    "career_group": "Cloud Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT28",
+    "career_name": "Site Reliability Engineer",
+    "career_group": "Cloud Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT29",
+    "career_name": "Database Administrator",
+    "career_group": "Data Science",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT30",
+    "career_name": "Business Intelligence Analyst",
+    "career_group": "Data Science",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT31",
+    "career_name": "Cybersecurity Analyst",
+    "career_group": "Cloud Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT32",
+    "career_name": "IoT Developer",
+    "career_group": "AI & Emerging Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT33",
+    "career_name": "Blockchain Developer",
+    "career_group": "AI & Emerging Technology",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT34",
+    "career_name": "QA Automation Engineer",
+    "career_group": "Enterprise Software",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT35",
+    "career_name": "Solutions Architect",
+    "career_group": "Enterprise Software",
+    "program": "DT"
+  },
+  {
+    "career_id": "DT36",
+    "career_name": "Technical Project Manager",
+    "career_group": "Enterprise Software",
+    "program": "DT"
+  },
+  {
+    "career_id": "DM01",
+    "career_name": "Graphic Designer",
+    "career_group": "Digital Content",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM02",
+    "career_name": "Photographer",
+    "career_group": "Digital Content",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM03",
+    "career_name": "Social Blogger/Vlogger",
+    "career_group": "Digital Content",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM04",
+    "career_name": "Digital Copywriter",
+    "career_group": "Digital Content",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM05",
+    "career_name": "Animator",
+    "career_group": "Animation",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM06",
+    "career_name": "Multimedia Artist",
+    "career_group": "Animation",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM07",
+    "career_name": "Screenplay Writer",
+    "career_group": "Film",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM08",
+    "career_name": "Director",
+    "career_group": "Film",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM09",
+    "career_name": "Video and Audio Editor",
+    "career_group": "Film",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM10",
+    "career_name": "Special Effect Designer",
+    "career_group": "Film",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM11",
+    "career_name": "Storyline Creator",
+    "career_group": "Game",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM12",
+    "career_name": "Scene Designer",
+    "career_group": "Game",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM13",
+    "career_name": "Game Modeler",
+    "career_group": "Game",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM14",
+    "career_name": "Game Animator",
+    "career_group": "Game",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM15",
+    "career_name": "Game Programmer",
+    "career_group": "Game",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM16",
+    "career_name": "Producer",
+    "career_group": "Production",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM17",
+    "career_name": "Creative",
+    "career_group": "Production",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM18",
+    "career_name": "Account Executive",
+    "career_group": "Marketing",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM19",
+    "career_name": "Public Relations Officer",
+    "career_group": "Marketing",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM20",
+    "career_name": "Marketing Coordinator",
+    "career_group": "Marketing",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM21",
+    "career_name": "Social Media Strategist",
+    "career_group": "Marketing",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM22",
+    "career_name": "Social Influencer",
+    "career_group": "Marketing",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM23",
+    "career_name": "One Man Band Journalist",
+    "career_group": "New Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM24",
+    "career_name": "Mobile UI/UX Designer",
+    "career_group": "New Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM25",
+    "career_name": "Cross-platform Mobile Developer",
+    "career_group": "New Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM26",
+    "career_name": "Digital Media Evaluator",
+    "career_group": "Research",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM27",
+    "career_name": "Researcher",
+    "career_group": "Research",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM28",
+    "career_name": "Graduate Student",
+    "career_group": "Research",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM29",
+    "career_name": "Motion Graphic Designer",
+    "career_group": "Interactive Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM30",
+    "career_name": "3D Modeler",
+    "career_group": "Interactive Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM31",
+    "career_name": "Concept Artist",
+    "career_group": "Interactive Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM32",
+    "career_name": "Sound Designer",
+    "career_group": "Interactive Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM33",
+    "career_name": "Music Composer",
+    "career_group": "Interactive Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM34",
+    "career_name": "Podcast Producer",
+    "career_group": "New Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM35",
+    "career_name": "Content Strategist",
+    "career_group": "Marketing",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM36",
+    "career_name": "Brand Designer",
+    "career_group": "Digital Content",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM37",
+    "career_name": "Illustration Artist",
+    "career_group": "Digital Content",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM38",
+    "career_name": "AR/VR Designer",
+    "career_group": "Interactive Media",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM39",
+    "career_name": "Esports Manager",
+    "career_group": "Game",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM40",
+    "career_name": "Community Manager",
+    "career_group": "Marketing",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM41",
+    "career_name": "Digital Marketing Specialist",
+    "career_group": "Marketing",
+    "program": "DM"
+  },
+  {
+    "career_id": "DM42",
+    "career_name": "Media Researcher",
+    "career_group": "Research",
+    "program": "DM"
+  }
+]

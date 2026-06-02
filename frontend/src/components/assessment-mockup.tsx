@@ -50,14 +50,14 @@ export function AssessmentMockup() {
 
           {/* Headline */}
           <h2 className={`mb-2 mt-2 text-center text-3xl font-bold text-slate-900 dark:text-white md:text-4xl ${thai ? "font-thai leading-snug" : "font-syne"}`}>
-            {thai ? "แบบทดสอบประเมินตนเอง 81 ข้อ" : "81-Question Self Assessment"}
+            {thai ? "แบบทดสอบประเมินตนเอง 10 ข้อ (ฉบับทดลอง)" : "10-Question Self Assessment (Demo)"}
           </h2>
 
           {/* Subtitle */}
           <p className={`mx-auto mb-8 max-w-2xl text-center leading-relaxed text-slate-600 dark:text-slate-300 ${thai ? "font-thai leading-loose" : ""}`}>
             {thai
-              ? "วิเคราะห์และจับคู่สมรรถนะ 66 มิติกับ 78 อาชีพดิจิทัล เพื่อเป้าหมายการวางแผนการเรียนรู้ที่แม่นยำที่สุด"
-              : "Maps your 66 competency dimensions against 78 digital careers for the most precise learning roadmap."}
+              ? "วิเคราะห์และจับคู่สมรรถนะของตัวคุณ เพื่อค้นหาคำแนะนำสายอาชีพดิจิทัลและรายวิชาที่ตรงความต้องการ"
+              : "Maps your competency profile against digital careers and recommended courses in real-time."}
           </p>
 
           {/* Value highlights */}

@@ -20,6 +20,8 @@ export interface Top10Response {
   user_id: string;
   timestamp: string;
   top10_careers: CareerResult[];
+  dream_career_group?: string;
+  dream_career_id?: string;
 }
 
 export interface RadarSeries {

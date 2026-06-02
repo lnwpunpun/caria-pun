@@ -22,6 +22,8 @@ class AssessmentSubmit(BaseModel):
     gpa: Optional[float] = Field(None, ge=0, le=4)
     scores: CompetencyScores = Field(..., description="66-dim competency scores, 0-100")
     input_method: str = Field("manual", description="hybrid | resume | manual")
+    dream_career_group: Optional[str] = Field(None, description="Declared dream career group of the user")
+    dream_career_id: Optional[str] = Field(None, description="Selected dream career ID")
 
 
 class CareerResult(BaseModel):
@@ -41,6 +43,8 @@ class Top10Response(BaseModel):
     user_id: str
     timestamp: str
     top10_careers: List[CareerResult]
+    dream_career_group: Optional[str] = None
+    dream_career_id: Optional[str] = None
 
 
 # --------------------------------------------------------------------------- #
