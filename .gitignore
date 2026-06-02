@@ -6,6 +6,7 @@ build/
 .pnpm-debug.log*
 pnpm-lock.yaml.bak
 tsconfig.tsbuildinfo
+package-lock.json
 
 # Python
 __pycache__/
