@@ -50,7 +50,7 @@ export function AssessmentMockup() {
 
           {/* Headline */}
           <h2 className={`mb-2 mt-2 text-center text-3xl font-bold text-slate-900 dark:text-white md:text-4xl ${thai ? "font-thai leading-snug" : "font-syne"}`}>
-            {thai ? "แบบทดสอบประเมินตนเอง 10 ข้อ (ฉบับทดลอง)" : "10-Question Self Assessment (Demo)"}
+            {thai ? "แบบทดสอบประเมินตนเอง 81 ข้อ" : "81-Question Self Assessment"}
           </h2>
 
           {/* Subtitle */}

@@ -11,8 +11,11 @@ Based on: Seesukong et al. (2024), CARIA, IJICTE 20(1), DOI 10.4018/IJICTE.35649
 
 from __future__ import annotations
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from models import database as db
 from routers import assessment, gap_analysis, recommendations, simulate
@@ -23,6 +26,36 @@ app = FastAPI(
     description="Career recommendation + competency gap analysis built on the CARIA "
     "Modified Euclidean Similarity model (Eq.1 capping + Eq.2 MES, 66 dimensions, scale 0-100).",
 )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    if isinstance(exc, StarletteHTTPException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={
+                "status": "error",
+                "message": exc.detail,
+                "details": None
+            }
+        )
+    if isinstance(exc, RequestValidationError):
+        return JSONResponse(
+            status_code=422,
+            content={
+                "status": "error",
+                "message": "Validation Error",
+                "details": exc.errors()
+            }
+        )
+    # Generic unhandled exception (500)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "status": "error",
+            "message": "Error processing request",
+            "details": str(exc),
+        },
+    )
 
 # CORS — Next.js dev server + Vercel deploys.
 app.add_middleware(

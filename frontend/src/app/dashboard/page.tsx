@@ -77,6 +77,78 @@ function DashboardContent() {
     load();
   }, [userId, router]);
 
+  const [dreamCareerData, setDreamCareerData] = useState<CareerResult | null>(null);
+  const [dreamCareerLoading, setDreamCareerLoading] = useState(false);
+
+  useEffect(() => {
+    if (loading || !data) return;
+
+    // 1. Retrieve selected dream career ID
+    let dreamId = "";
+    let dreamName = "";
+    if (typeof window !== "undefined") {
+      const localDream = localStorage.getItem("user_dream_career") || localStorage.getItem("dreamCareer");
+      if (localDream) {
+        try {
+          const parsed = JSON.parse(localDream);
+          if (parsed && parsed.id) {
+            dreamId = parsed.id;
+            dreamName = parsed.name || "";
+          }
+        } catch (e) {
+          // ignore
+        }
+      }
+    }
+
+    if (!dreamId) {
+      dreamId = data.dream_career_id || (typeof window !== "undefined" ? localStorage.getItem("caria_dream_career_id") : "") || "";
+      const found = (mockCareers as any[]).find(c => c.career_id === dreamId);
+      dreamName = found ? found.career_name : "";
+    }
+
+    if (!dreamId) return;
+
+    // 2. Check if it's already in the top 10 careers list
+    const isInTop10 = (data.top10_careers || []).some(c => c.career_id === dreamId);
+    if (isInTop10) {
+      setDreamCareerData(null);
+      return;
+    }
+
+    // 3. Load gap analysis for the dream career to construct the CareerResult
+    async function loadDreamCareer() {
+      setDreamCareerLoading(true);
+      try {
+        const gapRes = await api.getGapAnalysis(userId, dreamId);
+        
+        // Find career metadata
+        const mockCareerInfo = (mockCareers as { career_id: string; career_name: string; career_group: string; program: string }[]).find(
+          c => c.career_id === dreamId
+        );
+        
+        const careerResult: CareerResult = {
+          rank: 0, // indicates not in top 10
+          career_id: dreamId,
+          career_name: mockCareerInfo ? mockCareerInfo.career_name : dreamName,
+          career_group: mockCareerInfo ? mockCareerInfo.career_group : "Digital",
+          program: mockCareerInfo ? mockCareerInfo.program : "DT",
+          match_percentage: gapRes.match_percentage,
+          raw_mes: 0,
+          top_strengths: (gapRes.strengths || []).slice(0, 2).map(s => s.competency_id),
+          top_gaps: (gapRes.gaps || []).slice(0, 2).map(g => g.competency_id)
+        };
+        setDreamCareerData(careerResult);
+      } catch (err) {
+        console.error("Failed to load dream career gap analysis:", err);
+      } finally {
+        setDreamCareerLoading(false);
+      }
+    }
+
+    loadDreamCareer();
+  }, [loading, data, userId]);
+
   const handleCareerClick = (career: CareerResult) => {
     router.push(`/career/${career.career_id}?user=${userId}`);
   };
@@ -90,20 +162,39 @@ function DashboardContent() {
   const rest = careers.slice(3);
 
   // Retrieve selected dream career
-  const dreamCareerId = data?.dream_career_id || (typeof window !== "undefined" ? localStorage.getItem("caria_dream_career_id") : "") || "";
-  const dreamCareerObj = (mockCareers as { career_id: string; career_name: string; career_group: string; program: string }[]).find(
-    c => c.career_id === dreamCareerId
-  );
-  
-  const dreamCareerName = dreamCareerObj ? dreamCareerObj.career_name : "";
-  const dreamCareerLabel = dreamCareerId 
-    ? (CAREER_THAI_NAMES[dreamCareerId] || dreamCareerName)
-    : "";
+  let selectedDreamCareer: { id: string; name: string } | null = null;
+  if (typeof window !== "undefined") {
+    const localDream = localStorage.getItem("user_dream_career") || localStorage.getItem("dreamCareer");
+    if (localDream) {
+      try {
+        const parsed = JSON.parse(localDream);
+        if (parsed && parsed.id) {
+          selectedDreamCareer = {
+            id: parsed.id,
+            name: parsed.name || ""
+          };
+        }
+      } catch (e) {
+        // ignore
+      }
+    }
+  }
 
-  // Perform MES Top 10 match check
-  const matchedRankIdx = careers.findIndex(c => c.career_id === dreamCareerId);
-  const isMatched = matchedRankIdx !== -1;
-  const matchRankNum = matchedRankIdx + 1;
+  // Fallback to legacy flat keys if selectedDreamCareer is still null
+  if (!selectedDreamCareer) {
+    const dreamCareerId = data?.dream_career_id || (typeof window !== "undefined" ? localStorage.getItem("caria_dream_career_id") : "") || "";
+    const dreamCareerObj = (mockCareers as { career_id: string; career_name: string; career_group: string; program: string }[]).find(
+      c => c.career_id === dreamCareerId
+    );
+    if (dreamCareerObj) {
+      selectedDreamCareer = {
+        id: dreamCareerObj.career_id,
+        name: dreamCareerObj.career_name
+      };
+    }
+  }
+
+  const top10_careers = careers;
 
   // AI top recommendation for mismatch fallback
   const topAiCareer = careers[0];
@@ -143,63 +234,122 @@ function DashboardContent() {
         </div>
 
         {/* Dream Career Comparison Banner */}
-        {dreamCareerId && (
-          <div className="mb-10 animate-in fade-in duration-500">
-            {isMatched ? (
-              <div className="relative overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent p-6 md:p-8 shadow-lg shadow-emerald-500/5 backdrop-blur-md">
+        {(() => {
+          if (!selectedDreamCareer) {
+            return null;
+          }
+
+          const dreamRank = top10_careers.findIndex(c => c.career_id === selectedDreamCareer.id) + 1;
+          const isTop3 = dreamRank >= 1 && dreamRank <= 3;
+          const isTop10 = dreamRank >= 4 && dreamRank <= 10;
+          
+          const dreamCareerLabel = selectedDreamCareer.id 
+            ? (CAREER_THAI_NAMES[selectedDreamCareer.id] || selectedDreamCareer.name)
+            : "";
+
+          if (isTop3) {
+            // Condition A: ติด Top 3 (High Match)
+            return (
+              <div className="mb-10 rounded-3xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent p-6 md:p-8 shadow-lg shadow-emerald-500/5 backdrop-blur-md animate-in fade-in duration-500">
                 <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-                <div className="flex flex-col gap-4 md:flex-row md:items-center">
+                <div className="flex flex-col gap-5 md:flex-row md:items-center">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-500">
                     <Sparkles className="size-7 text-emerald-500 animate-pulse" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
-                        {thai ? "ตรงกัน (Match)" : "Match"}
+                        {thai ? "ตรงกันสูง (High Match)" : "High Match"}
                       </span>
                       <span className="text-xs text-muted-foreground font-medium">
                         {thai ? "เปรียบเทียบกับอาชีพในฝัน" : "Compared to Dream Career"}
                       </span>
                     </div>
                     <h3 className="text-xl font-bold text-slate-800 dark:text-white">
-                      {thai ? "ทักษะของคุณมาถูกทางแล้ว!" : "Your skills are on the right track!"}
+                      {thai ? "ยอดเยี่ยม! ทักษะของคุณมาถูกทางแล้ว" : "Excellent! Your skills are on the right track"}
                     </h3>
                     <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium max-w-3xl">
                       {thai 
-                        ? `อาชีพในฝันของคุณ "${dreamCareerLabel}" ตรงกับผลลัพธ์ที่ AI แนะนำโดยอยู่ในอันดับที่ ${matchRankNum} ถือเป็นจุดเริ่มต้นที่ดีมากสำหรับการพัฒนาเพื่อเข้าสู่สายอาชีพนี้อย่างเป็นระบบ`
-                        : `Your dream career "${dreamCareerLabel}" aligns with the AI recommendations, ranking at #${matchRankNum}. This is an excellent starting point for systematic skill development.`}
+                        ? `อาชีพในฝัน ${dreamCareerLabel} ของคุณตรงกับผลประเมิน AI ในอันดับที่ ${dreamRank} กดดู Gap Analysis เพื่ออุดรอยรั่วและไปให้ถึงเป้าหมายได้เลย โดยคลิกปุ่ม "Skill Gap Analysis" ที่การ์ดด้านล่าง`
+                        : `Your dream career "${dreamCareerLabel}" matches the AI recommendation at rank #${dreamRank}. Click Gap Analysis to close gaps and reach your goal by clicking the "Skill Gap Analysis" button in the card below.`}
                     </p>
                   </div>
+                  <button
+                    onClick={() => router.push(`/career/${selectedDreamCareer.id}?user=${userId}`)}
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-white transition-all shadow-md shrink-0 active:scale-95 hover:scale-105"
+                  >
+                    <span>{thai ? `🚀 แผนการเรียนสู่ ${dreamCareerLabel.split(" (")[0]}` : `🚀 Roadmap to ${dreamCareerLabel.split(" (")[0]}`}</span>
+                    <ArrowRight size={14} />
+                  </button>
                 </div>
               </div>
-            ) : (
-              <div className="relative overflow-hidden rounded-3xl border border-brand-orange/20 bg-gradient-to-r from-brand-orange/10 via-amber-500/5 to-transparent p-6 md:p-8 shadow-lg shadow-brand-orange/5 backdrop-blur-md">
-                <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 bg-brand-orange/10 rounded-full blur-3xl pointer-events-none" />
+            );
+          } else if (isTop10) {
+            // Condition B: ติดอันดับ 4-10 (Potential Match)
+            return (
+              <div className="mb-10 rounded-3xl border border-amber-500/20 bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent p-6 md:p-8 shadow-lg shadow-amber-500/5 backdrop-blur-md animate-in fade-in duration-500">
+                <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="flex flex-col gap-5 md:flex-row md:items-center">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-orange/15 border border-brand-orange/30 text-brand-orange">
-                    <AlertCircle className="size-7 text-brand-orange" />
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-500">
+                    <AlertCircle className="size-7 text-amber-500 animate-pulse" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-brand-orange/15 text-brand-orange border border-brand-orange/30">
-                        {thai ? "ไม่ตรงกัน (Mismatch)" : "Mismatch"}
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-500/15 text-amber-600 dark:text-amber-550 border border-amber-500/30">
+                        {thai ? "มีศักยภาพ (Potential Match)" : "Potential Match"}
                       </span>
                       <span className="text-xs text-muted-foreground font-medium">
-                        {thai ? "วิเคราะห์การเรียนรู้เพิ่มเติม" : "Analyzing Skill Paths"}
+                        {thai ? "เปรียบเทียบกับอาชีพในฝัน" : "Compared to Dream Career"}
                       </span>
                     </div>
                     <h3 className="text-xl font-bold text-slate-800 dark:text-white">
-                      {thai ? "วิเคราะห์เพิ่มเติมด้านทักษะ" : "Skill Alignment Advisory"}
+                      {thai ? "เป็นไปได้สูง! แต่ยังมีทักษะที่ต้องเน้นเพิ่ม" : "Highly Possible! But more skills are needed"}
                     </h3>
                     <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium max-w-3xl">
                       {thai 
-                        ? `ทักษะปัจจุบันของคุณเหมาะกับอาชีพ "${topAiCareerLabel}" มากกว่า แต่ไม่ต้องห่วง! ทางทีมได้เตรียมข้อมูลทักษะและรายวิชาเรียนที่ต้องอัปเกรดเพื่อดันสกิลให้ถึงเป้าหมายอาชีพในฝันของคุณเรียบร้อยแล้ว`
-                        : `Your current competencies align better with "${topAiCareerLabel}", but don't worry! We have prepared a customized roadmap & SUT course checklist to bridge your gap to "${dreamCareerLabel}".`}
+                        ? `อาชีพในฝัน ${dreamCareerLabel} ของคุณอยู่ในอันดับที่ ${dreamRank} ของผลประเมิน คุณมีพื้นฐานที่ดี แต่ควรดูรายวิชาแนะนำเพื่อดันตัวเองขึ้นไปติด Top 3 โดยคลิกปุ่ม "Skill Gap Analysis" ที่การ์ดด้านล่าง`
+                        : `Your dream career "${dreamCareerLabel}" ranks at #${dreamRank} in our recommendation list. You have a solid baseline, but should view recommended courses to push yourself into the Top 3 by clicking the "Skill Gap Analysis" button in the card below.`}
                     </p>
                   </div>
-                  {/* Call to Action to Mismatch Career Gap Analysis Roadmap */}
                   <button
-                    onClick={() => router.push(`/career/${dreamCareerId}?user=${userId}`)}
+                    onClick={() => router.push(`/career/${selectedDreamCareer.id}?user=${userId}`)}
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold bg-amber-500 hover:bg-amber-600 text-white transition-all shadow-md shrink-0 active:scale-95 hover:scale-105"
+                  >
+                    <span>{thai ? `🚀 แผนการเรียนสู่ ${dreamCareerLabel.split(" (")[0]}` : `🚀 Roadmap to ${dreamCareerLabel.split(" (")[0]}`}</span>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
+              </div>
+            );
+          } else {
+            // Condition C: ไม่ติด Top 10 เลย (Mismatch / Reality Check)
+            return (
+              <div className="mb-10 rounded-3xl border border-red-500/20 bg-gradient-to-r from-red-500/10 via-rose-500/5 to-transparent p-6 md:p-8 shadow-lg shadow-red-500/5 backdrop-blur-md animate-in fade-in duration-500">
+                <div className="absolute top-0 right-0 -mt-6 -mr-6 w-32 h-32 bg-red-500/10 rounded-full blur-3xl pointer-events-none" />
+                <div className="flex flex-col gap-5 md:flex-row md:items-center">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-red-500/15 border border-red-500/30 text-red-500">
+                    <AlertCircle className="size-7 text-red-500" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-500/15 text-red-500 border border-red-500/30">
+                        {thai ? "ไม่ตรงกัน (Mismatch)" : "Mismatch"}
+                      </span>
+                      <span className="text-xs text-muted-foreground font-medium">
+                        {thai ? "วิเคราะห์ทางเลือกแนะนำ" : "Reality Check"}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 dark:text-white">
+                      {thai ? "AI พบเส้นทางอื่นที่อาจเหมาะกับคุณมากกว่าในตอนนี้" : "AI found other paths that might fit you better right now"}
+                    </h3>
+                    <p className="mt-1.5 text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-medium max-w-3xl">
+                      {thai 
+                        ? `ปัจจุบันอาชีพ ${dreamCareerLabel} ยังไม่ติด Top 10 จากทักษะของคุณ (AI แนะนำ ${topAiCareerLabel} เป็นอันดับแรก) แต่ไม่ต้องห่วง! คุณสามารถใช้ระบบ Simulator จำลองการอัปสกิลเพื่อดูว่าต้องเรียนอะไรเพิ่มบ้าง โดยคลิกปุ่ม "Skill Gap Analysis" ที่การ์ดด้านล่าง`
+                        : `Currently the career "${dreamCareerLabel}" is not in the Top 10 based on your skills (AI recommends "${topAiCareerLabel}" first). But don't worry! You can use the Simulator to model upskilling paths by clicking the "Skill Gap Analysis" button in the card below.`}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => router.push(`/career/${selectedDreamCareer.id}?user=${userId}`)}
                     className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-bold bg-brand-orange text-white hover:bg-brand-orange/90 hover:scale-105 transition-all shadow-md shrink-0 active:scale-95"
                   >
                     <span>{thai ? `🚀 แผนการเรียนสู่ ${dreamCareerLabel.split(" (")[0]}` : `🚀 Roadmap to ${dreamCareerLabel.split(" (")[0]}`}</span>
@@ -207,7 +357,26 @@ function DashboardContent() {
                   </button>
                 </div>
               </div>
-            )}
+            );
+          }
+        })()}
+
+
+
+        {/* Selected Dream Career (If not in Top 10) */}
+        {!dreamCareerLoading && dreamCareerData && (
+          <div className="mb-10 p-6 rounded-3xl border border-brand-orange/15 bg-brand-orange/[0.02] border-dashed animate-in fade-in duration-500">
+            <h3 className="mb-4 flex items-center gap-2 text-md font-bold text-foreground">
+              <span className="text-brand-orange">💭</span> {thai ? "อาชีพในฝันที่คุณเลือก (Your Selected Dream Career)" : "Your Selected Dream Career"}
+            </h3>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <CareerCard
+                career={dreamCareerData}
+                isTopRank={false}
+                onClick={() => handleCareerClick(dreamCareerData)}
+                className="border-brand-orange/30 shadow-lg shadow-brand-orange/5 hover:border-brand-orange/60 hover:shadow-brand-orange/10 dark:hover:shadow-brand-orange/20 bg-white/80 dark:bg-[#070b14]/50 backdrop-blur-md"
+              />
+            </div>
           </div>
         )}
 
@@ -288,6 +457,8 @@ function DashboardContent() {
             </div>
           </div>
         )}
+
+
 
         {/* Personalized Career Roadmap Timeline */}
         {careers.length > 0 && (

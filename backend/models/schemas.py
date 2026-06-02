@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 CompetencyScores = Dict[str, float]  # { "<comp_id>": 0-100 }
 
@@ -24,6 +24,13 @@ class AssessmentSubmit(BaseModel):
     input_method: str = Field("manual", description="hybrid | resume | manual")
     dream_career_group: Optional[str] = Field(None, description="Declared dream career group of the user")
     dream_career_id: Optional[str] = Field(None, description="Selected dream career ID")
+
+    @field_validator("scores", mode="before")
+    @classmethod
+    def sanitize_scores(cls, v):
+        if not isinstance(v, dict):
+            return v
+        return {key: (0.0 if val is None else float(val)) for key, val in v.items()}
 
 
 class CareerResult(BaseModel):
@@ -120,6 +127,13 @@ class SimulateRequest(BaseModel):
     modified_scores: CompetencyScores = Field(
         ..., description="Subset of competencies to override, 0-100"
     )
+
+    @field_validator("modified_scores", mode="before")
+    @classmethod
+    def sanitize_modified_scores(cls, v):
+        if not isinstance(v, dict):
+            return v
+        return {key: (0.0 if val is None else float(val)) for key, val in v.items()}
 
 
 class RankingChange(BaseModel):

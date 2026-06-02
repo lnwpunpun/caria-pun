@@ -32,6 +32,14 @@ export default function AssessmentPage() {
         if (found) {
           setDreamCareerId(found.career_id);
           setDreamCareerGroup(found.career_group);
+          
+          // Persist immediately
+          const selectedObj = { id: found.career_id, name: found.career_name, group: found.career_group };
+          localStorage.setItem("dreamCareer", JSON.stringify(selectedObj));
+          localStorage.setItem("user_dream_career", JSON.stringify(selectedObj));
+          localStorage.setItem("caria_dream_career_id", found.career_id);
+          localStorage.setItem("caria_dream_career_group", found.career_group);
+          
           setStep("onboarding");
         }
       }
@@ -42,14 +50,47 @@ export default function AssessmentPage() {
   // so testers don't have to complete the assessment every time.
   const handleSkipDemo = () => {
     if (typeof window !== "undefined") {
+      // 1. Determine the selected career from localStorage, state, or fallback to DT08
+      let storedId = "DT08";
+      let storedGroup = "Enterprise Software";
+      let storedName = "Software Developer";
+
+      const localDream = localStorage.getItem("user_dream_career") || localStorage.getItem("dreamCareer");
+      if (localDream) {
+        try {
+          const parsed = JSON.parse(localDream);
+          if (parsed && parsed.id) {
+            storedId = parsed.id;
+            storedGroup = parsed.group || "";
+            storedName = parsed.name || "";
+          }
+        } catch (e) {
+          // ignore
+        }
+      } else {
+        const flatId = localStorage.getItem("caria_dream_career_id") || dreamCareerId;
+        const flatGroup = localStorage.getItem("caria_dream_career_group") || dreamCareerGroup;
+        if (flatId) {
+          storedId = flatId;
+          storedGroup = flatGroup || "";
+          const found = (mockCareers as any[]).find((c) => c.career_id === flatId);
+          storedName = found ? found.career_name : "";
+        }
+      }
+
+      // 2. Set all necessary localStorage states
+      const selectedObj = { id: storedId, name: storedName, group: storedGroup };
+      localStorage.setItem("dreamCareer", JSON.stringify(selectedObj));
+      localStorage.setItem("user_dream_career", JSON.stringify(selectedObj));
+      localStorage.setItem("caria_dream_career_id", storedId);
+      localStorage.setItem("caria_dream_career_group", storedGroup);
+
       const skippedResults = {
         ...MOCK_TOP10,
-        dream_career_id: "DT08", // Software Developer
-        dream_career_group: "Enterprise Software",
+        dream_career_id: storedId,
+        dream_career_group: storedGroup,
       };
       localStorage.setItem("caria_top10", JSON.stringify(skippedResults));
-      localStorage.setItem("caria_dream_career_id", "DT08");
-      localStorage.setItem("caria_dream_career_group", "Enterprise Software");
     }
     router.push("/dashboard?user=demo_ton");
   };
@@ -69,32 +110,48 @@ export default function AssessmentPage() {
       
       // Store in localStorage to pass values
       if (typeof window !== "undefined") {
+        const actualId = res.dream_career_id || dreamCareerId || "";
+        const actualGroup = res.dream_career_group || dreamCareerGroup || "";
+        const found = (mockCareers as any[]).find((c) => c.career_id === actualId);
+        const name = found ? found.career_name : "";
+        const selectedObj = { id: actualId, name, group: actualGroup };
+        
         const customResults = {
           ...res,
-          dream_career_id: res.dream_career_id || dreamCareerId || undefined,
-          dream_career_group: res.dream_career_group || dreamCareerGroup || undefined,
+          dream_career_id: actualId || undefined,
+          dream_career_group: actualGroup || undefined,
           user_id: res.user_id,
           timestamp: new Date().toISOString()
         };
+        localStorage.setItem("dreamCareer", JSON.stringify(selectedObj));
+        localStorage.setItem("user_dream_career", JSON.stringify(selectedObj));
         localStorage.setItem("caria_top10", JSON.stringify(customResults));
-        localStorage.setItem("caria_dream_career_id", res.dream_career_id || dreamCareerId || "");
-        localStorage.setItem("caria_dream_career_group", res.dream_career_group || dreamCareerGroup || "");
+        localStorage.setItem("caria_dream_career_id", actualId);
+        localStorage.setItem("caria_dream_career_group", actualGroup);
         localStorage.setItem("user_custom_scores", JSON.stringify(compiledScores));
       }
       router.push(`/dashboard?user=${res.user_id}`);
     } catch {
       const fallbackUserId = `user_81_demo`;
       if (typeof window !== "undefined") {
+        const actualId = dreamCareerId || "";
+        const actualGroup = dreamCareerGroup || "";
+        const found = (mockCareers as any[]).find((c) => c.career_id === actualId);
+        const name = found ? found.career_name : "";
+        const selectedObj = { id: actualId, name, group: actualGroup };
+        
         const customResults = {
           ...MOCK_TOP10,
           user_id: fallbackUserId,
           timestamp: new Date().toISOString(),
-          dream_career_id: dreamCareerId || undefined,
-          dream_career_group: dreamCareerGroup || undefined,
+          dream_career_id: actualId || undefined,
+          dream_career_group: actualGroup || undefined,
         };
+        localStorage.setItem("dreamCareer", JSON.stringify(selectedObj));
+        localStorage.setItem("user_dream_career", JSON.stringify(selectedObj));
         localStorage.setItem("caria_top10", JSON.stringify(customResults));
-        localStorage.setItem("caria_dream_career_id", dreamCareerId || "");
-        localStorage.setItem("caria_dream_career_group", dreamCareerGroup || "");
+        localStorage.setItem("caria_dream_career_id", actualId);
+        localStorage.setItem("caria_dream_career_group", actualGroup);
         localStorage.setItem("user_custom_scores", JSON.stringify(compiledScores));
       }
       router.push(`/dashboard?user=${fallbackUserId}`);
@@ -160,6 +217,15 @@ export default function AssessmentPage() {
                 onContinue={(id, group) => {
                   setDreamCareerId(id);
                   setDreamCareerGroup(group);
+                  if (typeof window !== "undefined") {
+                    const found = (mockCareers as any[]).find((c) => c.career_id === id);
+                    const name = found ? found.career_name : "";
+                    const selectedObj = { id, name, group };
+                    localStorage.setItem("dreamCareer", JSON.stringify(selectedObj));
+                    localStorage.setItem("user_dream_career", JSON.stringify(selectedObj));
+                    localStorage.setItem("caria_dream_career_id", id);
+                    localStorage.setItem("caria_dream_career_group", group);
+                  }
                   setStep("onboarding");
                 }}
                 lang={lang}

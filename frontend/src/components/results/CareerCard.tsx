@@ -95,7 +95,7 @@ export default function CareerCard({ career, isTopRank, onClick, className }: Ca
               rankGradient(rank),
             )}
           >
-            {rank}
+            {rank === 0 ? "-" : rank}
           </span>
         </div>
 

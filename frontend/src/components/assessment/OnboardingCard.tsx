@@ -28,12 +28,12 @@ export function OnboardingCard({ onStart, lang }: OnboardingCardProps) {
       {/* Main Heading */}
       <div className="text-center mb-8">
         <h2 className="text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-white">
-          {thai ? "แบบทดสอบประเมินตนเอง 10 ข้อ (ฉบับทดลอง)" : "10-Question Self-Assessment (Demo)"}
+          {thai ? "แบบทดสอบประเมินตนเอง 81 ข้อ" : "81-Question Self-Assessment"}
         </h2>
         <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 max-w-xl mx-auto">
           {thai
-            ? "ประเมินเชิงลึกแบบย่อ 10 ข้อ เพื่อทดลองใช้งานและวิเคราะห์สายอาชีพของคุณ ใช้เวลาประมาณ 2 นาที"
-            : "Brief evaluation of 10 questions to test the platform and analyze your matches. Takes about 2 minutes."}
+            ? "แบบประเมินสมรรถนะเชิงลึก 81 ข้อ ครอบคลุมทั้ง Skills, Attitudes, และ Knowledge ใช้เวลาประมาณ 10-15 นาที"
+            : "In-depth evaluation of 81 questions covering Skills, Attitudes, and Knowledge. Takes about 10-15 minutes."}
         </p>
       </div>
 

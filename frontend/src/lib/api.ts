@@ -16,9 +16,15 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     ...init,
   });
   if (!res.ok) {
-    throw new Error(`API ${path} failed: ${res.status} ${await res.text()}`);
+    const errorText = await res.text();
+    throw new Error(`API Error ${res.status}: ${errorText}`);
   }
-  return res.json() as Promise<T>;
+  const text = await res.text();
+  try {
+    return JSON.parse(text) as T;
+  } catch (e) {
+    throw new Error(`Invalid JSON response: ${text}`);
+  }
 }
 
 export interface SubmitPayload {
@@ -36,12 +42,16 @@ const simulateDelay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
 export const api = {
   submitAssessment: async (payload: SubmitPayload) => {
+    console.log("Submitting assessment payload:", payload);
     try {
       return await request<Top10Response>("/api/v1/assessment/submit", {
         method: "POST",
         body: JSON.stringify(payload),
       });
     } catch (error) {
+      console.error("Submission failed:", error);
+      showToast("เกิดข้อผิดพลาดในการประมวลผล กรุณาลองใหม่อีกครั้ง", "error");
+      
       console.warn("API Offline, using Mock Data", error);
       showToast("Offline Mode Active: Using mock data", "info");
       await simulateDelay(2000); // simulate 2s processing

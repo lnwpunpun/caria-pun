@@ -85,6 +85,16 @@ export function DreamCareerSelectCard({ onContinue, lang }: DreamCareerSelectCar
     setSelectedCareer(career);
     setSearchQuery(thai ? (CAREER_THAI_NAMES[career.career_id] || career.career_name) : career.career_name);
     setIsOpen(false);
+    // Persist the choice the moment it is made — so even if the user hits the
+    // top-right "Skip" (instead of "Continue"), the dashboard still compares
+    // against the career they actually selected.
+    if (typeof window !== "undefined") {
+      const selectedObj = { id: career.career_id, name: career.career_name, group: career.career_group };
+      localStorage.setItem("dreamCareer", JSON.stringify(selectedObj));
+      localStorage.setItem("user_dream_career", JSON.stringify(selectedObj));
+      localStorage.setItem("caria_dream_career_id", career.career_id);
+      localStorage.setItem("caria_dream_career_group", career.career_group);
+    }
   };
 
   return (
@@ -138,6 +148,12 @@ export function DreamCareerSelectCard({ onContinue, lang }: DreamCareerSelectCar
                 setSearchQuery("");
                 setSelectedCareer(null);
                 setIsOpen(true);
+                // Clear the persisted choice too, so a later skip won't reuse it.
+                if (typeof window !== "undefined") {
+                  ["dreamCareer", "user_dream_career", "caria_dream_career_id", "caria_dream_career_group"].forEach(
+                    (k) => localStorage.removeItem(k),
+                  );
+                }
               }}
               className="absolute right-4 top-4 text-xs font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
             >
